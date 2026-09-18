@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LOG // WAKE UP</title>
+  <title>LOG // HABITS & SMOKE FREE</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -41,35 +41,56 @@
       text-align: center;
     }
 
-    /* KPI STREAK DISPLAY */
-    .streak-card {
-      border: 1px solid var(--fg);
-      text-align: center;
-      padding: 12px;
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
       margin-bottom: 20px;
     }
 
-    .streak-val {
-      font-size: 2.2rem;
+    .kpi-card {
+      border: 1px solid var(--fg);
+      text-align: center;
+      padding: 12px 6px;
+    }
+
+    .kpi-val {
+      font-size: 1.8rem;
       font-weight: bold;
     }
 
-    .streak-lbl {
-      font-size: 0.65rem;
+    .kpi-lbl {
+      font-size: 0.6rem;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
-    /* MAIN LOG BUTTON */
     button.wake-btn {
       width: 100%;
-      padding: 16px;
+      padding: 14px;
       background-color: var(--fg);
       color: var(--bg);
       border: none;
       font-family: var(--font);
-      font-size: 0.95rem;
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    button.wake-btn:hover { background-color: #333; }
+
+    button.smoke-btn {
+      width: 100%;
+      padding: 8px;
+      background-color: var(--bg);
+      color: var(--fg);
+      border: 1px solid var(--fg);
+      font-family: var(--font);
+      font-size: 0.7rem;
       font-weight: bold;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -77,7 +98,7 @@
       margin-bottom: 20px;
     }
 
-    button.wake-btn:hover { background-color: #333; }
+    button.smoke-btn:hover { background-color: #f0f0f0; }
 
     .section-header {
       display: flex;
@@ -143,15 +164,21 @@
 <body>
 
   <div class="container">
-    <h1>LOG // WAKE UP</h1>
+    <h1>LOG // TRACKER</h1>
 
-    <!-- LIVE STREAK CARD -->
-    <div class="streak-card">
-      <div class="streak-val" id="streakDisplay">--</div>
-      <div class="streak-lbl">&lt; 5 AM Current Streak (Days)</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-val" id="smokeStreakDisplay">0</div>
+        <div class="kpi-lbl">Smoke Free (Days)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" id="streakDisplay">--</div>
+        <div class="kpi-lbl">&lt; 5 AM Streak</div>
+      </div>
     </div>
 
     <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
+    <button type="button" class="smoke-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit Date</button>
 
     <div class="section-header">
       <label>Additional Habits</label>
@@ -165,8 +192,33 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
     let extraHabits = JSON.parse(localStorage.getItem('saved_habit_labels')) || ['Reading', 'Exercise'];
+    let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
 
-    // Fetch current streak when page loads
+    function getSmokeStreakDays() {
+      const quit = new Date(smokeQuitDate);
+      const today = new Date();
+      const diffTime = today - quit;
+      return Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+    }
+
+    function calculateSmokeStreak() {
+      document.getElementById('smokeStreakDisplay').innerText = getSmokeStreakDays();
+    }
+
+    function resetSmokeQuitDate() {
+      if (confirm("Reset smoke quit date to today?")) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        
+        smokeQuitDate = `${year}-${month}-${day}`;
+        localStorage.setItem('smoke_quit_date', smokeQuitDate);
+        calculateSmokeStreak();
+        document.getElementById('status').innerText = "[!] SMOKE QUIT DATE RESET TO TODAY";
+      }
+    }
+
     function fetchCurrentStreak() {
       fetch(SCRIPT_URL)
         .then(res => res.json())
@@ -235,6 +287,7 @@
       const payload = {
         date: currentDate,
         wakeTime: currentTime,
+        smokeStreak: getSmokeStreakDays(),
         habits: habitsData
       };
 
@@ -245,17 +298,15 @@
         body: JSON.stringify(payload)
       })
       .then(() => {
-        statusDiv.innerText = `[✓] LOGGED AT ${currentTime}`;
+        statusDiv.innerText = `[✓] LOGGED TO SHEET AT ${currentTime}`;
         wakeBtn.disabled = false;
         wakeBtn.innerText = "LOG WAKE UP NOW";
 
-        // Reset habit checkboxes
         extraHabits.forEach((_, idx) => {
           const chk = document.getElementById(`habit_${idx}`);
           if (chk) chk.checked = false;
         });
 
-        // Refresh streak display
         setTimeout(fetchCurrentStreak, 1000);
       })
       .catch(err => {
@@ -265,9 +316,9 @@
       });
     }
 
-    // Initialize
     renderHabitInputs();
     fetchCurrentStreak();
+    calculateSmokeStreak();
   </script>
 </body>
 </html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOG // WAKE UP</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #000000;
+      --border: #e5e5e5;
+      --font: 'Courier New', Courier, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      display: flex;
+      justify-content: center;
+      padding: 30px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      border: 2px solid var(--fg);
+      padding: 24px;
+      box-shadow: 6px 6px 0px var(--fg);
+    }
+
+    h1 {
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--fg);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    /* KPI STREAK DISPLAY */
+    .streak-card {
+      border: 1px solid var(--fg);
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+
+    .streak-val {
+      font-size: 2.2rem;
+      font-weight: bold;
+    }
+
+    .streak-lbl {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    /* MAIN LOG BUTTON */
+    button.wake-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: var(--fg);
+      color: var(--bg);
+      border: none;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    button.wake-btn:hover { background-color: #333; }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    label {
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .add-btn {
+      background: none;
+      border: 1px solid var(--fg);
+      font-family: var(--font);
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .add-btn:hover { background: var(--fg); color: var(--bg); }
+
+    .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 0.8rem;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--fg);
+      cursor: pointer;
+    }
+
+    .remove-btn {
+      color: #999;
+      cursor: pointer;
+      font-size: 0.7rem;
+      margin-left: 6px;
+    }
+
+    .remove-btn:hover { color: var(--fg); font-weight: bold; }
+
+    #status {
+      margin-top: 16px;
+      font-size: 0.7rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>LOG // WAKE UP</h1>
+
+    <!-- LIVE STREAK CARD -->
+    <div class="streak-card">
+      <div class="streak-val" id="streakDisplay">--</div>
+      <div class="streak-lbl">&lt; 5 AM Current Streak (Days)</div>
+    </div>
+
+    <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
+
+    <div class="section-header">
+      <label>Additional Habits</label>
+      <button type="button" class="add-btn" onclick="addNewHabit()">+ Add Habit</button>
+    </div>
+    <div class="checkbox-group" id="habitsContainer"></div>
+
+    <div id="status"></div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
+    let extraHabits = JSON.parse(localStorage.getItem('saved_habit_labels')) || ['Reading', 'Exercise'];
+
+    // Fetch current streak when page loads
+    function fetchCurrentStreak() {
+      fetch(SCRIPT_URL)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            document.getElementById('streakDisplay').innerText = data.streak;
+          }
+        })
+        .catch(() => {
+          document.getElementById('streakDisplay').innerText = '0';
+        });
+    }
+
+    function renderHabitInputs() {
+      const container = document.getElementById('habitsContainer');
+      container.innerHTML = '';
+      extraHabits.forEach((habit, idx) => {
+        const div = document.createElement('div');
+        div.className = 'checkbox-item';
+        div.innerHTML = `
+          <span>${habit} <span class="remove-btn" onclick="removeHabit(${idx})">[x]</span></span>
+          <input type="checkbox" id="habit_${idx}">
+        `;
+        container.appendChild(div);
+      });
+      localStorage.setItem('saved_habit_labels', JSON.stringify(extraHabits));
+    }
+
+    function addNewHabit() {
+      const name = prompt("Enter new habit name:");
+      if (name && name.trim() !== '') {
+        extraHabits.push(name.trim());
+        renderHabitInputs();
+      }
+    }
+
+    function removeHabit(idx) {
+      extraHabits.splice(idx, 1);
+      renderHabitInputs();
+    }
+
+    function logWakeUp() {
+      const wakeBtn = document.getElementById('wakeBtn');
+      const statusDiv = document.getElementById('status');
+
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+
+      const currentDate = `${year}-${month}-${day}`;
+      const currentTime = `${hours}:${minutes}`;
+
+      wakeBtn.disabled = true;
+      wakeBtn.innerText = "SAVING...";
+      statusDiv.innerText = "";
+
+      const habitsData = {};
+      extraHabits.forEach((habit, idx) => {
+        const chk = document.getElementById(`habit_${idx}`);
+        if (chk) habitsData[habit] = chk.checked;
+      });
+
+      const payload = {
+        date: currentDate,
+        wakeTime: currentTime,
+        habits: habitsData
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] LOGGED AT ${currentTime}`;
+        wakeBtn.disabled = false;
+        wakeBtn.innerText = "LOG WAKE UP NOW";
+
+        // Reset habit checkboxes
+        extraHabits.forEach((_, idx) => {
+          const chk = document.getElementById(`habit_${idx}`);
+          if (chk) chk.checked = false;
+        });
+
+        // Refresh streak display
+        setTimeout(fetchCurrentStreak, 1000);
+      })
+      .catch(err => {
+        statusDiv.innerText = "[X] ERROR RECORDING";
+        wakeBtn.disabled = false;
+        wakeBtn.innerText = "LOG WAKE UP NOW";
+      });
+    }
+
+    // Initialize
+    renderHabitInputs();
+    fetchCurrentStreak();
+  </script>
+</body>
+</html>

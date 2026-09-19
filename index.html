@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LOG // HABITS & SMOKE FREE</title>
+  <title>LOG // TRACKER</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -29,6 +29,29 @@
       border: 2px solid var(--fg);
       padding: 24px;
       box-shadow: 6px 6px 0px var(--fg);
+    }
+
+    /* DAILY QUOTE BANNER */
+    .quote-box {
+      border: 1px solid var(--fg);
+      padding: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      background: #fafafa;
+    }
+
+    .quote-text {
+      font-size: 0.8rem;
+      font-style: italic;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .quote-author {
+      font-size: 0.65rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     h1 {
@@ -83,7 +106,14 @@
 
     button.wake-btn:hover { background-color: #333; }
 
-    button.smoke-btn {
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    button.secondary-btn {
       width: 100%;
       padding: 8px;
       background-color: var(--bg);
@@ -95,16 +125,16 @@
       letter-spacing: 1px;
       text-transform: uppercase;
       cursor: pointer;
-      margin-bottom: 20px;
     }
 
-    button.smoke-btn:hover { background-color: #f0f0f0; }
+    button.secondary-btn:hover { background-color: #f0f0f0; }
 
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
+      margin-top: 10px;
     }
 
     label {
@@ -164,6 +194,12 @@
 <body>
 
   <div class="container">
+    <!-- DAILY QUOTE DISPLAY ON TOP -->
+    <div class="quote-box">
+      <div class="quote-text" id="quoteText">"Loading daily motivation..."</div>
+      <div class="quote-author" id="quoteAuthor">--</div>
+    </div>
+
     <h1>LOG // TRACKER</h1>
 
     <div class="kpi-grid">
@@ -178,7 +214,12 @@
     </div>
 
     <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
-    <button type="button" class="smoke-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit Date</button>
+    
+    <div class="btn-row">
+      <button type="button" class="secondary-btn" onclick="addQuote()">+ Add Quote</button>
+      <button type="button" class="secondary-btn" onclick="addKeyword()">+ Add Keyword</button>
+    </div>
+    <button type="button" class="secondary-btn" style="font-size:0.6rem; padding:4px; margin-bottom:20px;" onclick="resetSmokeQuitDate()">Reset Smoke Quit Date</button>
 
     <div class="section-header">
       <label>Additional Habits</label>
@@ -219,16 +260,20 @@
       }
     }
 
-    function fetchCurrentStreak() {
+    function fetchDashboardData() {
       fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
           if (data.status === 'success') {
             document.getElementById('streakDisplay').innerText = data.streak;
+            document.getElementById('quoteText').innerText = `"${data.quote}"`;
+            document.getElementById('quoteAuthor').innerText = `- ${data.author}`;
           }
         })
         .catch(() => {
           document.getElementById('streakDisplay').innerText = '0';
+          document.getElementById('quoteText').innerText = '"Every day is a new beginning."';
+          document.getElementById('quoteAuthor').innerText = '- UNKNOWN';
         });
     }
 
@@ -258,6 +303,69 @@
     function removeHabit(idx) {
       extraHabits.splice(idx, 1);
       renderHabitInputs();
+    }
+
+    function addQuote() {
+      const quote = prompt("Enter the quote:");
+      if (!quote || quote.trim() === '') return;
+      
+      const author = prompt("Enter author name:") || "Anonymous";
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING QUOTE...";
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addQuote",
+        quote: quote.trim(),
+        author: author.trim(),
+        date: formattedDate
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] QUOTE SAVED TO QUOTES SHEET`;
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR SAVING QUOTE";
+      });
+    }
+
+    function addKeyword() {
+      const keyword = prompt("Enter keyword to log:");
+      if (!keyword || keyword.trim() === '') return;
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING KEYWORD...";
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addKeyword",
+        keyword: keyword.trim(),
+        date: formattedDate
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] KEYWORD "${keyword.trim()}" SAVED`;
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR SAVING KEYWORD";
+      });
     }
 
     function logWakeUp() {
@@ -298,7 +406,7 @@
         body: JSON.stringify(payload)
       })
       .then(() => {
-        statusDiv.innerText = `[✓] LOGGED TO SHEET AT ${currentTime}`;
+        statusDiv.innerText = `[✓] LOGGED AT ${currentTime}`;
         wakeBtn.disabled = false;
         wakeBtn.innerText = "LOG WAKE UP NOW";
 
@@ -307,7 +415,7 @@
           if (chk) chk.checked = false;
         });
 
-        setTimeout(fetchCurrentStreak, 1000);
+        setTimeout(fetchDashboardData, 1000);
       })
       .catch(err => {
         statusDiv.innerText = "[X] ERROR RECORDING";
@@ -317,7 +425,7 @@
     }
 
     renderHabitInputs();
-    fetchCurrentStreak();
+    fetchDashboardData();
     calculateSmokeStreak();
   </script>
 </body>

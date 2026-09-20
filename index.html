@@ -106,7 +106,7 @@
 
     button.wake-btn:hover { background-color: #333; }
 
-    .btn-row {
+    .btn-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
@@ -194,7 +194,6 @@
 <body>
 
   <div class="container">
-    <!-- DAILY QUOTE DISPLAY ON TOP -->
     <div class="quote-box">
       <div class="quote-text" id="quoteText">"Loading daily motivation..."</div>
       <div class="quote-author" id="quoteAuthor">--</div>
@@ -215,11 +214,15 @@
 
     <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
     
-    <div class="btn-row">
+    <div class="btn-grid">
+      <button type="button" class="secondary-btn" onclick="addSexActivity()">+ Sex Activity</button>
       <button type="button" class="secondary-btn" onclick="addQuote()">+ Add Quote</button>
-      <button type="button" class="secondary-btn" onclick="addKeyword()">+ Add Keyword</button>
     </div>
-    <button type="button" class="secondary-btn" style="font-size:0.6rem; padding:4px; margin-bottom:20px;" onclick="resetSmokeQuitDate()">Reset Smoke Quit Date</button>
+    
+    <div class="btn-grid">
+      <button type="button" class="secondary-btn" onclick="addKeyword()">+ Add Keyword</button>
+      <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
+    </div>
 
     <div class="section-header">
       <label>Additional Habits</label>
@@ -303,6 +306,38 @@
     function removeHabit(idx) {
       extraHabits.splice(idx, 1);
       renderHabitInputs();
+    }
+
+    function addSexActivity() {
+      const ejaculated = confirm("Did you ejaculate?\n\n[OK] = Yes\n[Cancel] = No");
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING ACTIVITY...";
+
+      const now = new Date();
+      const formattedDateTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addSexActivity",
+        dateTime: formattedDateTime,
+        ejaculated: ejaculated,
+        dateLogged: formattedDate
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        const resultText = ejaculated ? "YES" : "NO";
+        statusDiv.innerText = `[✓] LOGGED SEXUAL ACTIVITY (EJACULATED: ${resultText})`;
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR SAVING ACTIVITY";
+      });
     }
 
     function addQuote() {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LOG // TRACKER</title>
+  <title>LOG // HABIT STACKER</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -31,7 +31,6 @@
       box-shadow: 6px 6px 0px var(--fg);
     }
 
-    /* DAILY QUOTE BANNER */
     .quote-box {
       border: 1px solid var(--fg);
       padding: 12px;
@@ -106,11 +105,50 @@
 
     button.wake-btn:hover { background-color: #333; }
 
+    /* ROUTINE STACK MODAL BOX */
+    .routine-box {
+      display: none;
+      border: 2px solid var(--fg);
+      padding: 14px;
+      margin-bottom: 20px;
+      background: #fdfdfd;
+    }
+
+    .routine-box.active {
+      display: block;
+    }
+
+    .routine-title {
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--fg);
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .routine-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border);
+      padding: 8px;
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+    }
+
+    .routine-item.done {
+      text-decoration: line-through;
+      opacity: 0.5;
+      background: #f0f0f0;
+    }
+
     .btn-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     button.secondary-btn {
@@ -182,6 +220,8 @@
 
     .remove-btn:hover { color: var(--fg); font-weight: bold; }
 
+    #screenshotInput { display: none; }
+
     #status {
       margin-top: 16px;
       font-size: 0.7rem;
@@ -214,15 +254,30 @@
 
     <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
     
-    <div class="btn-grid">
-      <button type="button" class="secondary-btn" onclick="addSexActivity()">+ Sex Activity</button>
-      <button type="button" class="secondary-btn" onclick="addQuote()">+ Add Quote</button>
+    <!-- DYNAMIC ROUTINE STACK AREA (APPEARS UPON LOGGING WAKE UP) -->
+    <div class="routine-box" id="routineBox">
+      <div class="routine-title">⚡ ROUTINE STACK (CHECK AS YOU GO)</div>
+      <div id="routineListContainer"></div>
+      <button type="button" class="secondary-btn" style="margin-top:10px;" onclick="closeRoutineBox()">COMPLETE ROUTINE STACK</button>
     </div>
-    
+
     <div class="btn-grid">
+      <button type="button" class="secondary-btn" onclick="triggerScreenshotUpload()">+ Extract Screenshot</button>
+      <button type="button" class="secondary-btn" onclick="addSexActivity()">+ Sex Activity</button>
+    </div>
+
+    <div class="btn-grid">
+      <button type="button" class="secondary-btn" onclick="addQuote()">+ Add Quote</button>
       <button type="button" class="secondary-btn" onclick="addKeyword()">+ Add Keyword</button>
+    </div>
+
+    <div class="btn-grid">
+      <button type="button" class="secondary-btn" onclick="manageRoutineList()">⚙ Manage Routines</button>
       <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
     </div>
+
+    <!-- Hidden file picker -->
+    <input type="file" id="screenshotInput" accept="image/*" multiple onchange="handleScreenshotUpload(event)">
 
     <div class="section-header">
       <label>Additional Habits</label>
@@ -236,6 +291,7 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
     let extraHabits = JSON.parse(localStorage.getItem('saved_habit_labels')) || ['Reading', 'Exercise'];
+    let routineStack = JSON.parse(localStorage.getItem('saved_routine_stack')) || ['Drink 500ml Water', 'Make Bed', '5 Min Stretch', 'Cold Shower'];
     let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
 
     function getSmokeStreakDays() {
@@ -271,6 +327,10 @@
             document.getElementById('streakDisplay').innerText = data.streak;
             document.getElementById('quoteText').innerText = `"${data.quote}"`;
             document.getElementById('quoteAuthor').innerText = `- ${data.author}`;
+            if (data.routines && data.routines.length > 0) {
+              routineStack = data.routines;
+              localStorage.setItem('saved_routine_stack', JSON.stringify(routineStack));
+            }
           }
         })
         .catch(() => {
@@ -308,9 +368,113 @@
       renderHabitInputs();
     }
 
+    // ROUTINE STACK MANAGEMENT & RENDER
+    function renderRoutineStack() {
+      const container = document.getElementById('routineListContainer');
+      container.innerHTML = '';
+      routineStack.forEach((rItem, idx) => {
+        const div = document.createElement('div');
+        div.className = 'routine-item';
+        div.id = `routine_item_${idx}`;
+        div.innerHTML = `
+          <span>${idx + 1}. ${rItem}</span>
+          <input type="checkbox" onchange="toggleRoutineItem(${idx})">
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function toggleRoutineItem(idx) {
+      const el = document.getElementById(`routine_item_${idx}`);
+      if (el) el.classList.toggle('done');
+    }
+
+    function openRoutineBox() {
+      renderRoutineStack();
+      document.getElementById('routineBox').classList.add('active');
+    }
+
+    function closeRoutineBox() {
+      document.getElementById('routineBox').classList.remove('active');
+      document.getElementById('status').innerText = "[✓] ROUTINE STACK COMPLETED!";
+    }
+
+    function manageRoutineList() {
+      const currentText = routineStack.join('\n');
+      const updated = prompt("Edit Routine Stack (one habit per line):", currentText);
+      if (updated !== null) {
+        const lines = updated.split('\n').map(l => l.trim()).filter(l => l !== '');
+        if (lines.length > 0) {
+          routineStack = lines;
+          localStorage.setItem('saved_routine_stack', JSON.stringify(routineStack));
+          
+          // Sync with Google Sheet
+          fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: "saveRoutineList", routines: routineStack })
+          });
+
+          document.getElementById('status').innerText = "[✓] ROUTINE STACK UPDATED";
+        }
+      }
+    }
+
+    // SCREENSHOT UPLOADER INTEGRATION
+    function triggerScreenshotUpload() {
+      document.getElementById('screenshotInput').click();
+    }
+
+    async function handleScreenshotUpload(event) {
+      const files = Array.from(event.target.files);
+      if (files.length === 0) return;
+
+      const tag = prompt("Select Tag:\n1. Knowledge\n2. Guide\n3. Code / Tech\n4. Finance\n5. Personal", "Knowledge") || "Knowledge";
+      const statusDiv = document.getElementById('status');
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        statusDiv.innerText = `[${i + 1}/${files.length}] AI EXTRACTING: ${file.name}...`;
+
+        try {
+          const base64Image = await fileToBase64(file);
+          const now = new Date();
+          const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+          const payload = {
+            action: "addScreenshot",
+            date: formattedDate,
+            tag: tag,
+            image: base64Image
+          };
+
+          await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } catch (err) {
+          console.error("Upload error:", err);
+        }
+      }
+
+      statusDiv.innerText = `[✓] PROCESSED ${files.length} SCREENSHOT(S) TO LIBRARY TAB`;
+      event.target.value = "";
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
+
     function addSexActivity() {
       const ejaculated = confirm("Did you ejaculate?\n\n[OK] = Yes\n[Cancel] = No");
-
       const statusDiv = document.getElementById('status');
       statusDiv.innerText = "SAVING ACTIVITY...";
 
@@ -345,7 +509,6 @@
       if (!quote || quote.trim() === '') return;
       
       const author = prompt("Enter author name:") || "Anonymous";
-
       const statusDiv = document.getElementById('status');
       statusDiv.innerText = "SAVING QUOTE...";
 
@@ -449,6 +612,9 @@
           const chk = document.getElementById(`habit_${idx}`);
           if (chk) chk.checked = false;
         });
+
+        // Trigger Routine Stack Container
+        openRoutineBox();
 
         setTimeout(fetchDashboardData, 1000);
       })

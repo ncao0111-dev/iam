@@ -282,6 +282,65 @@
       padding-bottom: 2px;
     }
 
+    /* MODAL OVERLAY FOR VIRTUE LOGGING */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 15px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: #ffffff;
+      border: 2px solid var(--fg);
+      box-shadow: 6px 6px 0px var(--fg);
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--fg);
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+
+    .virtue-block {
+      border: 1px solid var(--border);
+      padding: 10px;
+      margin-bottom: 12px;
+      background: #fafafa;
+    }
+
+    .virtue-name {
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .virtue-input-row {
+      margin-bottom: 6px;
+    }
+
+    .virtue-input-row label {
+      font-size: 0.65rem;
+      display: block;
+      margin-bottom: 2px;
+    }
+
     #status {
       margin-top: 16px;
       font-size: 0.7rem;
@@ -326,7 +385,7 @@
     </div>
 
     <div class="btn-grid">
-      <button type="button" class="secondary-btn" onclick="logSleepAndVirtues()">Log Sleep & Virtues</button>
+      <button type="button" class="secondary-btn" onclick="openVirtuesModal()">Log Sleep & Virtues</button>
       <button type="button" class="secondary-btn" onclick="logLapsePrompt()">Log Clean Lapse</button>
     </div>
 
@@ -396,6 +455,19 @@
     </div>
   </div>
 
+  <!-- MODAL FOR VIRTUE LOGGING (2 LINES PER VIRTUE: GRADE + NOTE) -->
+  <div class="modal-overlay" id="virtuesModal">
+    <div class="modal-card">
+      <div class="modal-title">🌙 NIGHT CHECK-OUT: VIRTUES</div>
+      <div id="modalTimeDisplay" style="font-size:0.75rem; margin-bottom:12px; font-weight:bold;"></div>
+      
+      <div id="virtuesFormContainer"></div>
+
+      <button type="button" class="wake-btn" onclick="submitVirtuesModal()">SUBMIT CHECK-OUT & LOG</button>
+      <button type="button" class="secondary-btn" onclick="closeVirtuesModal()">CANCEL</button>
+    </div>
+  </div>
+
   <div id="status"></div>
 
   <script>
@@ -413,7 +485,41 @@
     let cleanMindStartDate = localStorage.getItem('clean_mind_start_date') || '2026-09-01';
     let wifeCycleStart = localStorage.getItem('wife_cycle_start_date') || '2026-09-24';
 
-    function logSleepAndVirtues() {
+    function openVirtuesModal() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      
+      document.getElementById('modalTimeDisplay').innerText = `SLEEP TIME LOGGED: ${hours}:${minutes}`;
+
+      const container = document.getElementById('virtuesFormContainer');
+      container.innerHTML = '';
+
+      activeVirtues.forEach((vName, idx) => {
+        const block = document.createElement('div');
+        block.className = 'virtue-block';
+        block.innerHTML = `
+          <div class="virtue-name">${vName}</div>
+          <div class="virtue-input-row">
+            <label>Grade [1-10]:</label>
+            <input type="text" id="v_grade_${idx}" value="8" style="width:100%;">
+          </div>
+          <div class="virtue-input-row">
+            <label>Note / Reflection for today:</label>
+            <input type="text" id="v_note_${idx}" placeholder="What happened today..." style="width:100%;">
+          </div>
+        `;
+        container.appendChild(block);
+      });
+
+      document.getElementById('virtuesModal').classList.add('active');
+    }
+
+    function closeVirtuesModal() {
+      document.getElementById('virtuesModal').classList.remove('active');
+    }
+
+    function submitVirtuesModal() {
       const now = new Date();
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -424,27 +530,27 @@
       const currentDate = `${year}-${month}-${day}`;
       const sleepTimeStr = `${hours}:${minutes}`;
 
-      const virtueRatings = {};
-      alert(`[CHECK-OUT] Logging sleep time at ${sleepTimeStr}.\n\nGrade yourself on a scale from 1 to 10 for today's virtues:`);
+      const virtueData = {};
+      activeVirtues.forEach((vName, idx) => {
+        const gradeVal = document.getElementById(`v_grade_${idx}`).value;
+        const noteVal = document.getElementById(`v_note_${idx}`).value;
+        
+        virtueData[vName] = {
+          grade: gradeVal.trim() || "-",
+          note: noteVal.trim() || "-"
+        };
+      });
 
-      for (let i = 0; i < activeVirtues.length; i++) {
-        const vName = activeVirtues[i];
-        const rating = prompt(`Grade [1-10]:\n${vName}`, "8");
-        if (rating !== null && rating.trim() !== '') {
-          virtueRatings[vName] = rating.trim();
-        } else {
-          virtueRatings[vName] = "-";
-        }
-      }
+      closeVirtuesModal();
 
       const statusDiv = document.getElementById('status');
-      statusDiv.innerText = "SAVING SLEEP TIME & VIRTUES...";
+      statusDiv.innerText = "SAVING SLEEP TIME & VIRTUE RATINGS...";
 
       const payload = {
         action: "addSleepVirtuesLog",
         date: currentDate,
         sleepTime: sleepTimeStr,
-        virtues: virtueRatings
+        virtues: virtueData
       };
 
       fetch(SCRIPT_URL, {
@@ -454,7 +560,7 @@
         body: JSON.stringify(payload)
       })
       .then(() => {
-        statusDiv.innerText = `[✓] SLEEP TIME (${sleepTimeStr}) & VIRTUES SAVED TO SHEET`;
+        statusDiv.innerText = `[✓] SLEEP TIME (${sleepTimeStr}) & VIRTUES LOGGED TO SHEET`;
       })
       .catch(() => {
         statusDiv.innerText = "[X] ERROR SAVING SLEEP TIME & VIRTUES";

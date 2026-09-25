@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LOG // HABIT STACKER</title>
+  <title>LOG // PERSONAL & WIFE TRACKER</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -19,16 +19,27 @@
       color: var(--fg);
       font-family: var(--font);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       padding: 30px 20px;
     }
 
     .container {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       border: 2px solid var(--fg);
       padding: 24px;
       box-shadow: 6px 6px 0px var(--fg);
+      margin-bottom: 30px;
+    }
+
+    .wife-container {
+      width: 100%;
+      max-width: 420px;
+      border: 2px solid var(--fg);
+      padding: 24px;
+      box-shadow: 6px 6px 0px var(--fg);
+      background: #fafafa;
     }
 
     .quote-box {
@@ -74,6 +85,7 @@
       border: 1px solid var(--fg);
       text-align: center;
       padding: 12px 6px;
+      background: #fff;
     }
 
     .kpi-val {
@@ -105,18 +117,15 @@
 
     button.wake-btn:hover { background-color: #333; }
 
-    /* ROUTINE STACK MODAL BOX */
     .routine-box {
       display: none;
       border: 2px solid var(--fg);
       padding: 14px;
       margin-bottom: 20px;
-      background: #fdfdfd;
+      background: #ffffff;
     }
 
-    .routine-box.active {
-      display: block;
-    }
+    .routine-box.active { display: block; }
 
     .routine-title {
       font-size: 0.75rem;
@@ -202,6 +211,7 @@
       border: 1px solid var(--border);
       padding: 8px 10px;
       font-size: 0.8rem;
+      background: #fff;
     }
 
     .checkbox-item input[type="checkbox"] {
@@ -222,6 +232,51 @@
 
     #screenshotInput { display: none; }
 
+    .form-group { margin-bottom: 12px; }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--fg);
+      font-family: var(--font);
+      font-size: 0.75rem;
+      background: #fff;
+      outline: none;
+    }
+
+    textarea { resize: vertical; min-height: 50px; }
+
+    .info-box {
+      border: 1px solid var(--fg);
+      padding: 10px;
+      margin-bottom: 12px;
+      font-size: 0.7rem;
+      line-height: 1.4;
+      background: #fff;
+    }
+
+    .knowledge-box {
+      display: none;
+      border: 1px solid var(--fg);
+      padding: 12px;
+      margin-bottom: 16px;
+      background: #ffffff;
+      font-size: 0.7rem;
+      line-height: 1.4;
+    }
+
+    .knowledge-box.active { display: block; }
+
+    .knowledge-section-title {
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      border-bottom: 1px dashed var(--fg);
+      padding-bottom: 2px;
+    }
+
     #status {
       margin-top: 16px;
       font-size: 0.7rem;
@@ -233,13 +288,14 @@
 </head>
 <body>
 
+  <!-- PERSONAL HABIT TRACKER CONTAINER -->
   <div class="container">
     <div class="quote-box">
       <div class="quote-text" id="quoteText">"Loading daily motivation..."</div>
       <div class="quote-author" id="quoteAuthor">--</div>
     </div>
 
-    <h1>LOG // TRACKER</h1>
+    <h1>LOG // MY HABITS</h1>
 
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -254,7 +310,6 @@
 
     <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
     
-    <!-- DYNAMIC ROUTINE STACK AREA (APPEARS UPON LOGGING WAKE UP) -->
     <div class="routine-box" id="routineBox">
       <div class="routine-title">⚡ ROUTINE STACK (CHECK AS YOU GO)</div>
       <div id="routineListContainer"></div>
@@ -276,7 +331,6 @@
       <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
     </div>
 
-    <!-- Hidden file picker -->
     <input type="file" id="screenshotInput" accept="image/*" multiple onchange="handleScreenshotUpload(event)">
 
     <div class="section-header">
@@ -284,15 +338,228 @@
       <button type="button" class="add-btn" onclick="addNewHabit()">+ Add Habit</button>
     </div>
     <div class="checkbox-group" id="habitsContainer"></div>
-
-    <div id="status"></div>
   </div>
+
+  <!-- SEPARATE WIFE CYCLE & CARE TRACKER CONTAINER -->
+  <div class="wife-container">
+    <h1>WIFE CYCLE & CARE</h1>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-val" id="wifeCycleDayVal">--</div>
+        <div class="kpi-lbl">Cycle Day</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" id="wifePhaseVal" style="font-size: 0.95rem; padding-top: 6px;">--</div>
+        <div class="kpi-lbl">Current Phase</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>CARE / COMFORT GUIDE FOR TODAY:</strong><br>
+      <span id="wifeCareGuide">Loading phase advice...</span>
+    </div>
+
+    <button type="button" class="secondary-btn" style="margin-bottom: 8px;" onclick="toggleKnowledgeBox()">📖 VIEW DEEP KNOWLEDGE & MECHANISMS</button>
+
+    <div class="knowledge-box" id="knowledgeBox">
+      <div id="knowledgeContent">Loading mechanisms...</div>
+    </div>
+
+    <div class="form-group">
+      <label>Her Experience / Symptoms Today</label>
+      <input type="text" id="wifeExperienceInput" placeholder="e.g. Cramps, low energy, craving sweets, happy">
+    </div>
+
+    <div class="form-group">
+      <label>Your Personal Note / Actions Taken</label>
+      <textarea id="wifeNotesInput" placeholder="e.g. Made warm ginger tea, massaged lower back, bought dark chocolate"></textarea>
+    </div>
+
+    <button type="button" class="wake-btn" onclick="logWifeCycle()">SAVE WIFE CYCLE LOG</button>
+    
+    <div class="btn-grid">
+      <button type="button" class="secondary-btn" onclick="logPeriodEnd()">Log Period Ended Today</button>
+      <button type="button" class="secondary-btn" onclick="resetWifeCycleStartDate()">Update Start Date</button>
+    </div>
+  </div>
+
+  <div id="status"></div>
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
     let extraHabits = JSON.parse(localStorage.getItem('saved_habit_labels')) || ['Reading', 'Exercise'];
     let routineStack = JSON.parse(localStorage.getItem('saved_routine_stack')) || ['Drink 500ml Water', 'Make Bed', '5 Min Stretch', 'Cold Shower'];
     let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
+
+    // Start date set to September 24 (Day 1) so today (Sep 25) calculates to Day 2
+    let wifeCycleStart = localStorage.getItem('wife_cycle_start_date') || '2026-09-24';
+
+    function getCycleDetails() {
+      const start = new Date(wifeCycleStart);
+      const today = new Date();
+      
+      // Zero out hours for clean calendar day calculations
+      start.setHours(0,0,0,0);
+      today.setHours(0,0,0,0);
+
+      const diffTime = today - start;
+      const dayNum = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      
+      const cycleDayMod = ((dayNum - 1) % 28) + 1;
+
+      let phase = "";
+      let guide = "";
+      let knowledgeHtml = "";
+
+      if (cycleDayMod >= 1 && cycleDayMod <= 5) {
+        phase = "Menstrual (Days 1-5)";
+        guide = "Rest & Nourish: Provide warm meals, ginger tea, heat pad, and let her get extra sleep. Avoid scheduling strenuous plans.";
+        
+        knowledgeHtml = `
+          <div class="knowledge-section-title">🔬 WESTERN MEDICAL SCIENCE</div>
+          Progesterone & Estrogen plummet to lowest levels, triggering arterial constriction in the endometrium and shedding of the lining. Systemic energy is lowest, pain tolerance decreases, and inflammation rises.
+          
+          <div class="knowledge-section-title">☯ TRADITIONAL MEDICINE (TCM / TNM)</div>
+          Yang transforms into Yin. Liver Qi must move smoothly to allow Blood (Huyết) to empty completely without stagnation or cramping. Keep abdomen warm and avoid cold foods/drinks.
+
+          <div class="knowledge-section-title">🌕 ESOTERIC & LUNAR ARCHETYPE</div>
+          New Moon / Crone Archetype (Inner Winter). A period of natural physical/energetic cleansing, introspection, deep intuition, and need for quiet sanctuary.
+        `;
+      } else if (cycleDayMod >= 6 && cycleDayMod <= 11) {
+        phase = "Follicular (Days 6-11)";
+        guide = "Energy Rising: Estrogen is up. Great time for active outings, social dates, trying new experiences, and collaborative goals.";
+        
+        knowledgeHtml = `
+          <div class="knowledge-section-title">🔬 WESTERN MEDICAL SCIENCE</div>
+          FSH stimulates ovarian follicles while rising Estrogen builds a new uterine lining. Estrogen increases serotonin and dopamine, boosting mental clarity, stamina, and social openness.
+          
+          <div class="knowledge-section-title">☯ TRADITIONAL MEDICINE (TCM / TNM)</div>
+          Yin & Blood Building Phase. Depleted Yin and Blood post-menses are rebuilt through Kidney Essence (Tinh) and Spleen nourishment. Encourage nutrient-dense, blood-building warm foods.
+
+          <div class="knowledge-section-title">🌕 ESOTERIC & LUNAR ARCHETYPE</div>
+          Waxing Moon / Maiden Archetype (Inner Spring). Symbolizes rebirth, optimism, mental focus, curiosity, and new beginnings.
+        `;
+      } else if (cycleDayMod >= 12 && cycleDayMod <= 16) {
+        phase = "Ovulatory (Days 12-16)";
+        guide = "Peak Confidence & Libido: High energy. Express love directly, plan romantic dates, communicate openly, and enjoy high connection.";
+        
+        knowledgeHtml = `
+          <div class="knowledge-section-title">🔬 WESTERN MEDICAL SCIENCE</div>
+          Estrogen peaks, triggering an LH surge that releases the egg. Testosterone peaks, driving max physical strength, heightened verbal fluency, high confidence, and peak sex drive.
+          
+          <div class="knowledge-section-title">☯ TRADITIONAL MEDICINE (TCM / TNM)</div>
+          Yin reaches its peak and transforms into Yang. Chong (Sea of Blood) and Ren vessels fill completely to release energy. Foster open emotional expression.
+
+          <div class="knowledge-section-title">🌕 ESOTERIC & LUNAR ARCHETYPE</div>
+          Full Moon / Mother Archetype (Inner Summer). Peak magnetic presence, expressive warmth, creativity, and deep outward connection.
+        `;
+      } else {
+        phase = "Luteal / PMS (Days 17-28)";
+        guide = "Support & Calm: Progesterone rises then drops. Offer extra patience, healthy comfort food, clean up without asking, and avoid conflict.";
+        
+        knowledgeHtml = `
+          <div class="knowledge-section-title">🔬 WESTERN MEDICAL SCIENCE</div>
+          Corpus Luteum releases high Progesterone to calm the central nervous system and raise metabolic rate. As hormones drop near Day 25-28, fluid retention, mood shifts, and PMS emerge.
+          
+          <div class="knowledge-section-title">☯ TRADITIONAL MEDICINE (TCM / TNM)</div>
+          Yang Warming & Qi Moving Phase. If Liver Qi stagnates from stress or unexpressed emotions, PMS tension and breast tenderness occur. Soothe Liver with gentle movement and chamomile/rose tea.
+
+          <div class="knowledge-section-title">🌕 ESOTERIC & LUNAR ARCHETYPE</div>
+          Waning Moon / Enchantress Archetype (Inner Autumn). A phase of boundary-setting, detail focus, discernment, and cutting through fluff.
+        `;
+      }
+
+      return { dayNum, cycleDayMod, phase, guide, knowledgeHtml };
+    }
+
+    function updateWifeCycleUI() {
+      const details = getCycleDetails();
+      document.getElementById('wifeCycleDayVal').innerText = `Day ${details.cycleDayMod}`;
+      document.getElementById('wifePhaseVal').innerText = details.phase;
+      document.getElementById('wifeCareGuide').innerText = details.guide;
+      document.getElementById('knowledgeContent').innerHTML = details.knowledgeHtml;
+    }
+
+    function toggleKnowledgeBox() {
+      document.getElementById('knowledgeBox').classList.toggle('active');
+    }
+
+    function logPeriodEnd() {
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const details = getCycleDetails();
+
+      const payload = {
+        action: "addWifeCycleLog",
+        date: formattedDate,
+        cycleDay: `Day ${details.cycleDayMod}`,
+        hormonePhase: details.phase,
+        experience: "Menses Stopped / End of Period",
+        comfortGuide: "Transition to Follicular Phase (Energy rising)",
+        notes: `Period ended on Day ${details.cycleDayMod}`,
+        timestamp: `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        document.getElementById('status').innerText = `[✓] PERIOD END LOGGED FOR TODAY (DAY ${details.cycleDayMod})`;
+      });
+    }
+
+    function resetWifeCycleStartDate() {
+      const input = prompt("Enter new cycle start date (YYYY-MM-DD):", wifeCycleStart);
+      if (input && input.trim() !== '') {
+        wifeCycleStart = input.trim();
+        localStorage.setItem('wife_cycle_start_date', wifeCycleStart);
+        updateWifeCycleUI();
+        document.getElementById('status').innerText = `[!] CYCLE START DATE UPDATED TO ${wifeCycleStart}`;
+      }
+    }
+
+    function logWifeCycle() {
+      const exp = document.getElementById('wifeExperienceInput').value;
+      const notes = document.getElementById('wifeNotesInput').value;
+      const statusDiv = document.getElementById('status');
+
+      statusDiv.innerText = "SAVING WIFE CYCLE LOG...";
+
+      const details = getCycleDetails();
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const formattedTimestamp = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addWifeCycleLog",
+        date: formattedDate,
+        cycleDay: `Day ${details.cycleDayMod}`,
+        hormonePhase: details.phase,
+        experience: exp || "Normal / Unspecified",
+        comfortGuide: details.guide,
+        notes: notes || "-",
+        timestamp: formattedTimestamp
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] WIFE CYCLE LOG SAVED (DAY ${details.cycleDayMod})`;
+        document.getElementById('wifeExperienceInput').value = "";
+        document.getElementById('wifeNotesInput').value = "";
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR SAVING WIFE CYCLE LOG";
+      });
+    }
 
     function getSmokeStreakDays() {
       const quit = new Date(smokeQuitDate);
@@ -368,7 +635,6 @@
       renderHabitInputs();
     }
 
-    // ROUTINE STACK MANAGEMENT & RENDER
     function renderRoutineStack() {
       const container = document.getElementById('routineListContainer');
       container.innerHTML = '';
@@ -408,7 +674,6 @@
           routineStack = lines;
           localStorage.setItem('saved_routine_stack', JSON.stringify(routineStack));
           
-          // Sync with Google Sheet
           fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -421,7 +686,6 @@
       }
     }
 
-    // SCREENSHOT UPLOADER INTEGRATION
     function triggerScreenshotUpload() {
       document.getElementById('screenshotInput').click();
     }
@@ -613,9 +877,7 @@
           if (chk) chk.checked = false;
         });
 
-        // Trigger Routine Stack Container
         openRoutineBox();
-
         setTimeout(fetchDashboardData, 1000);
       })
       .catch(err => {
@@ -625,9 +887,11 @@
       });
     }
 
+    // Initialize
     renderHabitInputs();
     fetchDashboardData();
     calculateSmokeStreak();
+    updateWifeCycleUI();
   </script>
 </body>
 </html>

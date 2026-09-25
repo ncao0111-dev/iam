@@ -249,7 +249,7 @@
       outline: none;
     }
 
-    textarea { resize: vertical; min-height: 50px; }
+    textarea { resize: vertical; min-height: 60px; }
 
     .info-box {
       border: 1px solid var(--fg);
@@ -282,7 +282,7 @@
       padding-bottom: 2px;
     }
 
-    /* MODAL OVERLAY FOR VIRTUE LOGGING */
+    /* REUSABLE IN-APP MODAL SYSTEM */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -331,9 +331,7 @@
       text-transform: uppercase;
     }
 
-    .virtue-input-row {
-      margin-bottom: 6px;
-    }
+    .virtue-input-row { margin-bottom: 6px; }
 
     .virtue-input-row label {
       font-size: 0.65rem;
@@ -386,27 +384,27 @@
 
     <div class="btn-grid">
       <button type="button" class="secondary-btn" onclick="openVirtuesModal()">Log Sleep & Virtues</button>
-      <button type="button" class="secondary-btn" onclick="logLapsePrompt()">Log Clean Lapse</button>
+      <button type="button" class="secondary-btn" onclick="openModal('lapseModal')">Log Clean Lapse</button>
     </div>
 
     <div class="btn-grid">
       <button type="button" class="secondary-btn" onclick="addSexActivity()">+ Sex Activity</button>
-      <button type="button" class="secondary-btn" onclick="addQuote()">+ Add Quote</button>
+      <button type="button" class="secondary-btn" onclick="openModal('quoteModal')">+ Add Quote</button>
     </div>
 
     <div class="btn-grid">
-      <button type="button" class="secondary-btn" onclick="addKeyword()">+ Add Keyword</button>
-      <button type="button" class="secondary-btn" onclick="manageVirtuesList()">⚙ Edit Virtues</button>
+      <button type="button" class="secondary-btn" onclick="openModal('keywordModal')">+ Add Keyword</button>
+      <button type="button" class="secondary-btn" onclick="openEditVirtuesModal()">⚙ Edit Virtues</button>
     </div>
 
     <div class="btn-grid">
-      <button type="button" class="secondary-btn" onclick="manageRoutineList()">⚙ Manage Routines</button>
+      <button type="button" class="secondary-btn" onclick="openEditRoutinesModal()">⚙ Manage Routines</button>
       <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
     </div>
 
     <div class="section-header">
       <label>Additional Habits</label>
-      <button type="button" class="add-btn" onclick="addNewHabit()">+ Add Habit</button>
+      <button type="button" class="add-btn" onclick="openModal('addHabitModal')">+ Add Habit</button>
     </div>
     <div class="checkbox-group" id="habitsContainer"></div>
   </div>
@@ -451,20 +449,114 @@
     
     <div class="btn-grid">
       <button type="button" class="secondary-btn" onclick="logPeriodEnd()">Log Period Ended Today</button>
-      <button type="button" class="secondary-btn" onclick="resetWifeCycleStartDate()">Update Start Date</button>
+      <button type="button" class="secondary-btn" onclick="openCycleStartModal()">Update Start Date</button>
     </div>
   </div>
 
-  <!-- MODAL FOR VIRTUE LOGGING (2 LINES PER VIRTUE: GRADE + NOTE) -->
+  <!-- MODAL 1: NIGHT CHECK-OUT VIRTUES MODAL -->
   <div class="modal-overlay" id="virtuesModal">
     <div class="modal-card">
       <div class="modal-title">🌙 NIGHT CHECK-OUT: VIRTUES</div>
       <div id="modalTimeDisplay" style="font-size:0.75rem; margin-bottom:12px; font-weight:bold;"></div>
-      
       <div id="virtuesFormContainer"></div>
-
       <button type="button" class="wake-btn" onclick="submitVirtuesModal()">SUBMIT CHECK-OUT & LOG</button>
-      <button type="button" class="secondary-btn" onclick="closeVirtuesModal()">CANCEL</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('virtuesModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADD HABIT MODAL -->
+  <div class="modal-overlay" id="addHabitModal">
+    <div class="modal-card">
+      <div class="modal-title">+ ADD NEW HABIT</div>
+      <div class="form-group">
+        <label>Habit Name</label>
+        <input type="text" id="newHabitInput" placeholder="e.g. Read 10 pages, Cold Shower">
+      </div>
+      <button type="button" class="wake-btn" onclick="submitAddHabit()">ADD HABIT</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('addHabitModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- MODAL 3: EDIT VIRTUES LIST MODAL -->
+  <div class="modal-overlay" id="editVirtuesModal">
+    <div class="modal-card">
+      <div class="modal-title">⚙ EDIT PRACTICING VIRTUES</div>
+      <div class="form-group">
+        <label>Virtues (One per line)</label>
+        <textarea id="editVirtuesTextarea" style="min-height:120px;"></textarea>
+      </div>
+      <button type="button" class="wake-btn" onclick="submitEditVirtues()">SAVE VIRTUES LIST</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('editVirtuesModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- MODAL 4: EDIT ROUTINES STACK MODAL -->
+  <div class="modal-overlay" id="editRoutinesModal">
+    <div class="modal-card">
+      <div class="modal-title">⚙ EDIT ROUTINE STACK</div>
+      <div class="form-group">
+        <label>Routine Steps (One per line)</label>
+        <textarea id="editRoutinesTextarea" style="min-height:120px;"></textarea>
+      </div>
+      <button type="button" class="wake-btn" onclick="submitEditRoutines()">SAVE ROUTINE STACK</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('editRoutinesModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- MODAL 5: LOG CLEAN MIND LAPSE MODAL -->
+  <div class="modal-overlay" id="lapseModal">
+    <div class="modal-card">
+      <div class="modal-title">⚠️ LOG CLEAN MIND LAPSE</div>
+      <div id="lapsePrevStreakDisplay" style="font-size:0.75rem; font-weight:bold; margin-bottom:10px;"></div>
+      <div class="form-group">
+        <label>Full Details (Triggers, context, feelings)</label>
+        <textarea id="lapseDetailsTextarea" placeholder="What led to this lapse? What can be improved?"></textarea>
+      </div>
+      <button type="button" class="wake-btn" onclick="submitLapseLog()">RESET STREAK & LOG LAPSE</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('lapseModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- MODAL 6: ADD QUOTE MODAL -->
+  <div class="modal-overlay" id="quoteModal">
+    <div class="modal-card">
+      <div class="modal-title">+ ADD MOTIVATIONAL QUOTE</div>
+      <div class="form-group">
+        <label>Quote Text</label>
+        <textarea id="quoteTextInput" placeholder="Enter inspiring quote..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Author</label>
+        <input type="text" id="quoteAuthorInput" placeholder="e.g. Marcus Aurelius, Lao Tzu">
+      </div>
+      <button type="button" class="wake-btn" onclick="submitAddQuote()">SAVE QUOTE</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('quoteModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- MODAL 7: ADD KEYWORD MODAL -->
+  <div class="modal-overlay" id="keywordModal">
+    <div class="modal-card">
+      <div class="modal-title">+ ADD KEYWORD</div>
+      <div class="form-group">
+        <label>Keyword / Concept</label>
+        <input type="text" id="keywordInput" placeholder="e.g. Tapas, Ekagrata, Systems Thinking">
+      </div>
+      <button type="button" class="wake-btn" onclick="submitAddKeyword()">SAVE KEYWORD</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('keywordModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- MODAL 8: UPDATE CYCLE START DATE MODAL -->
+  <div class="modal-overlay" id="cycleStartModal">
+    <div class="modal-card">
+      <div class="modal-title">⚙ UPDATE CYCLE START DATE</div>
+      <div class="form-group">
+        <label>Start Date (YYYY-MM-DD)</label>
+        <input type="text" id="cycleStartDateInput" placeholder="YYYY-MM-DD">
+      </div>
+      <button type="button" class="wake-btn" onclick="submitCycleStartDate()">UPDATE CYCLE DATE</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('cycleStartModal')">CANCEL</button>
     </div>
   </div>
 
@@ -485,6 +577,72 @@
     let cleanMindStartDate = localStorage.getItem('clean_mind_start_date') || '2026-09-01';
     let wifeCycleStart = localStorage.getItem('wife_cycle_start_date') || '2026-09-24';
 
+    // GENERAL MODAL HELPERS
+    function openModal(id) {
+      if (id === 'lapseModal') {
+        document.getElementById('lapsePrevStreakDisplay').innerText = `PREVIOUS CLEAN STREAK: ${getCleanMindDays()} DAYS`;
+      }
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    // 1. ADD HABIT MODAL
+    function submitAddHabit() {
+      const input = document.getElementById('newHabitInput').value;
+      if (input && input.trim() !== '') {
+        extraHabits.push(input.trim());
+        renderHabitInputs();
+        document.getElementById('newHabitInput').value = '';
+        closeModal('addHabitModal');
+      }
+    }
+
+    // 2. EDIT VIRTUES MODAL
+    function openEditVirtuesModal() {
+      document.getElementById('editVirtuesTextarea').value = activeVirtues.join('\n');
+      openModal('editVirtuesModal');
+    }
+
+    function submitEditVirtues() {
+      const text = document.getElementById('editVirtuesTextarea').value;
+      const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
+      if (lines.length > 0) {
+        activeVirtues = lines;
+        localStorage.setItem('saved_virtues_list', JSON.stringify(activeVirtues));
+        document.getElementById('status').innerText = "[✓] PRACTICING VIRTUES LIST UPDATED";
+        closeModal('editVirtuesModal');
+      }
+    }
+
+    // 3. EDIT ROUTINES MODAL
+    function openEditRoutinesModal() {
+      document.getElementById('editRoutinesTextarea').value = routineStack.join('\n');
+      openModal('editRoutinesModal');
+    }
+
+    function submitEditRoutines() {
+      const text = document.getElementById('editRoutinesTextarea').value;
+      const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
+      if (lines.length > 0) {
+        routineStack = lines;
+        localStorage.setItem('saved_routine_stack', JSON.stringify(routineStack));
+        
+        fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: "saveRoutineList", routines: routineStack })
+        });
+
+        document.getElementById('status').innerText = "[✓] ROUTINE STACK UPDATED";
+        closeModal('editRoutinesModal');
+      }
+    }
+
+    // 4. NIGHTLY SLEEP & VIRTUES MODAL (2 LINES PER VIRTUE: GRADE & NOTE)
     function openVirtuesModal() {
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
@@ -512,11 +670,7 @@
         container.appendChild(block);
       });
 
-      document.getElementById('virtuesModal').classList.add('active');
-    }
-
-    function closeVirtuesModal() {
-      document.getElementById('virtuesModal').classList.remove('active');
+      openModal('virtuesModal');
     }
 
     function submitVirtuesModal() {
@@ -541,7 +695,7 @@
         };
       });
 
-      closeVirtuesModal();
+      closeModal('virtuesModal');
 
       const statusDiv = document.getElementById('status');
       statusDiv.innerText = "SAVING SLEEP TIME & VIRTUE RATINGS...";
@@ -567,37 +721,10 @@
       });
     }
 
-    function manageVirtuesList() {
-      const currentText = activeVirtues.join('\n');
-      const updated = prompt("Edit Practicing Virtues (one virtue per line):", currentText);
-      if (updated !== null) {
-        const lines = updated.split('\n').map(l => l.trim()).filter(l => l !== '');
-        if (lines.length > 0) {
-          activeVirtues = lines;
-          localStorage.setItem('saved_virtues_list', JSON.stringify(activeVirtues));
-          document.getElementById('status').innerText = "[✓] PRACTICING VIRTUES LIST UPDATED";
-        }
-      }
-    }
-
-    function getCleanMindDays() {
-      const start = new Date(cleanMindStartDate);
-      const today = new Date();
-      start.setHours(0,0,0,0);
-      today.setHours(0,0,0,0);
-      const diffTime = today - start;
-      return Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
-    }
-
-    function calculateCleanStreak() {
-      document.getElementById('cleanMindVal').innerText = getCleanMindDays();
-    }
-
-    function logLapsePrompt() {
+    // 5. CLEAN MIND LAPSE MODAL
+    function submitLapseLog() {
       const prevStreak = getCleanMindDays();
-      const details = prompt(`[LOG LAPSE]\nPrevious Streak: ${prevStreak} Days\n\nEnter full details of what happened (triggers, feelings, context):`);
-      
-      if (details === null) return;
+      const details = document.getElementById('lapseDetailsTextarea').value;
 
       const now = new Date();
       const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -615,6 +742,9 @@
         newStartDate: formattedDate
       };
 
+      closeModal('lapseModal');
+      document.getElementById('lapseDetailsTextarea').value = '';
+
       const statusDiv = document.getElementById('status');
       statusDiv.innerText = "SAVING LAPSE LOG...";
 
@@ -630,6 +760,108 @@
       .catch(() => {
         statusDiv.innerText = "[X] ERROR SAVING LAPSE LOG";
       });
+    }
+
+    // 6. ADD QUOTE MODAL
+    function submitAddQuote() {
+      const quote = document.getElementById('quoteTextInput').value;
+      const author = document.getElementById('quoteAuthorInput').value || "Anonymous";
+
+      if (!quote || quote.trim() === '') return;
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING QUOTE...";
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addQuote",
+        quote: quote.trim(),
+        author: author.trim(),
+        date: formattedDate
+      };
+
+      closeModal('quoteModal');
+      document.getElementById('quoteTextInput').value = '';
+      document.getElementById('quoteAuthorInput').value = '';
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] QUOTE SAVED TO QUOTES SHEET`;
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR SAVING QUOTE";
+      });
+    }
+
+    // 7. ADD KEYWORD MODAL
+    function submitAddKeyword() {
+      const keyword = document.getElementById('keywordInput').value;
+      if (!keyword || keyword.trim() === '') return;
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING KEYWORD...";
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addKeyword",
+        keyword: keyword.trim(),
+        date: formattedDate
+      };
+
+      closeModal('keywordModal');
+      document.getElementById('keywordInput').value = '';
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] KEYWORD "${keyword.trim()}" SAVED`;
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR SAVING KEYWORD";
+      });
+    }
+
+    // 8. UPDATE CYCLE START DATE MODAL
+    function openCycleStartModal() {
+      document.getElementById('cycleStartDateInput').value = wifeCycleStart;
+      openModal('cycleStartModal');
+    }
+
+    function submitCycleStartDate() {
+      const input = document.getElementById('cycleStartDateInput').value;
+      if (input && input.trim() !== '') {
+        wifeCycleStart = input.trim();
+        localStorage.setItem('wife_cycle_start_date', wifeCycleStart);
+        updateWifeCycleUI();
+        closeModal('cycleStartModal');
+        document.getElementById('status').innerText = `[!] CYCLE START DATE UPDATED TO ${wifeCycleStart}`;
+      }
+    }
+
+    function getCleanMindDays() {
+      const start = new Date(cleanMindStartDate);
+      const today = new Date();
+      start.setHours(0,0,0,0);
+      today.setHours(0,0,0,0);
+      const diffTime = today - start;
+      return Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+    }
+
+    function calculateCleanStreak() {
+      document.getElementById('cleanMindVal').innerText = getCleanMindDays();
     }
 
     function getCycleDetails() {
@@ -746,16 +978,6 @@
       });
     }
 
-    function resetWifeCycleStartDate() {
-      const input = prompt("Enter new cycle start date (YYYY-MM-DD):", wifeCycleStart);
-      if (input && input.trim() !== '') {
-        wifeCycleStart = input.trim();
-        localStorage.setItem('wife_cycle_start_date', wifeCycleStart);
-        updateWifeCycleUI();
-        document.getElementById('status').innerText = `[!] CYCLE START DATE UPDATED TO ${wifeCycleStart}`;
-      }
-    }
-
     function logWifeCycle() {
       const exp = document.getElementById('wifeExperienceInput').value;
       const notes = document.getElementById('wifeNotesInput').value;
@@ -856,14 +1078,6 @@
       localStorage.setItem('saved_habit_labels', JSON.stringify(extraHabits));
     }
 
-    function addNewHabit() {
-      const name = prompt("Enter new habit name:");
-      if (name && name.trim() !== '') {
-        extraHabits.push(name.trim());
-        renderHabitInputs();
-      }
-    }
-
     function removeHabit(idx) {
       extraHabits.splice(idx, 1);
       renderHabitInputs();
@@ -899,27 +1113,6 @@
       document.getElementById('status').innerText = "[✓] ROUTINE STACK COMPLETED!";
     }
 
-    function manageRoutineList() {
-      const currentText = routineStack.join('\n');
-      const updated = prompt("Edit Routine Stack (one habit per line):", currentText);
-      if (updated !== null) {
-        const lines = updated.split('\n').map(l => l.trim()).filter(l => l !== '');
-        if (lines.length > 0) {
-          routineStack = lines;
-          localStorage.setItem('saved_routine_stack', JSON.stringify(routineStack));
-          
-          fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: "saveRoutineList", routines: routineStack })
-          });
-
-          document.getElementById('status').innerText = "[✓] ROUTINE STACK UPDATED";
-        }
-      }
-    }
-
     function addSexActivity() {
       const ejaculated = confirm("Did you ejaculate?\n\n[OK] = Yes\n[Cancel] = No");
       const statusDiv = document.getElementById('status');
@@ -948,68 +1141,6 @@
       })
       .catch(() => {
         statusDiv.innerText = "[X] ERROR SAVING ACTIVITY";
-      });
-    }
-
-    function addQuote() {
-      const quote = prompt("Enter the quote:");
-      if (!quote || quote.trim() === '') return;
-      
-      const author = prompt("Enter author name:") || "Anonymous";
-      const statusDiv = document.getElementById('status');
-      statusDiv.innerText = "SAVING QUOTE...";
-
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-
-      const payload = {
-        action: "addQuote",
-        quote: quote.trim(),
-        author: author.trim(),
-        date: formattedDate
-      };
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(() => {
-        statusDiv.innerText = `[✓] QUOTE SAVED TO QUOTES SHEET`;
-      })
-      .catch(() => {
-        statusDiv.innerText = "[X] ERROR SAVING QUOTE";
-      });
-    }
-
-    function addKeyword() {
-      const keyword = prompt("Enter keyword to log:");
-      if (!keyword || keyword.trim() === '') return;
-
-      const statusDiv = document.getElementById('status');
-      statusDiv.innerText = "SAVING KEYWORD...";
-
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      const payload = {
-        action: "addKeyword",
-        keyword: keyword.trim(),
-        date: formattedDate
-      };
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(() => {
-        statusDiv.innerText = `[✓] KEYWORD "${keyword.trim()}" SAVED`;
-      })
-      .catch(() => {
-        statusDiv.innerText = "[X] ERROR SAVING KEYWORD";
       });
     }
 

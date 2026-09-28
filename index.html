@@ -107,6 +107,76 @@
       margin-top: 4px;
     }
 
+    /* CLEAN MIND DEDICATED SECTION */
+    .clean-mind-section {
+      border: 2px solid var(--fg);
+      padding: 16px;
+      margin-bottom: 20px;
+      background: #fdfdfd;
+    }
+
+    .clean-mind-header {
+      font-size: 0.8rem;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--fg);
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .clean-mind-badge {
+      background: var(--fg);
+      color: var(--bg);
+      padding: 2px 6px;
+      font-size: 0.65rem;
+    }
+
+    .teaching-meta {
+      font-size: 0.65rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #444;
+      margin-bottom: 6px;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 4px;
+    }
+
+    .teaching-box {
+      border: 1px solid var(--fg);
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+
+    .teaching-content {
+      font-size: 0.78rem;
+      line-height: 1.45;
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+
+    .reflection-box {
+      background: #f4f4f4;
+      border-left: 3px solid var(--fg);
+      padding: 8px;
+      font-size: 0.7rem;
+      line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    .reflection-title {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.6rem;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
     button.wake-btn {
       width: 100%;
       padding: 14px;
@@ -282,7 +352,7 @@
       padding-bottom: 2px;
     }
 
-    /* REUSABLE IN-APP MODAL SYSTEM */
+    /* MODAL OVERLAYS */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -374,6 +444,27 @@
       </div>
     </div>
 
+    <!-- DEDICATED CLEAN MIND TRACKER SECTION -->
+    <div class="clean-mind-section">
+      <div class="clean-mind-header">
+        <span>🧠 MIND PURITY TRACKER</span>
+        <span class="clean-mind-badge" id="cleanMindBadge">DAY 1 / 365</span>
+      </div>
+
+      <div class="teaching-box">
+        <div class="teaching-meta" id="teachingMetaDisplay">PATH: LOADING... | TEACHER: --</div>
+        <div class="teaching-content" id="teachingContentText">Loading daily teaching from master sheet...</div>
+        
+        <div class="reflection-box">
+          <div class="reflection-title">🎯 DAILY REFLECTION / ACTION FOCUS:</div>
+          <span id="teachingReflectionText">Loading focus...</span>
+        </div>
+      </div>
+
+      <button type="button" class="wake-btn" onclick="commitCleanMindToday()">⚡ COMMIT TO CLEAN MIND TODAY</button>
+      <button type="button" class="secondary-btn" style="color: #900; border-color: #900;" onclick="openModal('lapseModal')">⚠️ LOG LAPSE / RESET STREAK</button>
+    </div>
+
     <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
     
     <div class="routine-box" id="routineBox">
@@ -384,27 +475,26 @@
 
     <div class="btn-grid">
       <button type="button" class="secondary-btn" onclick="openVirtuesModal()">Log Sleep & Virtues</button>
-      <button type="button" class="secondary-btn" onclick="openModal('lapseModal')">Log Clean Lapse</button>
-    </div>
-
-    <div class="btn-grid">
       <button type="button" class="secondary-btn" onclick="addSexActivity()">+ Sex Activity</button>
+    </div>
+
+    <div class="btn-grid">
       <button type="button" class="secondary-btn" onclick="openModal('quoteModal')">+ Add Quote</button>
-    </div>
-
-    <div class="btn-grid">
       <button type="button" class="secondary-btn" onclick="openModal('keywordModal')">+ Add Keyword</button>
-      <button type="button" class="secondary-btn" onclick="openEditVirtuesModal()">⚙ Edit Virtues</button>
     </div>
 
     <div class="btn-grid">
+      <button type="button" class="secondary-btn" onclick="openEditVirtuesModal()">⚙ Edit Virtues</button>
       <button type="button" class="secondary-btn" onclick="openEditRoutinesModal()">⚙ Manage Routines</button>
+    </div>
+
+    <div class="btn-grid">
       <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
+      <button type="button" class="secondary-btn" onclick="openModal('addHabitModal')">+ Add Habit</button>
     </div>
 
     <div class="section-header">
       <label>Additional Habits</label>
-      <button type="button" class="add-btn" onclick="openModal('addHabitModal')">+ Add Habit</button>
     </div>
     <div class="checkbox-group" id="habitsContainer"></div>
   </div>
@@ -510,9 +600,9 @@
       <div id="lapsePrevStreakDisplay" style="font-size:0.75rem; font-weight:bold; margin-bottom:10px;"></div>
       <div class="form-group">
         <label>Full Details (Triggers, context, feelings)</label>
-        <textarea id="lapseDetailsTextarea" placeholder="What led to this lapse? What can be improved?"></textarea>
+        <textarea id="lapseDetailsTextarea" placeholder="What led to this lapse? What will you change starting today?"></textarea>
       </div>
-      <button type="button" class="wake-btn" onclick="submitLapseLog()">RESET STREAK & LOG LAPSE</button>
+      <button type="button" class="wake-btn" style="background:#900;" onclick="submitLapseLog()">RESET STREAK & LOG LAPSE</button>
       <button type="button" class="secondary-btn" onclick="closeModal('lapseModal')">CANCEL</button>
     </div>
   </div>
@@ -576,11 +666,13 @@
     let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
     let cleanMindStartDate = localStorage.getItem('clean_mind_start_date') || '2026-09-01';
     let wifeCycleStart = localStorage.getItem('wife_cycle_start_date') || '2026-09-24';
+    
+    let activeTeachingData = {};
 
-    // GENERAL MODAL HELPERS
+    // MODAL HELPERS
     function openModal(id) {
       if (id === 'lapseModal') {
-        document.getElementById('lapsePrevStreakDisplay').innerText = `PREVIOUS CLEAN STREAK: ${getCleanMindDays()} DAYS`;
+        document.getElementById('lapsePrevStreakDisplay').innerText = `PREVIOUS STREAK: ${getCleanMindDays()} DAYS`;
       }
       document.getElementById(id).classList.add('active');
     }
@@ -589,7 +681,119 @@
       document.getElementById(id).classList.remove('active');
     }
 
-    // 1. ADD HABIT MODAL
+    // CLEAN MIND CALCULATIONS & LIVE FETCH FROM SHEET
+    function getCleanMindDays() {
+      const start = new Date(cleanMindStartDate);
+      const today = new Date();
+      start.setHours(0,0,0,0);
+      today.setHours(0,0,0,0);
+      const diffTime = today - start;
+      return Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+    }
+
+    function calculateCleanStreak() {
+      const streakDays = getCleanMindDays();
+      const currentDayNum = streakDays + 1;
+
+      document.getElementById('cleanMindVal').innerText = streakDays;
+      document.getElementById('cleanMindBadge').innerText = `DAY ${currentDayNum} / 365`;
+
+      fetch(`${SCRIPT_URL}?dayNum=${currentDayNum}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.purityTeaching) {
+            activeTeachingData = data.purityTeaching;
+            document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
+            document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
+            document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
+          }
+        })
+        .catch(() => {
+          document.getElementById('teachingMetaDisplay').innerText = "MIND PURITY | MASTER TEACHINGS";
+          document.getElementById('teachingContentText').innerText = `"Transmute restless impulse into creative willpower."`;
+          document.getElementById('teachingReflectionText').innerText = "Guard raw attention at the threshold.";
+        });
+    }
+
+    function commitCleanMindToday() {
+      const currentDayNum = getCleanMindDays() + 1;
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const formattedTimestamp = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "LOGGING COMMITMENT...";
+
+      const payload = {
+        action: "addCleanCommitment",
+        dateTime: formattedTimestamp,
+        dayNum: currentDayNum,
+        tradition: activeTeachingData.tradition || "",
+        source: activeTeachingData.source || "",
+        teaching: activeTeachingData.teaching || "",
+        reflection: activeTeachingData.reflection || ""
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] COMMITTED FOR DAY ${currentDayNum} AT ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR LOGGING COMMITMENT";
+      });
+    }
+
+    function submitLapseLog() {
+      const prevStreak = getCleanMindDays();
+      const details = document.getElementById('lapseDetailsTextarea').value;
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const formattedTimestamp = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      cleanMindStartDate = formattedDate;
+      localStorage.setItem('clean_mind_start_date', cleanMindStartDate);
+
+      const payload = {
+        action: "addCleanLapseLog",
+        dateTime: formattedTimestamp,
+        previousStreak: prevStreak,
+        tradition: activeTeachingData.tradition || "",
+        source: activeTeachingData.source || "",
+        teaching: activeTeachingData.teaching || "",
+        reflection: activeTeachingData.reflection || "",
+        notes: details.trim() || "No notes entered",
+        newStartDate: formattedDate
+      };
+
+      closeModal('lapseModal');
+      document.getElementById('lapseDetailsTextarea').value = '';
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING LAPSE LOG...";
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = "[!] LAPSE LOGGED TO SHEET. STREAK RESET TO DAY 1. STAY RESOLUTE!";
+        calculateCleanStreak();
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR SAVING LAPSE LOG";
+      });
+    }
+
+    // HABITS & OTHER FORM LOGIC
     function submitAddHabit() {
       const input = document.getElementById('newHabitInput').value;
       if (input && input.trim() !== '') {
@@ -600,7 +804,6 @@
       }
     }
 
-    // 2. EDIT VIRTUES MODAL
     function openEditVirtuesModal() {
       document.getElementById('editVirtuesTextarea').value = activeVirtues.join('\n');
       openModal('editVirtuesModal');
@@ -617,7 +820,6 @@
       }
     }
 
-    // 3. EDIT ROUTINES MODAL
     function openEditRoutinesModal() {
       document.getElementById('editRoutinesTextarea').value = routineStack.join('\n');
       openModal('editRoutinesModal');
@@ -642,7 +844,6 @@
       }
     }
 
-    // 4. NIGHTLY SLEEP & VIRTUES MODAL (2 LINES PER VIRTUE: GRADE & NOTE)
     function openVirtuesModal() {
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
@@ -721,48 +922,6 @@
       });
     }
 
-    // 5. CLEAN MIND LAPSE MODAL
-    function submitLapseLog() {
-      const prevStreak = getCleanMindDays();
-      const details = document.getElementById('lapseDetailsTextarea').value;
-
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      const formattedTimestamp = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      cleanMindStartDate = formattedDate;
-      localStorage.setItem('clean_mind_start_date', cleanMindStartDate);
-      calculateCleanStreak();
-
-      const payload = {
-        action: "addCleanLapseLog",
-        dateTime: formattedTimestamp,
-        previousStreak: prevStreak,
-        notes: details.trim() || "No notes entered",
-        newStartDate: formattedDate
-      };
-
-      closeModal('lapseModal');
-      document.getElementById('lapseDetailsTextarea').value = '';
-
-      const statusDiv = document.getElementById('status');
-      statusDiv.innerText = "SAVING LAPSE LOG...";
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(() => {
-        statusDiv.innerText = "[!] LAPSE LOGGED TO SHEET. STREAK RESET TO 0. STAY STRONG!";
-      })
-      .catch(() => {
-        statusDiv.innerText = "[X] ERROR SAVING LAPSE LOG";
-      });
-    }
-
-    // 6. ADD QUOTE MODAL
     function submitAddQuote() {
       const quote = document.getElementById('quoteTextInput').value;
       const author = document.getElementById('quoteAuthorInput').value || "Anonymous";
@@ -800,7 +959,6 @@
       });
     }
 
-    // 7. ADD KEYWORD MODAL
     function submitAddKeyword() {
       const keyword = document.getElementById('keywordInput').value;
       if (!keyword || keyword.trim() === '') return;
@@ -834,7 +992,6 @@
       });
     }
 
-    // 8. UPDATE CYCLE START DATE MODAL
     function openCycleStartModal() {
       document.getElementById('cycleStartDateInput').value = wifeCycleStart;
       openModal('cycleStartModal');
@@ -849,19 +1006,6 @@
         closeModal('cycleStartModal');
         document.getElementById('status').innerText = `[!] CYCLE START DATE UPDATED TO ${wifeCycleStart}`;
       }
-    }
-
-    function getCleanMindDays() {
-      const start = new Date(cleanMindStartDate);
-      const today = new Date();
-      start.setHours(0,0,0,0);
-      today.setHours(0,0,0,0);
-      const diffTime = today - start;
-      return Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
-    }
-
-    function calculateCleanStreak() {
-      document.getElementById('cleanMindVal').innerText = getCleanMindDays();
     }
 
     function getCycleDetails() {

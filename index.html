@@ -514,8 +514,15 @@
       </div>
     </div>
 
+    <div class="kpi-grid">
+      <div class="kpi-card" style="grid-column: span 2; background: #fff;">
+        <div class="kpi-val" id="fertilityStatusVal" style="font-size: 1.1rem; padding-top: 2px;">--</div>
+        <div class="kpi-lbl">FERTILITY & CONCEPTION WINDOW</div>
+      </div>
+    </div>
+
     <div class="info-box">
-      <strong>CARE / COMFORT GUIDE FOR TODAY:</strong><br>
+      <strong>CARE & FERTILITY GUIDE FOR TODAY:</strong><br>
       <span id="wifeCareGuide">Loading phase advice...</span>
     </div>
 
@@ -1019,74 +1026,95 @@
       const cycleDayMod = ((dayNum - 1) % 28) + 1;
 
       let phase = "";
+      let fertility = "";
       let guide = "";
       let knowledgeHtml = "";
 
       if (cycleDayMod >= 1 && cycleDayMod <= 5) {
         phase = "Menstrual (Days 1-5)";
-        guide = "Rest & Nourish: Provide warm meals, ginger tea, heat pad, and let her get extra sleep. Avoid scheduling strenuous plans.";
+        fertility = "VERY LOW (< 1%)";
+        guide = "Rest & Nourish: Provide warm meals, ginger tea, heat pad, and let her get extra sleep. Conception probability is extremely low.";
         
         knowledgeHtml = `
-          <div class="knowledge-section-title">🔬 WESTERN MEDICAL SCIENCE</div>
-          Progesterone & Estrogen plummet to lowest levels, triggering arterial constriction in the endometrium and shedding of the lining. Systemic energy is lowest, pain tolerance decreases, and inflammation rises.
+          <div class="knowledge-section-title">🔬 FERTILITY & BIOLOGY</div>
+          Arterial constriction causes shedding of uterine lining. Ovaries are recruiting new follicles under low FSH. Cervical mucus is absent or thick (impenetrable to sperm).
           
           <div class="knowledge-section-title">☯ TRADITIONAL MEDICINE (TCM / TNM)</div>
-          Yang transforms into Yin. Liver Qi must move smoothly to allow Blood (Huyết) to empty completely without stagnation or cramping. Keep abdomen warm and avoid cold foods/drinks.
+          Yang transforms into Yin. Liver Qi must move smoothly to allow Blood (Huyết) to empty completely without stagnation or cramping. Keep abdomen warm.
 
-          <div class="knowledge-section-title">🌕 ESOTERIC & LUNAR ARCHETYPE</div>
-          New Moon / Crone Archetype (Inner Winter). A period of natural physical/energetic cleansing, introspection, deep intuition, and need for quiet sanctuary.
+          <div class="knowledge-section-title">🌕 ESOTERIC ARCHETYPE</div>
+          New Moon / Crone Archetype (Inner Winter). Energetic cleansing, introspection, deep intuition, and need for quiet sanctuary.
         `;
-      } else if (cycleDayMod >= 6 && cycleDayMod <= 11) {
-        phase = "Follicular (Days 6-11)";
-        guide = "Energy Rising: Estrogen is up. Great time for active outings, social dates, trying new experiences, and collaborative goals.";
+      } else if (cycleDayMod >= 6 && cycleDayMod <= 9) {
+        phase = "Early Follicular (Days 6-9)";
+        fertility = "LOW TO MODERATE (~5-10%)";
+        guide = "Energy Rising: Estrogen builds up. Sperm can survive up to 5 days in fertile cervical mucus, entering early conception window towards Day 9.";
         
         knowledgeHtml = `
-          <div class="knowledge-section-title">🔬 WESTERN MEDICAL SCIENCE</div>
-          FSH stimulates ovarian follicles while rising Estrogen builds a new uterine lining. Estrogen increases serotonin and dopamine, boosting mental clarity, stamina, and social openness.
+          <div class="knowledge-section-title">🔬 FERTILITY & BIOLOGY</div>
+          Developing follicles secrete increasing Estrogen, causing cervical mucus to change from dry/sticky to lotion-like. Uterine lining begins thick rebuilding.
           
           <div class="knowledge-section-title">☯ TRADITIONAL MEDICINE (TCM / TNM)</div>
-          Yin & Blood Building Phase. Depleted Yin and Blood post-menses are rebuilt through Kidney Essence (Tinh) and Spleen nourishment. Encourage nutrient-dense, blood-building warm foods.
+          Yin & Blood Building Phase. Rebuilding depleted Jing (Essence) and Blood. Encourage nutrient-dense warm foods.
 
-          <div class="knowledge-section-title">🌕 ESOTERIC & LUNAR ARCHETYPE</div>
-          Waxing Moon / Maiden Archetype (Inner Spring). Symbolizes rebirth, optimism, mental focus, curiosity, and new beginnings.
+          <div class="knowledge-section-title">🌕 ESOTERIC ARCHETYPE</div>
+          Waxing Moon / Maiden Archetype (Inner Spring). Symbolizes rebirth, mental clarity, optimism, and social openness.
         `;
-      } else if (cycleDayMod >= 12 && cycleDayMod <= 16) {
-        phase = "Ovulatory (Days 12-16)";
-        guide = "Peak Confidence & Libido: High energy. Express love directly, plan romantic dates, communicate openly, and enjoy high connection.";
+      } else if (cycleDayMod >= 10 && cycleDayMod <= 16) {
+        phase = "Ovulatory Window (Days 10-16)";
+        fertility = "PEAK FERTILITY (25-33%)";
+        guide = "PEAK CONCEPTION WINDOW: High Estrogen & LH surge trigger egg release (approx. Day 14). Clear, stretchy 'egg-white' cervical fluid maximizes sperm motility.";
         
         knowledgeHtml = `
-          <div class="knowledge-section-title">🔬 WESTERN MEDICAL SCIENCE</div>
-          Estrogen peaks, triggering an LH surge that releases the egg. Testosterone peaks, driving max physical strength, heightened verbal fluency, high confidence, and peak sex drive.
+          <div class="knowledge-section-title">🔬 FERTILITY & BIOLOGY</div>
+          LH surge triggers ovulation. Released egg lives 12-24 hours. Cervical fluid becomes raw egg-white consistency (pH-balanced to nourish sperm). Maximum physical strength, confidence, and libido.
           
           <div class="knowledge-section-title">☯ TRADITIONAL MEDICINE (TCM / TNM)</div>
-          Yin reaches its peak and transforms into Yang. Chong (Sea of Blood) and Ren vessels fill completely to release energy. Foster open emotional expression.
+          Yin reaches its peak and transforms into Yang. High heat and Qi movement in the Sea of Blood (Chong Vessel). Peak magnetism.
 
-          <div class="knowledge-section-title">🌕 ESOTERIC & LUNAR ARCHETYPE</div>
-          Full Moon / Mother Archetype (Inner Summer). Peak magnetic presence, expressive warmth, creativity, and deep outward connection.
+          <div class="knowledge-section-title">🌕 ESOTERIC ARCHETYPE</div>
+          Full Moon / Mother Archetype (Inner Summer). Peak magnetic presence, expressive warmth, creativity, and deep physical connection.
+        `;
+      } else if (cycleDayMod >= 17 && cycleDayMod <= 22) {
+        phase = "Early Luteal (Days 17-22)";
+        fertility = "LOW / CLOSING (< 2%)";
+        guide = "Fertility Window Closed: Egg degrades if unfertilized. Progesterone produced by Corpus Luteum thickens cervical plug, blocking further sperm passage.";
+        
+        knowledgeHtml = `
+          <div class="knowledge-section-title">🔬 FERTILITY & BIOLOGY</div>
+          Corpus Luteum secretes Progesterone, shifting body basal temperature up by ~0.5°F. Uterine lining transforms into a secretory state preparing for potential implantation.
+          
+          <div class="knowledge-section-title">☯ TRADITIONAL MEDICINE (TCM / TNM)</div>
+          Yang Phase Begins. Conserve metabolic heat and avoid raw cold foods. Keep lower back and abdomen warm.
+
+          <div class="knowledge-section-title">🌕 ESOTERIC ARCHETYPE</div>
+          Waning Moon / Enchantress Archetype (Inner Autumn). Grounding, boundary-setting, attention to detail, and inward focus.
         `;
       } else {
-        phase = "Luteal / PMS (Days 17-28)";
-        guide = "Support & Calm: Progesterone rises then drops. Offer extra patience, healthy comfort food, clean up without asking, and avoid conflict.";
+        phase = "Late Luteal / PMS (Days 23-28)";
+        fertility = "VERY LOW (< 0.1%)";
+        guide = "Support & Calm: Progesterone & Estrogen drop drastically. Offer extra patience, healthy comfort food, and reduce stress to soothe PMS.";
         
         knowledgeHtml = `
-          <div class="knowledge-section-title">🔬 WESTERN MEDICAL SCIENCE</div>
-          Corpus Luteum releases high Progesterone to calm the central nervous system and raise metabolic rate. As hormones drop near Day 25-28, fluid retention, mood shifts, and PMS emerge.
+          <div class="knowledge-section-title">🔬 FERTILITY & BIOLOGY</div>
+          Regression of Corpus Luteum drops Progesterone & Estrogen. Central nervous system serotonin decreases, inducing fluid retention, mood swings, and fatigue.
           
           <div class="knowledge-section-title">☯ TRADITIONAL MEDICINE (TCM / TNM)</div>
-          Yang Warming & Qi Moving Phase. If Liver Qi stagnates from stress or unexpressed emotions, PMS tension and breast tenderness occur. Soothe Liver with gentle movement and chamomile/rose tea.
+          Liver Qi Stagnation risk. Soothe Liver with gentle movement, chamomile/rose tea, and warm baths.
 
-          <div class="knowledge-section-title">🌕 ESOTERIC & LUNAR ARCHETYPE</div>
-          Waning Moon / Enchantress Archetype (Inner Autumn). A phase of boundary-setting, detail focus, discernment, and cutting through fluff.
+          <div class="knowledge-section-title">🌕 ESOTERIC ARCHETYPE</div>
+          Dark Moon / Inner Autumn. Cutting through non-essentials, discernment, and preparing for natural reset.
         `;
       }
 
-      return { dayNum, cycleDayMod, phase, guide, knowledgeHtml };
+      return { dayNum, cycleDayMod, phase, fertility, guide, knowledgeHtml };
     }
 
     function updateWifeCycleUI() {
       const details = getCycleDetails();
       document.getElementById('wifeCycleDayVal').innerText = `Day ${details.cycleDayMod}`;
       document.getElementById('wifePhaseVal').innerText = details.phase;
+      document.getElementById('fertilityStatusVal').innerText = details.fertility;
       document.getElementById('wifeCareGuide').innerText = details.guide;
       document.getElementById('knowledgeContent').innerHTML = details.knowledgeHtml;
     }
@@ -1106,7 +1134,7 @@
         cycleDay: `Day ${details.cycleDayMod}`,
         hormonePhase: details.phase,
         experience: "Menses Stopped / End of Period",
-        comfortGuide: "Transition to Follicular Phase (Energy rising)",
+        comfortGuide: `Fertility Status: ${details.fertility} | ${details.guide}`,
         notes: `Period ended on Day ${details.cycleDayMod}`,
         timestamp: `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
       };
@@ -1140,7 +1168,7 @@
         cycleDay: `Day ${details.cycleDayMod}`,
         hormonePhase: details.phase,
         experience: exp || "Normal / Unspecified",
-        comfortGuide: details.guide,
+        comfortGuide: `Fertility Status: ${details.fertility} | ${details.guide}`,
         notes: notes || "-",
         timestamp: formattedTimestamp
       };

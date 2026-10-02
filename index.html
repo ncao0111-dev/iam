@@ -107,6 +107,58 @@
       margin-top: 4px;
     }
 
+    /* DAILY CHAKRA MASTERY CARD */
+    .chakra-section {
+      border: 2px solid var(--fg);
+      padding: 14px;
+      margin-bottom: 20px;
+      background: #fcfcfc;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .chakra-section:hover {
+      background: #f0f0f0;
+    }
+
+    .chakra-day-title {
+      font-size: 0.65rem;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--fg);
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+    }
+
+    .chakra-symbol {
+      font-size: 2.2rem;
+      margin: 4px 0;
+    }
+
+    .chakra-name {
+      font-size: 0.95rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .chakra-theme {
+      font-size: 0.7rem;
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .click-hint {
+      font-size: 0.6rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 8px;
+      color: #666;
+    }
+
     /* CLEAN MIND DEDICATED SECTION */
     .clean-mind-section {
       border: 2px solid var(--fg);
@@ -266,18 +318,6 @@
       font-weight: bold;
       text-transform: uppercase;
     }
-
-    .add-btn {
-      background: none;
-      border: 1px solid var(--fg);
-      font-family: var(--font);
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .add-btn:hover { background: var(--fg); color: var(--bg); }
 
     .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
 
@@ -444,6 +484,15 @@
       </div>
     </div>
 
+    <!-- DAILY CHAKRA MASTERY CARD -->
+    <div class="chakra-section" onclick="openModal('chakraModal')">
+      <div class="chakra-day-title" id="chakraDayDisplay">TODAY'S CHAKRA WORK</div>
+      <div class="chakra-symbol" id="chakraSymbolDisplay">लं</div>
+      <div class="chakra-name" id="chakraNameDisplay">MULADHARA (ROOT)</div>
+      <div class="chakra-theme" id="chakraThemeDisplay">"Grounding, Physical Health & Survival"</div>
+      <div class="click-hint">[ 🔍 CLICK FOR LESSON & DAILY PRACTICE ]</div>
+    </div>
+
     <!-- DEDICATED CLEAN MIND TRACKER SECTION -->
     <div class="clean-mind-section">
       <div class="clean-mind-header">
@@ -550,6 +599,15 @@
     </div>
   </div>
 
+  <!-- MODAL 0: CHAKRA LESSON & PRACTICE MODAL -->
+  <div class="modal-overlay" id="chakraModal">
+    <div class="modal-card">
+      <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
+      <div id="chakraModalContent" style="font-size:0.75rem; line-height:1.45;"></div>
+      <button type="button" class="secondary-btn" style="margin-top:14px;" onclick="closeModal('chakraModal')">CLOSE LESSON</button>
+    </div>
+  </div>
+
   <!-- MODAL 1: NIGHT CHECK-OUT VIRTUES MODAL -->
   <div class="modal-overlay" id="virtuesModal">
     <div class="modal-card">
@@ -577,7 +635,7 @@
   <!-- MODAL 3: EDIT VIRTUES LIST MODAL -->
   <div class="modal-overlay" id="editVirtuesModal">
     <div class="modal-card">
-      <div class="modal-title">⚙ EDIT PRACTICING VIRTUES</div>
+      <div class="modal-title">GEAR EDIT PRACTICING VIRTUES</div>
       <div class="form-group">
         <label>Virtues (One per line)</label>
         <textarea id="editVirtuesTextarea" style="min-height:120px;"></textarea>
@@ -590,7 +648,7 @@
   <!-- MODAL 4: EDIT ROUTINES STACK MODAL -->
   <div class="modal-overlay" id="editRoutinesModal">
     <div class="modal-card">
-      <div class="modal-title">⚙ EDIT ROUTINE STACK</div>
+      <div class="modal-title">GEAR EDIT ROUTINE STACK</div>
       <div class="form-group">
         <label>Routine Steps (One per line)</label>
         <textarea id="editRoutinesTextarea" style="min-height:120px;"></textarea>
@@ -647,7 +705,7 @@
   <!-- MODAL 8: UPDATE CYCLE START DATE MODAL -->
   <div class="modal-overlay" id="cycleStartModal">
     <div class="modal-card">
-      <div class="modal-title">⚙ UPDATE CYCLE START DATE</div>
+      <div class="modal-title">GEAR UPDATE CYCLE START DATE</div>
       <div class="form-group">
         <label>Start Date (YYYY-MM-DD)</label>
         <input type="text" id="cycleStartDateInput" placeholder="YYYY-MM-DD">
@@ -676,7 +734,101 @@
     
     let activeTeachingData = {};
 
-    // MODAL HELPERS
+    // 7-DAY CHAKRA MASTERY DATABASE
+    const chakraMasteryData = {
+      1: { // Monday
+        name: "Muladhara (Root Chakra)",
+        symbol: "लं",
+        element: "Earth | Beej Mantra: LAM",
+        theme: "Grounding, Physical Health & Survival",
+        hobbies: "Walking, Whole Foods, Yoga, Cycling",
+        lesson: "Muladhara governs basic physical survival, nervous system stability, and bone structure. You cannot build high mental clarity without a grounded physical container.",
+        practice: "1. Spend 30 minutes walking barefoot on natural ground or cycling outdoors.\n2. Eat a meal cooked with whole root vegetables.\n3. Practice 10 minutes of Earth Breath (Inhale 4s, Hold 4s, Exhale 8s)."
+      },
+      2: { // Tuesday
+        name: "Svadhisthana (Sacral Chakra)",
+        symbol: "वं",
+        element: "Water | Beej Mantra: VAM",
+        theme: "Emotional Flow, Self-Connection & Sensuality",
+        hobbies: "Journaling, Painting, Abhyanga, Yog Nidra",
+        lesson: "Svadhisthana governs fluid emotional flow and creative vitality. Resistance and emotional suppression block this center; self-massage and deep rest unblock it.",
+        practice: "1. Practice Abhyanga (warm oil self-massage) before showering.\n2. Journal on: 'Where am I holding unnecessary emotional rigidity?'\n3. Perform 20 minutes of guided Yog Nidra before sleep."
+      },
+      3: { // Wednesday
+        name: "Manipura (Solar Plexus)",
+        symbol: "रं",
+        element: "Fire | Beej Mantra: RAM",
+        theme: "Personal Power, Action & Confidence",
+        hobbies: "Public Speaking, Solo Travel, Martial Arts, Adventure Sports",
+        lesson: "Located at the navel, Manipura governs digestive fire (Agni), discipline, and inner strength. It transforms intention into concrete physical action.",
+        practice: "1. Engage in one confidence-building challenge that steps outside your comfort zone.\n2. Perform 3 rounds of Kapalabhati (Breath of Fire) exhalations.\n3. Hold plank/core activation poses for 3 minutes total."
+      },
+      4: { // Thursday
+        name: "Anahata (Heart Chakra)",
+        symbol: "यं",
+        element: "Air | Beej Mantra: YAM",
+        theme: "Compassion, Social Connection & Love",
+        hobbies: "Attending Kirtan, Book Clubs, Game Nights, Dance Classes",
+        lesson: "Anahata bridges the physical and spiritual centers. It dissolves ego-driven isolation and fosters genuine empathy and communal connection.",
+        practice: "1. Participate in a group activity or host a game night / open dialogue with loved ones.\n2. Write down one past resentment and safely burn or shred the paper.\n3. Practice heart-opening stretches while chanting YAM."
+      },
+      5: { // Friday
+        name: "Vishuddha (Throat Chakra)",
+        symbol: "हं",
+        element: "Ether | Beej Mantra: HAM",
+        theme: "Truth, Expression & Authentic Voice",
+        hobbies: "Podcasts, Writing, Singing, Affirmations",
+        lesson: "Vishuddha is the mouth of manifestation. Unspoken feelings and deceit cause congestion here; authentic voice and deep listening bring alignment.",
+        practice: "1. Record a short podcast/voice reflection or practice writing 500 words.\n2. Speak 5 core personal affirmations aloud in front of a mirror.\n3. Practice Simhasana (Lion's Breath) 5 times to clear throat tension."
+      },
+      6: { // Saturday
+        name: "Ajna (Third Eye Chakra)",
+        symbol: "ॐ",
+        element: "Light | Beej Mantra: OM",
+        theme: "Intuition, Discernment & Inner Vision",
+        hobbies: "Reading, Learning Languages, Solving Puzzles, Meditation",
+        lesson: "Ajna governs higher intellectual pattern recognition, focus, and intuitive foresight beyond sensory distractions.",
+        practice: "1. Dedicate 45 minutes to learning a complex skill, language, or philosophy.\n2. Perform Trataka (candle gazing) for 5 minutes without blinking.\n3. Practice 10 minutes of Nadi Shodhana (Alternate Nostril Breathing)."
+      },
+      0: { // Sunday
+        name: "Sahasrara (Crown Chakra)",
+        symbol: "𑖌𑖬𑖿",
+        element: "Pure Consciousness | Silent Awareness",
+        theme: "Divine Connection, Unity & Service",
+        hobbies: "Volunteering, Feeding Animals, Charity, Planting Trees",
+        lesson: "Sahasrara represents spiritual culmination and non-duality. Spiritual growth is realized through selfless action (Karma Yoga) serving the world.",
+        practice: "1. Perform a direct act of service: feed stray animals, plant a tree, or donate to charity.\n2. Sit in 20 minutes of silent meditation (Zazen) without any technique.\n3. Visualize white/violet light pouring into the crown of your head."
+      }
+    };
+
+    function updateDailyChakraUI() {
+      const todayDayOfWeek = new Date().getDay(); // 0 = Sunday, 1 = Monday, etc.
+      const chakra = chakraMasteryData[todayDayOfWeek];
+
+      const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+      document.getElementById('chakraDayDisplay').innerText = `TODAY'S CHAKRA WORK (${dayNames[todayDayOfWeek]})`;
+      document.getElementById('chakraSymbolDisplay').innerText = chakra.symbol;
+      document.getElementById('chakraNameDisplay').innerText = chakra.name;
+      document.getElementById('chakraThemeDisplay').innerText = `"${chakra.theme}"`;
+
+      // Build Modal HTML Content
+      document.getElementById('chakraModalTitle').innerText = `${chakra.name.toUpperCase()}`;
+      document.getElementById('chakraModalContent').innerHTML = `
+        <div class="knowledge-section-title">✨ ELEMENT & SOUND</div>
+        <strong>${chakra.element}</strong><br><br>
+
+        <div class="knowledge-section-title">🎨 ESSENTIAL HOBBIES & ACTIVITIES</div>
+        ${chakra.hobbies}<br><br>
+
+        <div class="knowledge-section-title">📖 THE YOGIC LESSON</div>
+        ${chakra.lesson}<br><br>
+
+        <div class="knowledge-section-title">⚡ DAILY PRACTICE STEPS</div>
+        ${chakra.practice.replace(/\n/g, '<br>')}
+      `;
+    }
+
+    // GENERAL MODAL HELPERS
     function openModal(id) {
       if (id === 'lapseModal') {
         document.getElementById('lapsePrevStreakDisplay').innerText = `PREVIOUS STREAK: ${getCleanMindDays()} DAYS`;
@@ -1380,6 +1532,7 @@
     calculateSmokeStreak();
     calculateCleanStreak();
     updateWifeCycleUI();
+    updateDailyChakraUI();
   </script>
 </body>
 </html>

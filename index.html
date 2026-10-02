@@ -18,34 +18,90 @@
       background: var(--bg);
       color: var(--fg);
       font-family: var(--font);
+      overflow-x: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* FIXED TOP NAVIGATION BAR */
+    .top-nav {
+      display: flex;
+      width: 100%;
+      border-bottom: 2px solid var(--fg);
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-tab {
+      flex: 1;
+      padding: 12px 6px;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      background: #fafafa;
+      color: #777;
+    }
+
+    .nav-tab.active {
+      background: #fff;
+      color: var(--fg);
+      border-bottom: 3px solid var(--fg);
+    }
+
+    /* HORIZONTAL SWIPE VIEWPORT CONTAINER */
+    .swipe-container {
+      display: flex;
+      flex: 1;
+      width: 100vw;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .swipe-page {
+      min-width: 100vw;
+      width: 100vw;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      padding: 20px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 30px 20px;
     }
 
     .container {
       width: 100%;
       max-width: 420px;
       border: 2px solid var(--fg);
-      padding: 24px;
+      padding: 20px;
       box-shadow: 6px 6px 0px var(--fg);
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+      background: #fff;
     }
 
     .wife-container {
       width: 100%;
       max-width: 420px;
       border: 2px solid var(--fg);
-      padding: 24px;
+      padding: 20px;
       box-shadow: 6px 6px 0px var(--fg);
       background: #fafafa;
+      margin-bottom: 20px;
     }
 
     .quote-box {
       border: 1px solid var(--fg);
       padding: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       text-align: center;
       background: #fafafa;
     }
@@ -78,14 +134,14 @@
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 6px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .kpi-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .kpi-card {
@@ -96,7 +152,7 @@
     }
 
     .kpi-val {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: bold;
     }
 
@@ -110,17 +166,15 @@
     /* DAILY CHAKRA MASTERY CARD */
     .chakra-section {
       border: 2px solid var(--fg);
-      padding: 14px;
-      margin-bottom: 20px;
+      padding: 12px;
+      margin-bottom: 16px;
       background: #fcfcfc;
       text-align: center;
       cursor: pointer;
       transition: background 0.2s;
     }
 
-    .chakra-section:hover {
-      background: #f0f0f0;
-    }
+    .chakra-section:hover { background: #f0f0f0; }
 
     .chakra-day-title {
       font-size: 0.65rem;
@@ -129,16 +183,16 @@
       text-transform: uppercase;
       border-bottom: 1px solid var(--fg);
       padding-bottom: 4px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .chakra-symbol {
-      font-size: 2.2rem;
-      margin: 4px 0;
+      font-size: 2rem;
+      margin: 2px 0;
     }
 
     .chakra-name {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -151,30 +205,30 @@
     }
 
     .click-hint {
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       font-weight: bold;
       letter-spacing: 1px;
       text-transform: uppercase;
-      margin-top: 8px;
+      margin-top: 6px;
       color: #666;
     }
 
     /* CLEAN MIND DEDICATED SECTION */
     .clean-mind-section {
       border: 2px solid var(--fg);
-      padding: 16px;
-      margin-bottom: 20px;
+      padding: 14px;
+      margin-bottom: 16px;
       background: #fdfdfd;
     }
 
     .clean-mind-header {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: bold;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       border-bottom: 2px solid var(--fg);
       padding-bottom: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -200,14 +254,14 @@
 
     .teaching-box {
       border: 1px solid var(--fg);
-      padding: 12px;
-      margin-bottom: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
       background: #fff;
     }
 
     .teaching-content {
-      font-size: 0.78rem;
-      line-height: 1.45;
+      font-size: 0.75rem;
+      line-height: 1.4;
       font-style: italic;
       margin-bottom: 8px;
     }
@@ -216,32 +270,32 @@
       background: #f4f4f4;
       border-left: 3px solid var(--fg);
       padding: 8px;
-      font-size: 0.7rem;
-      line-height: 1.4;
-      margin-bottom: 14px;
+      font-size: 0.68rem;
+      line-height: 1.35;
+      margin-bottom: 10px;
     }
 
     .reflection-title {
       font-weight: bold;
       text-transform: uppercase;
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       letter-spacing: 0.5px;
       margin-bottom: 2px;
     }
 
     button.wake-btn {
       width: 100%;
-      padding: 14px;
+      padding: 12px;
       background-color: var(--fg);
       color: var(--bg);
       border: none;
       font-family: var(--font);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: bold;
       letter-spacing: 1px;
       text-transform: uppercase;
       cursor: pointer;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     button.wake-btn:hover { background-color: #333; }
@@ -249,21 +303,21 @@
     .routine-box {
       display: none;
       border: 2px solid var(--fg);
-      padding: 14px;
-      margin-bottom: 20px;
+      padding: 12px;
+      margin-bottom: 16px;
       background: #ffffff;
     }
 
     .routine-box.active { display: block; }
 
     .routine-title {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 1px;
       border-bottom: 1px solid var(--fg);
       padding-bottom: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .routine-item {
@@ -273,7 +327,7 @@
       border: 1px solid var(--border);
       padding: 8px;
       margin-bottom: 6px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
 
     .routine-item.done {
@@ -296,7 +350,7 @@
       color: var(--fg);
       border: 1px solid var(--fg);
       font-family: var(--font);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: bold;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -309,25 +363,25 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      margin-top: 10px;
+      margin-bottom: 8px;
+      margin-top: 8px;
     }
 
     label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: bold;
       text-transform: uppercase;
     }
 
-    .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+    .checkbox-group { display: flex; flex-direction: column; gap: 6px; }
 
     .checkbox-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       border: 1px solid var(--border);
-      padding: 8px 10px;
-      font-size: 0.8rem;
+      padding: 8px;
+      font-size: 0.75rem;
       background: #fff;
     }
 
@@ -341,31 +395,31 @@
     .remove-btn {
       color: #999;
       cursor: pointer;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       margin-left: 6px;
     }
 
     .remove-btn:hover { color: var(--fg); font-weight: bold; }
 
-    .form-group { margin-bottom: 12px; }
+    .form-group { margin-bottom: 10px; }
 
     input[type="text"], textarea {
       width: 100%;
       padding: 8px;
       border: 1px solid var(--fg);
       font-family: var(--font);
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       background: #fff;
       outline: none;
     }
 
-    textarea { resize: vertical; min-height: 60px; }
+    textarea { resize: vertical; min-height: 50px; }
 
     .info-box {
       border: 1px solid var(--fg);
       padding: 10px;
       margin-bottom: 12px;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       line-height: 1.4;
       background: #fff;
     }
@@ -373,10 +427,10 @@
     .knowledge-box {
       display: none;
       border: 1px solid var(--fg);
-      padding: 12px;
-      margin-bottom: 16px;
+      padding: 10px;
+      margin-bottom: 14px;
       background: #ffffff;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       line-height: 1.4;
     }
 
@@ -386,7 +440,7 @@
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-top: 8px;
+      margin-top: 6px;
       margin-bottom: 4px;
       border-bottom: 1px dashed var(--fg);
       padding-bottom: 2px;
@@ -410,7 +464,7 @@
       background: #ffffff;
       border: 2px solid var(--fg);
       box-shadow: 6px 6px 0px var(--fg);
-      padding: 20px;
+      padding: 18px;
       width: 100%;
       max-width: 400px;
       max-height: 90vh;
@@ -418,188 +472,207 @@
     }
 
     .modal-title {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 1px;
       border-bottom: 2px solid var(--fg);
       padding-bottom: 6px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .virtue-block {
       border: 1px solid var(--border);
-      padding: 10px;
-      margin-bottom: 12px;
+      padding: 8px;
+      margin-bottom: 10px;
       background: #fafafa;
     }
 
     .virtue-name {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: bold;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-transform: uppercase;
     }
 
-    .virtue-input-row { margin-bottom: 6px; }
+    .virtue-input-row { margin-bottom: 4px; }
 
     .virtue-input-row label {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       display: block;
       margin-bottom: 2px;
     }
 
     #status {
-      margin-top: 16px;
-      font-size: 0.7rem;
+      padding: 8px;
+      font-size: 0.68rem;
       text-align: center;
       text-transform: uppercase;
       letter-spacing: 1px;
+      background: #fff;
+      border-top: 1px solid var(--border);
     }
   </style>
 </head>
 <body>
 
-  <!-- PERSONAL HABIT TRACKER CONTAINER -->
-  <div class="container">
-    <div class="quote-box">
-      <div class="quote-text" id="quoteText">"Loading daily motivation..."</div>
-      <div class="quote-author" id="quoteAuthor">--</div>
-    </div>
+  <!-- TOP NAV BAR -->
+  <div class="top-nav">
+    <div class="nav-tab active" id="tab0" onclick="scrollToPage(0)">1. MY TRACKER</div>
+    <div class="nav-tab" id="tab1" onclick="scrollToPage(1)">2. WIFE CYCLE & CARE</div>
+  </div>
 
-    <h1>LOG // MY HABITS</h1>
+  <!-- MAIN SWIPE VIEW CONTAINER -->
+  <div class="swipe-container" id="swipeViewport">
+    
+    <!-- PAGE 1: PERSONAL HABIT TRACKER -->
+    <div class="swipe-page">
+      <div class="container">
+        <div class="quote-box">
+          <div class="quote-text" id="quoteText">"Loading daily motivation..."</div>
+          <div class="quote-author" id="quoteAuthor">--</div>
+        </div>
 
-    <div class="kpi-grid-3">
-      <div class="kpi-card">
-        <div class="kpi-val" id="cleanMindVal">0</div>
-        <div class="kpi-lbl">Clean Mind</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" id="smokeStreakDisplay">0</div>
-        <div class="kpi-lbl">Smoke Free</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" id="streakDisplay">--</div>
-        <div class="kpi-lbl">&lt; 5 AM Streak</div>
-      </div>
-    </div>
+        <h1>LOG // MY HABITS</h1>
 
-    <!-- DAILY CHAKRA MASTERY CARD -->
-    <div class="chakra-section" onclick="openModal('chakraModal')">
-      <div class="chakra-day-title" id="chakraDayDisplay">TODAY'S CHAKRA WORK</div>
-      <div class="chakra-symbol" id="chakraSymbolDisplay">लं</div>
-      <div class="chakra-name" id="chakraNameDisplay">MULADHARA (ROOT)</div>
-      <div class="chakra-theme" id="chakraThemeDisplay">"Grounding, Physical Health & Survival"</div>
-      <div class="click-hint">[ 🔍 CLICK FOR LESSON & DAILY PRACTICE ]</div>
-    </div>
+        <div class="kpi-grid-3">
+          <div class="kpi-card">
+            <div class="kpi-val" id="cleanMindVal">0</div>
+            <div class="kpi-lbl">Clean Mind</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="smokeStreakDisplay">0</div>
+            <div class="kpi-lbl">Smoke Free</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="streakDisplay">--</div>
+            <div class="kpi-lbl">&lt; 5 AM Streak</div>
+          </div>
+        </div>
 
-    <!-- DEDICATED CLEAN MIND TRACKER SECTION -->
-    <div class="clean-mind-section">
-      <div class="clean-mind-header">
-        <span>🧠 MIND PURITY TRACKER</span>
-        <span class="clean-mind-badge" id="cleanMindBadge">DAY 1 / 365</span>
-      </div>
+        <!-- DAILY CHAKRA MASTERY CARD -->
+        <div class="chakra-section" onclick="openModal('chakraModal')">
+          <div class="chakra-day-title" id="chakraDayDisplay">TODAY'S CHAKRA WORK</div>
+          <div class="chakra-symbol" id="chakraSymbolDisplay">लं</div>
+          <div class="chakra-name" id="chakraNameDisplay">MULADHARA (ROOT)</div>
+          <div class="chakra-theme" id="chakraThemeDisplay">"Grounding, Physical Health & Survival"</div>
+          <div class="click-hint">[ 🔍 CLICK FOR LESSON & DAILY PRACTICE ]</div>
+        </div>
 
-      <div class="teaching-box">
-        <div class="teaching-meta" id="teachingMetaDisplay">PATH: LOADING... | TEACHER: --</div>
-        <div class="teaching-content" id="teachingContentText">Loading daily teaching from master sheet...</div>
+        <!-- DEDICATED CLEAN MIND TRACKER SECTION -->
+        <div class="clean-mind-section">
+          <div class="clean-mind-header">
+            <span>🧠 MIND PURITY TRACKER</span>
+            <span class="clean-mind-badge" id="cleanMindBadge">DAY 1 / 365</span>
+          </div>
+
+          <div class="teaching-box">
+            <div class="teaching-meta" id="teachingMetaDisplay">PATH: LOADING... | TEACHER: --</div>
+            <div class="teaching-content" id="teachingContentText">Loading daily teaching from master sheet...</div>
+            
+            <div class="reflection-box">
+              <div class="reflection-title">🎯 DAILY REFLECTION / ACTION FOCUS:</div>
+              <span id="teachingReflectionText">Loading focus...</span>
+            </div>
+          </div>
+
+          <button type="button" class="wake-btn" onclick="commitCleanMindToday()">⚡ COMMIT TO CLEAN MIND TODAY</button>
+          <button type="button" class="secondary-btn" style="color: #900; border-color: #900;" onclick="openModal('lapseModal')">⚠️ LOG LAPSE / RESET STREAK</button>
+        </div>
+
+        <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
         
-        <div class="reflection-box">
-          <div class="reflection-title">🎯 DAILY REFLECTION / ACTION FOCUS:</div>
-          <span id="teachingReflectionText">Loading focus...</span>
+        <div class="routine-box" id="routineBox">
+          <div class="routine-title">⚡ ROUTINE STACK (CHECK AS YOU GO)</div>
+          <div id="routineListContainer"></div>
+          <button type="button" class="secondary-btn" style="margin-top:10px;" onclick="closeRoutineBox()">COMPLETE ROUTINE STACK</button>
+        </div>
+
+        <div class="btn-grid">
+          <button type="button" class="secondary-btn" onclick="openVirtuesModal()">Log Sleep & Virtues</button>
+          <button type="button" class="secondary-btn" onclick="addSexActivity()">+ Sex Activity</button>
+        </div>
+
+        <div class="btn-grid">
+          <button type="button" class="secondary-btn" onclick="openModal('quoteModal')">+ Add Quote</button>
+          <button type="button" class="secondary-btn" onclick="openModal('keywordModal')">+ Add Keyword</button>
+        </div>
+
+        <div class="btn-grid">
+          <button type="button" class="secondary-btn" onclick="openEditVirtuesModal()">⚙ Edit Virtues</button>
+          <button type="button" class="secondary-btn" onclick="openEditRoutinesModal()">⚙ Manage Routines</button>
+        </div>
+
+        <div class="btn-grid">
+          <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
+          <button type="button" class="secondary-btn" onclick="openModal('addHabitModal')">+ Add Habit</button>
+        </div>
+
+        <div class="section-header">
+          <label>Additional Habits</label>
+        </div>
+        <div class="checkbox-group" id="habitsContainer"></div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: SEPARATE WIFE CYCLE & CARE TRACKER -->
+    <div class="swipe-page">
+      <div class="wife-container">
+        <h1>WIFE CYCLE & CARE</h1>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-val" id="wifeCycleDayVal">--</div>
+            <div class="kpi-lbl">Cycle Day</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="wifePhaseVal" style="font-size: 0.95rem; padding-top: 6px;">--</div>
+            <div class="kpi-lbl">Current Phase</div>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card" style="grid-column: span 2; background: #fff;">
+            <div class="kpi-val" id="fertilityStatusVal" style="font-size: 1.05rem; padding-top: 2px;">--</div>
+            <div class="kpi-lbl">FERTILITY & CONCEPTION WINDOW</div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <strong>CARE & FERTILITY GUIDE FOR TODAY:</strong><br>
+          <span id="wifeCareGuide">Loading phase advice...</span>
+        </div>
+
+        <button type="button" class="secondary-btn" style="margin-bottom: 8px;" onclick="toggleKnowledgeBox()">📖 VIEW DEEP KNOWLEDGE & MECHANISMS</button>
+
+        <div class="knowledge-box" id="knowledgeBox">
+          <div id="knowledgeContent">Loading mechanisms...</div>
+        </div>
+
+        <div class="form-group">
+          <label>Her Experience / Symptoms Today</label>
+          <input type="text" id="wifeExperienceInput" placeholder="e.g. Cramps, low energy, craving sweets, happy">
+        </div>
+
+        <div class="form-group">
+          <label>Your Personal Note / Actions Taken</label>
+          <textarea id="wifeNotesInput" placeholder="e.g. Made warm ginger tea, massaged lower back, bought dark chocolate"></textarea>
+        </div>
+
+        <button type="button" class="wake-btn" onclick="logWifeCycle()">SAVE WIFE CYCLE LOG</button>
+        
+        <div class="btn-grid">
+          <button type="button" class="secondary-btn" onclick="logPeriodEnd()">Log Period Ended Today</button>
+          <button type="button" class="secondary-btn" onclick="openCycleStartModal()">Update Start Date</button>
         </div>
       </div>
-
-      <button type="button" class="wake-btn" onclick="commitCleanMindToday()">⚡ COMMIT TO CLEAN MIND TODAY</button>
-      <button type="button" class="secondary-btn" style="color: #900; border-color: #900;" onclick="openModal('lapseModal')">⚠️ LOG LAPSE / RESET STREAK</button>
     </div>
 
-    <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
-    
-    <div class="routine-box" id="routineBox">
-      <div class="routine-title">⚡ ROUTINE STACK (CHECK AS YOU GO)</div>
-      <div id="routineListContainer"></div>
-      <button type="button" class="secondary-btn" style="margin-top:10px;" onclick="closeRoutineBox()">COMPLETE ROUTINE STACK</button>
-    </div>
-
-    <div class="btn-grid">
-      <button type="button" class="secondary-btn" onclick="openVirtuesModal()">Log Sleep & Virtues</button>
-      <button type="button" class="secondary-btn" onclick="addSexActivity()">+ Sex Activity</button>
-    </div>
-
-    <div class="btn-grid">
-      <button type="button" class="secondary-btn" onclick="openModal('quoteModal')">+ Add Quote</button>
-      <button type="button" class="secondary-btn" onclick="openModal('keywordModal')">+ Add Keyword</button>
-    </div>
-
-    <div class="btn-grid">
-      <button type="button" class="secondary-btn" onclick="openEditVirtuesModal()">⚙ Edit Virtues</button>
-      <button type="button" class="secondary-btn" onclick="openEditRoutinesModal()">⚙ Manage Routines</button>
-    </div>
-
-    <div class="btn-grid">
-      <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
-      <button type="button" class="secondary-btn" onclick="openModal('addHabitModal')">+ Add Habit</button>
-    </div>
-
-    <div class="section-header">
-      <label>Additional Habits</label>
-    </div>
-    <div class="checkbox-group" id="habitsContainer"></div>
   </div>
 
-  <!-- SEPARATE WIFE CYCLE & CARE TRACKER CONTAINER -->
-  <div class="wife-container">
-    <h1>WIFE CYCLE & CARE</h1>
+  <div id="status"></div>
 
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-val" id="wifeCycleDayVal">--</div>
-        <div class="kpi-lbl">Cycle Day</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" id="wifePhaseVal" style="font-size: 0.95rem; padding-top: 6px;">--</div>
-        <div class="kpi-lbl">Current Phase</div>
-      </div>
-    </div>
-
-    <div class="kpi-grid">
-      <div class="kpi-card" style="grid-column: span 2; background: #fff;">
-        <div class="kpi-val" id="fertilityStatusVal" style="font-size: 1.1rem; padding-top: 2px;">--</div>
-        <div class="kpi-lbl">FERTILITY & CONCEPTION WINDOW</div>
-      </div>
-    </div>
-
-    <div class="info-box">
-      <strong>CARE & FERTILITY GUIDE FOR TODAY:</strong><br>
-      <span id="wifeCareGuide">Loading phase advice...</span>
-    </div>
-
-    <button type="button" class="secondary-btn" style="margin-bottom: 8px;" onclick="toggleKnowledgeBox()">📖 VIEW DEEP KNOWLEDGE & MECHANISMS</button>
-
-    <div class="knowledge-box" id="knowledgeBox">
-      <div id="knowledgeContent">Loading mechanisms...</div>
-    </div>
-
-    <div class="form-group">
-      <label>Her Experience / Symptoms Today</label>
-      <input type="text" id="wifeExperienceInput" placeholder="e.g. Cramps, low energy, craving sweets, happy">
-    </div>
-
-    <div class="form-group">
-      <label>Your Personal Note / Actions Taken</label>
-      <textarea id="wifeNotesInput" placeholder="e.g. Made warm ginger tea, massaged lower back, bought dark chocolate"></textarea>
-    </div>
-
-    <button type="button" class="wake-btn" onclick="logWifeCycle()">SAVE WIFE CYCLE LOG</button>
-    
-    <div class="btn-grid">
-      <button type="button" class="secondary-btn" onclick="logPeriodEnd()">Log Period Ended Today</button>
-      <button type="button" class="secondary-btn" onclick="openCycleStartModal()">Update Start Date</button>
-    </div>
-  </div>
-
-  <!-- MODAL 0: CHAKRA LESSON & PRACTICE MODAL -->
+  <!-- MODALS SYSTEM -->
   <div class="modal-overlay" id="chakraModal">
     <div class="modal-card">
       <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
@@ -608,7 +681,6 @@
     </div>
   </div>
 
-  <!-- MODAL 1: NIGHT CHECK-OUT VIRTUES MODAL -->
   <div class="modal-overlay" id="virtuesModal">
     <div class="modal-card">
       <div class="modal-title">🌙 NIGHT CHECK-OUT: VIRTUES</div>
@@ -619,7 +691,6 @@
     </div>
   </div>
 
-  <!-- MODAL 2: ADD HABIT MODAL -->
   <div class="modal-overlay" id="addHabitModal">
     <div class="modal-card">
       <div class="modal-title">+ ADD NEW HABIT</div>
@@ -632,10 +703,9 @@
     </div>
   </div>
 
-  <!-- MODAL 3: EDIT VIRTUES LIST MODAL -->
   <div class="modal-overlay" id="editVirtuesModal">
     <div class="modal-card">
-      <div class="modal-title">GEAR EDIT PRACTICING VIRTUES</div>
+      <div class="modal-title">⚙ EDIT PRACTICING VIRTUES</div>
       <div class="form-group">
         <label>Virtues (One per line)</label>
         <textarea id="editVirtuesTextarea" style="min-height:120px;"></textarea>
@@ -645,10 +715,9 @@
     </div>
   </div>
 
-  <!-- MODAL 4: EDIT ROUTINES STACK MODAL -->
   <div class="modal-overlay" id="editRoutinesModal">
     <div class="modal-card">
-      <div class="modal-title">GEAR EDIT ROUTINE STACK</div>
+      <div class="modal-title">⚙ EDIT ROUTINE STACK</div>
       <div class="form-group">
         <label>Routine Steps (One per line)</label>
         <textarea id="editRoutinesTextarea" style="min-height:120px;"></textarea>
@@ -658,7 +727,6 @@
     </div>
   </div>
 
-  <!-- MODAL 5: LOG CLEAN MIND LAPSE MODAL -->
   <div class="modal-overlay" id="lapseModal">
     <div class="modal-card">
       <div class="modal-title">⚠️ LOG CLEAN MIND LAPSE</div>
@@ -672,7 +740,6 @@
     </div>
   </div>
 
-  <!-- MODAL 6: ADD QUOTE MODAL -->
   <div class="modal-overlay" id="quoteModal">
     <div class="modal-card">
       <div class="modal-title">+ ADD MOTIVATIONAL QUOTE</div>
@@ -689,7 +756,6 @@
     </div>
   </div>
 
-  <!-- MODAL 7: ADD KEYWORD MODAL -->
   <div class="modal-overlay" id="keywordModal">
     <div class="modal-card">
       <div class="modal-title">+ ADD KEYWORD</div>
@@ -702,10 +768,9 @@
     </div>
   </div>
 
-  <!-- MODAL 8: UPDATE CYCLE START DATE MODAL -->
   <div class="modal-overlay" id="cycleStartModal">
     <div class="modal-card">
-      <div class="modal-title">GEAR UPDATE CYCLE START DATE</div>
+      <div class="modal-title">⚙ UPDATE CYCLE START DATE</div>
       <div class="form-group">
         <label>Start Date (YYYY-MM-DD)</label>
         <input type="text" id="cycleStartDateInput" placeholder="YYYY-MM-DD">
@@ -714,8 +779,6 @@
       <button type="button" class="secondary-btn" onclick="closeModal('cycleStartModal')">CANCEL</button>
     </div>
   </div>
-
-  <div id="status"></div>
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
@@ -734,9 +797,27 @@
     
     let activeTeachingData = {};
 
+    // SWIPE PAGE CONTROLLER & LISTENERS
+    function scrollToPage(index) {
+      const viewport = document.getElementById('swipeViewport');
+      viewport.scrollTo({ left: window.innerWidth * index, behavior: 'smooth' });
+      updateActiveTab(index);
+    }
+
+    function updateActiveTab(index) {
+      document.getElementById('tab0').classList.toggle('active', index === 0);
+      document.getElementById('tab1').classList.toggle('active', index === 1);
+    }
+
+    document.getElementById('swipeViewport').addEventListener('scroll', () => {
+      const viewport = document.getElementById('swipeViewport');
+      const pageIndex = Math.round(viewport.scrollLeft / window.innerWidth);
+      updateActiveTab(pageIndex);
+    });
+
     // 7-DAY CHAKRA MASTERY DATABASE
     const chakraMasteryData = {
-      1: { // Monday
+      1: {
         name: "Muladhara (Root Chakra)",
         symbol: "लं",
         element: "Earth | Beej Mantra: LAM",
@@ -745,7 +826,7 @@
         lesson: "Muladhara governs basic physical survival, nervous system stability, and bone structure. You cannot build high mental clarity without a grounded physical container.",
         practice: "1. Spend 30 minutes walking barefoot on natural ground or cycling outdoors.\n2. Eat a meal cooked with whole root vegetables.\n3. Practice 10 minutes of Earth Breath (Inhale 4s, Hold 4s, Exhale 8s)."
       },
-      2: { // Tuesday
+      2: {
         name: "Svadhisthana (Sacral Chakra)",
         symbol: "वं",
         element: "Water | Beej Mantra: VAM",
@@ -754,7 +835,7 @@
         lesson: "Svadhisthana governs fluid emotional flow and creative vitality. Resistance and emotional suppression block this center; self-massage and deep rest unblock it.",
         practice: "1. Practice Abhyanga (warm oil self-massage) before showering.\n2. Journal on: 'Where am I holding unnecessary emotional rigidity?'\n3. Perform 20 minutes of guided Yog Nidra before sleep."
       },
-      3: { // Wednesday
+      3: {
         name: "Manipura (Solar Plexus)",
         symbol: "रं",
         element: "Fire | Beej Mantra: RAM",
@@ -763,7 +844,7 @@
         lesson: "Located at the navel, Manipura governs digestive fire (Agni), discipline, and inner strength. It transforms intention into concrete physical action.",
         practice: "1. Engage in one confidence-building challenge that steps outside your comfort zone.\n2. Perform 3 rounds of Kapalabhati (Breath of Fire) exhalations.\n3. Hold plank/core activation poses for 3 minutes total."
       },
-      4: { // Thursday
+      4: {
         name: "Anahata (Heart Chakra)",
         symbol: "यं",
         element: "Air | Beej Mantra: YAM",
@@ -772,7 +853,7 @@
         lesson: "Anahata bridges the physical and spiritual centers. It dissolves ego-driven isolation and fosters genuine empathy and communal connection.",
         practice: "1. Participate in a group activity or host a game night / open dialogue with loved ones.\n2. Write down one past resentment and safely burn or shred the paper.\n3. Practice heart-opening stretches while chanting YAM."
       },
-      5: { // Friday
+      5: {
         name: "Vishuddha (Throat Chakra)",
         symbol: "हं",
         element: "Ether | Beej Mantra: HAM",
@@ -781,7 +862,7 @@
         lesson: "Vishuddha is the mouth of manifestation. Unspoken feelings and deceit cause congestion here; authentic voice and deep listening bring alignment.",
         practice: "1. Record a short podcast/voice reflection or practice writing 500 words.\n2. Speak 5 core personal affirmations aloud in front of a mirror.\n3. Practice Simhasana (Lion's Breath) 5 times to clear throat tension."
       },
-      6: { // Saturday
+      6: {
         name: "Ajna (Third Eye Chakra)",
         symbol: "ॐ",
         element: "Light | Beej Mantra: OM",
@@ -790,7 +871,7 @@
         lesson: "Ajna governs higher intellectual pattern recognition, focus, and intuitive foresight beyond sensory distractions.",
         practice: "1. Dedicate 45 minutes to learning a complex skill, language, or philosophy.\n2. Perform Trataka (candle gazing) for 5 minutes without blinking.\n3. Practice 10 minutes of Nadi Shodhana (Alternate Nostril Breathing)."
       },
-      0: { // Sunday
+      0: {
         name: "Sahasrara (Crown Chakra)",
         symbol: "𑖌𑖬𑖿",
         element: "Pure Consciousness | Silent Awareness",
@@ -802,7 +883,7 @@
     };
 
     function updateDailyChakraUI() {
-      const todayDayOfWeek = new Date().getDay(); // 0 = Sunday, 1 = Monday, etc.
+      const todayDayOfWeek = new Date().getDay();
       const chakra = chakraMasteryData[todayDayOfWeek];
 
       const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
@@ -811,7 +892,6 @@
       document.getElementById('chakraNameDisplay').innerText = chakra.name;
       document.getElementById('chakraThemeDisplay').innerText = `"${chakra.theme}"`;
 
-      // Build Modal HTML Content
       document.getElementById('chakraModalTitle').innerText = `${chakra.name.toUpperCase()}`;
       document.getElementById('chakraModalContent').innerHTML = `
         <div class="knowledge-section-title">✨ ELEMENT & SOUND</div>

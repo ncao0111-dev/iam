@@ -792,7 +792,6 @@
     ];
 
     let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
-    let cleanMindStartDate = localStorage.getItem('clean_mind_start_date') || '2026-09-01';
     let wifeCycleStart = localStorage.getItem('wife_cycle_start_date') || '2026-09-24';
     
     let activeTeachingData = {};
@@ -911,7 +910,8 @@
     // GENERAL MODAL HELPERS
     function openModal(id) {
       if (id === 'lapseModal') {
-        document.getElementById('lapsePrevStreakDisplay').innerText = `PREVIOUS STREAK: ${getCleanMindDays()} DAYS`;
+        const currentStreakVal = document.getElementById('cleanMindVal').innerText || '0';
+        document.getElementById('lapsePrevStreakDisplay').innerText = `PREVIOUS STREAK: ${currentStreakVal} DAYS`;
       }
       document.getElementById(id).classList.add('active');
     }
@@ -920,31 +920,24 @@
       document.getElementById(id).classList.remove('active');
     }
 
-    // CLEAN MIND CALCULATIONS & LIVE FETCH FROM SHEET
-    function getCleanMindDays() {
-      const start = new Date(cleanMindStartDate);
-      const today = new Date();
-      start.setHours(0,0,0,0);
-      today.setHours(0,0,0,0);
-      const diffTime = today - start;
-      return Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
-    }
-
+    // CLEAN MIND: REAL-TIME TABLE READ VIA APPS SCRIPT
     function calculateCleanStreak() {
-      const streakDays = getCleanMindDays();
-      const currentDayNum = streakDays + 1;
-
-      document.getElementById('cleanMindVal').innerText = streakDays;
-      document.getElementById('cleanMindBadge').innerText = `DAY ${currentDayNum} / 365`;
-
-      fetch(`${SCRIPT_URL}?dayNum=${currentDayNum}`)
+      fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
-          if (data && data.purityTeaching) {
-            activeTeachingData = data.purityTeaching;
-            document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
-            document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
-            document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
+          if (data && data.status === 'success') {
+            const streakDays = data.cleanStreak !== undefined ? data.cleanStreak : 0;
+            const currentDayNum = streakDays + 1;
+
+            document.getElementById('cleanMindVal').innerText = streakDays;
+            document.getElementById('cleanMindBadge').innerText = `DAY ${currentDayNum} / 365`;
+
+            if (data.purityTeaching) {
+              activeTeachingData = data.purityTeaching;
+              document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
+              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
+              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
+            }
           }
         })
         .catch(() => {
@@ -955,7 +948,8 @@
     }
 
     function commitCleanMindToday() {
-      const currentDayNum = getCleanMindDays() + 1;
+      const currentStreakVal = parseInt(document.getElementById('cleanMindVal').innerText || '0', 10);
+      const currentDayNum = currentStreakVal + 1;
 
       const now = new Date();
       const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -989,15 +983,12 @@
     }
 
     function submitLapseLog() {
-      const prevStreak = getCleanMindDays();
+      const prevStreak = parseInt(document.getElementById('cleanMindVal').innerText || '0', 10);
       const details = document.getElementById('lapseDetailsTextarea').value;
 
       const now = new Date();
       const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
       const formattedTimestamp = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      cleanMindStartDate = formattedDate;
-      localStorage.setItem('clean_mind_start_date', cleanMindStartDate);
 
       const payload = {
         action: "addCleanLapseLog",
@@ -1454,6 +1445,21 @@
             document.getElementById('streakDisplay').innerText = data.streak;
             document.getElementById('quoteText').innerText = `"${data.quote}"`;
             document.getElementById('quoteAuthor').innerText = `- ${data.author}`;
+            
+            if (data.cleanStreak !== undefined) {
+              const streakDays = data.cleanStreak;
+              const currentDayNum = streakDays + 1;
+              document.getElementById('cleanMindVal').innerText = streakDays;
+              document.getElementById('cleanMindBadge').innerText = `DAY ${currentDayNum} / 365`;
+            }
+
+            if (data.purityTeaching) {
+              activeTeachingData = data.purityTeaching;
+              document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
+              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
+              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
+            }
+
             if (data.routines && data.routines.length > 0) {
               routineStack = data.routines;
               localStorage.setItem('saved_routine_stack', JSON.stringify(routineStack));
@@ -1572,11 +1578,13 @@
         if (chk) habitsData[habit] = chk.checked;
       });
 
+      const cleanStreakVal = parseInt(document.getElementById('cleanMindVal').innerText || '0', 10);
+
       const payload = {
         date: currentDate,
         wakeTime: currentTime,
         smokeStreak: getSmokeStreakDays(),
-        cleanStreak: getCleanMindDays(),
+        cleanStreak: cleanStreakVal,
         habits: habitsData
       };
 

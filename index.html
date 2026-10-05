@@ -403,7 +403,7 @@
 
     .form-group { margin-bottom: 10px; }
 
-    input[type="text"], textarea {
+    input[type="text"], textarea, select {
       width: 100%;
       padding: 8px;
       border: 1px solid var(--fg);
@@ -590,22 +590,26 @@
 
         <div class="btn-grid">
           <button type="button" class="secondary-btn" onclick="openVirtuesModal()">Log Sleep & Virtues</button>
-          <button type="button" class="secondary-btn" onclick="addSexActivity()">+ Sex Activity</button>
+          <button type="button" class="secondary-btn" onclick="openModal('sexModal')">+ Sex Activity</button>
         </div>
 
         <div class="btn-grid">
+          <button type="button" class="secondary-btn" onclick="openModal('marijuanaModal')">🍃 + Log Marijuana</button>
           <button type="button" class="secondary-btn" onclick="openModal('quoteModal')">+ Add Quote</button>
+        </div>
+
+        <div class="btn-grid">
           <button type="button" class="secondary-btn" onclick="openModal('keywordModal')">+ Add Keyword</button>
-        </div>
-
-        <div class="btn-grid">
           <button type="button" class="secondary-btn" onclick="openEditVirtuesModal()">⚙ Edit Virtues</button>
-          <button type="button" class="secondary-btn" onclick="openEditRoutinesModal()">⚙ Manage Routines</button>
         </div>
 
         <div class="btn-grid">
+          <button type="button" class="secondary-btn" onclick="openEditRoutinesModal()">⚙ Manage Routines</button>
           <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
-          <button type="button" class="secondary-btn" onclick="openModal('addHabitModal')">+ Add Habit</button>
+        </div>
+
+        <div class="btn-grid">
+          <button type="button" class="secondary-btn" style="grid-column: span 2;" onclick="openModal('addHabitModal')">+ Add Habit</button>
         </div>
 
         <div class="section-header">
@@ -681,6 +685,43 @@
   <div id="status"></div>
 
   <!-- MODALS SYSTEM -->
+  <!-- SEXUAL ACTIVITY MODAL -->
+  <div class="modal-overlay" id="sexModal">
+    <div class="modal-card">
+      <div class="modal-title">+ LOG SEXUAL ACTIVITY</div>
+      <div class="form-group">
+        <label>Ejaculation Occurred?</label>
+        <select id="sexEjaculatedSelect">
+          <option value="YES">YES</option>
+          <option value="NO" selected>NO</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes / Reflections (Optional)</label>
+        <textarea id="sexNotesInput" placeholder="e.g. Connection, energy levels, mood, atmosphere..."></textarea>
+      </div>
+      <button type="button" class="wake-btn" onclick="submitSexActivity()">SAVE SEXUAL ACTIVITY</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('sexModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- MARIJUANA USAGE MODAL -->
+  <div class="modal-overlay" id="marijuanaModal">
+    <div class="modal-card">
+      <div class="modal-title">🍃 LOG MARIJUANA USAGE</div>
+      <div class="form-group">
+        <label>Method / Amount</label>
+        <input type="text" id="marijuanaMethodInput" placeholder="e.g. Joint, Edible, Vape (1 Puff)">
+      </div>
+      <div class="form-group">
+        <label>Context / Reflection / Notes</label>
+        <textarea id="marijuanaNotesInput" placeholder="Why now? Mood, intention, creative session..."></textarea>
+      </div>
+      <button type="button" class="wake-btn" onclick="submitMarijuanaLog()">SAVE MARIJUANA LOG</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('marijuanaModal')">CANCEL</button>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="chakraModal">
     <div class="modal-card">
       <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
@@ -1028,6 +1069,81 @@
       })
       .catch(() => {
         statusDiv.innerText = "[X] ERROR SAVING LAPSE LOG";
+      });
+    }
+
+    // SUBMIT SEXUAL ACTIVITY WITH NOTES
+    function submitSexActivity() {
+      const ejaculatedVal = document.getElementById('sexEjaculatedSelect').value === "YES";
+      const notesVal = document.getElementById('sexNotesInput').value.trim();
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING SEXUAL ACTIVITY...";
+
+      const now = new Date();
+      const formattedDateTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addSexActivity",
+        dateTime: formattedDateTime,
+        ejaculated: ejaculatedVal,
+        notes: notesVal || "-",
+        dateLogged: formattedDate
+      };
+
+      closeModal('sexModal');
+      document.getElementById('sexNotesInput').value = '';
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] LOGGED SEXUAL ACTIVITY (EJACULATED: ${ejaculatedVal ? "YES" : "NO"})`;
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR SAVING ACTIVITY";
+      });
+    }
+
+    // SUBMIT MARIJUANA LOG
+    function submitMarijuanaLog() {
+      const methodVal = document.getElementById('marijuanaMethodInput').value.trim();
+      const notesVal = document.getElementById('marijuanaNotesInput').value.trim();
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING MARIJUANA LOG...";
+
+      const now = new Date();
+      const formattedDateTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addMarijuanaLog",
+        dateTime: formattedDateTime,
+        method: methodVal || "Unspecified",
+        notes: notesVal || "-",
+        dateLogged: formattedDate
+      };
+
+      closeModal('marijuanaModal');
+      document.getElementById('marijuanaMethodInput').value = '';
+      document.getElementById('marijuanaNotesInput').value = '';
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] MARIJUANA LOG SAVED AT ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      })
+      .catch(() => {
+        statusDiv.innerText = "[X] ERROR SAVING MARIJUANA LOG";
       });
     }
 
@@ -1487,6 +1603,10 @@
           document.getElementById('streakDisplay').innerText = '0';
           document.getElementById('quoteText').innerText = '"Every day is a new beginning."';
           document.getElementById('quoteAuthor').innerText = '- UNKNOWN';
+          
+          document.getElementById('wifeQuoteTopic').innerText = 'GENTLEMAN\'S THOUGHT // LOVE & RESPECT';
+          document.getElementById('wifeQuoteText').innerText = '"Love is the foundation while respect is the framework."';
+          document.getElementById('wifeQuoteAuthor').innerText = '- GENTLEMAN WISDOM';
         });
     }
 
@@ -1538,37 +1658,6 @@
     function closeRoutineBox() {
       document.getElementById('routineBox').classList.remove('active');
       document.getElementById('status').innerText = "[✓] ROUTINE STACK COMPLETED!";
-    }
-
-    function addSexActivity() {
-      const ejaculated = confirm("Did you ejaculate?\n\n[OK] = Yes\n[Cancel] = No");
-      const statusDiv = document.getElementById('status');
-      statusDiv.innerText = "SAVING ACTIVITY...";
-
-      const now = new Date();
-      const formattedDateTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-
-      const payload = {
-        action: "addSexActivity",
-        dateTime: formattedDateTime,
-        ejaculated: ejaculated,
-        dateLogged: formattedDate
-      };
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(() => {
-        const resultText = ejaculated ? "YES" : "NO";
-        statusDiv.innerText = `[✓] LOGGED SEXUAL ACTIVITY (EJACULATED: ${resultText})`;
-      })
-      .catch(() => {
-        statusDiv.innerText = "[X] ERROR SAVING ACTIVITY";
-      });
     }
 
     function logWakeUp() {

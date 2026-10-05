@@ -618,6 +618,14 @@
     <!-- PAGE 2: SEPARATE WIFE CYCLE & CARE TRACKER -->
     <div class="swipe-page">
       <div class="wife-container">
+        
+        <!-- GENTLEMAN'S DAILY THOUGHT FOR HER -->
+        <div class="quote-box" style="border-left: 3px solid var(--fg); background: #fff; text-align: left; margin-bottom: 16px;">
+          <div style="font-size: 0.6rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 4px;" id="wifeQuoteTopic">GENTLEMAN'S DAILY THOUGHT FOR HER</div>
+          <div class="quote-text" id="wifeQuoteText" style="font-size: 0.8rem; font-style: italic; line-height: 1.35;">"Loading daily message..."</div>
+          <div class="quote-author" id="wifeQuoteAuthor" style="font-size: 0.65rem; font-weight: bold; text-transform: uppercase; text-align: right; margin-top: 4px;">--</div>
+        </div>
+
         <h1>WIFE CYCLE & CARE</h1>
 
         <div class="kpi-grid">
@@ -781,7 +789,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
+    const SCRIPT_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSTx92L3XHEALB2gX6aHcmV0IlAk3sGKdqdvq0AqzlLyX2Fk1HvcTNDmgMHV1qeyvUuJTLfbvB6IZOVxOPUvBuzAcPDnxEV29Ww-FGbOabHGkLzWKfDlFhA3UVzHlf3kHw0RsvL-KZ-Ji4Kxel0XJ-gl5BwZfJdQDQROt_mgyMWi4ouM8UgZjqrWg4-nxgT7maXh-ijQ-fuRsbncKiz57fcRfWKewC5vBGuQX2yuYHssTbLqsarH_umTeO60s_DJZSfNvxT4qICMvQf9CzZJbGzb-Zzlg&lib=M9afdlgMBPBuwUj7HdEUpR6W6meA15me7';
     let extraHabits = JSON.parse(localStorage.getItem('saved_habit_labels')) || ['Reading', 'Exercise'];
     let routineStack = JSON.parse(localStorage.getItem('saved_routine_stack')) || ['Drink 500ml Water', 'Make Bed', '5 Min Stretch', 'Cold Shower'];
     
@@ -1446,6 +1454,15 @@
             document.getElementById('quoteText').innerText = `"${data.quote}"`;
             document.getElementById('quoteAuthor').innerText = `- ${data.author}`;
             
+            // Gentleman Quote for Wife (Page 2)
+            if (data.wifeQuote) {
+              document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote}"`;
+              document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author}`;
+              if (data.wifeQuote.topic) {
+                document.getElementById('wifeQuoteTopic').innerText = `GENTLEMAN'S THOUGHT // ${data.wifeQuote.topic.toUpperCase()}`;
+              }
+            }
+
             if (data.cleanStreak !== undefined) {
               const streakDays = data.cleanStreak;
               const currentDayNum = streakDays + 1;

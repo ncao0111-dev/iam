@@ -94,18 +94,8 @@
       background: #fafafa;
     }
 
-    .quote-text {
-      font-size: 0.78rem;
-      font-style: italic;
-      line-height: 1.3;
-      margin-bottom: 4px;
-    }
-
-    .quote-author {
-      font-size: 0.62rem;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
+    .quote-text { font-size: 0.78rem; font-style: italic; line-height: 1.3; margin-bottom: 4px; }
+    .quote-author { font-size: 0.62rem; font-weight: bold; text-transform: uppercase; }
 
     h1 {
       font-size: 1rem;
@@ -186,19 +176,8 @@
       background: #fff;
     }
 
-    .habit-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .habit-label-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      font-weight: bold;
-    }
+    .habit-card-top { display: flex; align-items: center; justify-content: space-between; }
+    .habit-label-group { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: bold; }
 
     .habit-note-input {
       width: 100%;
@@ -211,21 +190,35 @@
     }
 
     .habit-note-input.active { display: block; }
+    .toggle-note-btn { font-size: 0.58rem; cursor: pointer; text-decoration: underline; margin-left: 6px; color: #555; }
 
-    .toggle-note-btn {
-      font-size: 0.58rem;
-      cursor: pointer;
-      text-decoration: underline;
-      margin-left: 6px;
-      color: #555;
+    /* CALENDAR CONTROL HEADER */
+    .cal-header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border: 1px solid var(--fg);
+      padding: 6px 10px;
+      background: #fafafa;
     }
+
+    .cal-nav-btn {
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border: 1px solid var(--fg);
+      background: #fff;
+    }
+
+    .cal-month-title { font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; }
 
     /* CALENDAR GRID */
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 4px;
-      margin-top: 8px;
       text-align: center;
     }
 
@@ -244,6 +237,47 @@
 
     .cal-day-cell.completed { background: #f4f4f4; border-color: #000; }
     .cal-emojis { font-size: 0.7rem; margin-top: 2px; line-height: 1.1; word-break: break-all; }
+
+    /* THOUGHT TAG FREQUENCY BUBBLE CONTAINER */
+    .tag-cloud-section {
+      margin-top: 16px;
+      border-top: 2px solid var(--fg);
+      padding-top: 12px;
+    }
+
+    .tag-cloud-title {
+      font-size: 0.68rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .tag-bubbles-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border: 1px solid var(--fg);
+      background: #fafafa;
+      min-height: 80px;
+    }
+
+    .tag-bubble {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--fg);
+      border-radius: 20px;
+      padding: 4px 10px;
+      background: #fff;
+      font-weight: bold;
+      text-transform: lowercase;
+      box-shadow: 2px 2px 0px var(--fg);
+      transition: transform 0.2s;
+    }
 
     .modal-overlay {
       display: none;
@@ -278,7 +312,6 @@
     <div class="swipe-page">
       <div class="container">
         
-        <!-- RESTORED MOTIVATIONAL QUOTE -->
         <div class="quote-box">
           <div class="quote-text" id="quoteText">"Loading daily motivation..."</div>
           <div class="quote-author" id="quoteAuthor">--</div>
@@ -287,21 +320,12 @@
         <h1>LOG // MY HABITS</h1>
 
         <div class="kpi-grid-3">
-          <div class="kpi-card">
-            <div class="kpi-val" id="cleanMindVal">0</div>
-            <div class="kpi-lbl">Clean Mind</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-val" id="smokeStreakDisplay">0</div>
-            <div class="kpi-lbl">Smoke Free</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-val" id="streakDisplay">--</div>
-            <div class="kpi-lbl">&lt; 5 AM Streak</div>
-          </div>
+          <div class="kpi-card"><div class="kpi-val" id="cleanMindVal">0</div><div class="kpi-lbl">Clean Mind</div></div>
+          <div class="kpi-card"><div class="kpi-val" id="smokeStreakDisplay">0</div><div class="kpi-lbl">Smoke Free</div></div>
+          <div class="kpi-card"><div class="kpi-val" id="streakDisplay">--</div><div class="kpi-lbl">&lt; 5 AM Streak</div></div>
         </div>
 
-        <!-- RESTORED DAILY CHAKRA MASTERY CARD -->
+        <!-- CHAKRA MASTERY CARD -->
         <div class="chakra-section" onclick="openModal('chakraModal')">
           <div class="chakra-day-title" id="chakraDayDisplay">TODAY'S CHAKRA WORK</div>
           <div class="chakra-symbol" id="chakraSymbolDisplay">लं</div>
@@ -309,7 +333,7 @@
           <div style="font-size: 0.58rem; text-transform: uppercase; margin-top: 4px; color: #666;">[ 🔍 CLICK FOR LESSON & PRACTICE ]</div>
         </div>
 
-        <!-- RESTORED CLEAN MIND TRACKER SECTION -->
+        <!-- CLEAN MIND TRACKER SECTION -->
         <div class="clean-mind-section">
           <div class="clean-mind-header">
             <span>🧠 MIND PURITY TRACKER</span>
@@ -335,10 +359,12 @@
           <span style="font-size:0.6rem; text-decoration:underline; cursor:pointer;" onclick="openModal('addHabitModal')">+ Add Habit</span>
         </div>
 
-        <!-- PERMANENT HABITS CONTAINER -->
         <div id="habitsContainer"></div>
 
         <button type="button" class="wake-btn" style="background:#222; margin-top:10px;" onclick="saveCheckedHabits()">SAVE HABITS & NOTES LOG</button>
+
+        <!-- RANDOM THOUGHTS BUTTON -->
+        <button type="button" class="wake-btn" style="background:#444; margin-top:4px;" onclick="openModal('thoughtModal')">💡 + LOG RANDOM THOUGHT</button>
 
         <div class="btn-grid" style="margin-top:10px;">
           <button type="button" class="secondary-btn" onclick="openModal('quoteModal')">+ Add Quote</button>
@@ -350,7 +376,6 @@
           <button type="button" class="secondary-btn" onclick="openEditVirtuesModal()">⚙ Edit Virtues</button>
         </div>
 
-        <!-- MOVED SLEEP & VIRTUES BUTTON TO END OF PAGE -->
         <button type="button" class="wake-btn" style="margin-top:12px; background:#000;" onclick="openVirtuesModal()">🌙 LOG SLEEP & VIRTUES CHECK-OUT</button>
 
       </div>
@@ -383,10 +408,17 @@
       </div>
     </div>
 
-    <!-- PAGE 3: CALENDAR & FREQUENCY TRACKER -->
+    <!-- PAGE 3: CALENDAR & THOUGHT TAG FREQUENCY BUBBLES -->
     <div class="swipe-page">
       <div class="cal-container">
-        <h1>ALL HABITS CALENDAR</h1>
+        <h1>HABITS & THOUGHTS CALENDAR</h1>
+
+        <!-- MONTH SWITCH NAVIGATION -->
+        <div class="cal-header-nav">
+          <button type="button" class="cal-nav-btn" onclick="changeMonth(-1)">&lt; PREV</button>
+          <div class="cal-month-title" id="calMonthTitle">OCTOBER 2026</div>
+          <button type="button" class="cal-nav-btn" onclick="changeMonth(1)">NEXT &gt;</button>
+        </div>
 
         <div class="calendar-grid">
           <div class="cal-day-hdr">SUN</div><div class="cal-day-hdr">MON</div><div class="cal-day-hdr">TUE</div>
@@ -394,6 +426,15 @@
           <div class="cal-day-hdr">SAT</div>
         </div>
         <div class="calendar-grid" id="calGridCells"></div>
+
+        <!-- THOUGHT TAG FREQUENCY CLOUD -->
+        <div class="tag-cloud-section">
+          <div class="tag-cloud-title">🧠 THOUGHT TAG FREQUENCY BUBBLES</div>
+          <div class="tag-bubbles-wrapper" id="tagCloudContainer">
+            <span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -402,11 +443,19 @@
   <div id="status"></div>
 
   <!-- MODALS -->
-  <div class="modal-overlay" id="chakraModal">
+  <div class="modal-overlay" id="thoughtModal">
     <div class="modal-card">
-      <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
-      <div id="chakraModalContent" style="font-size:0.75rem; line-height:1.45;"></div>
-      <button type="button" class="secondary-btn" style="margin-top:14px;" onclick="closeModal('chakraModal')">CLOSE LESSON</button>
+      <div class="modal-title">💡 LOG RANDOM THOUGHT</div>
+      <div style="margin-bottom:8px;">
+        <label style="font-size:0.62rem; font-weight:bold;">Thought Tag / Category</label>
+        <input type="text" id="thoughtTagInput" placeholder="e.g. food, sex, ideas, philosophy, work" style="width:100%; padding:6px; border:1px solid var(--fg);">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:0.62rem; font-weight:bold;">Thought Details</label>
+        <textarea id="thoughtDetailInput" style="width:100%; min-height:60px; padding:6px; border:1px solid var(--fg);" placeholder="What's on your mind?"></textarea>
+      </div>
+      <button type="button" class="wake-btn" onclick="submitThoughtLog()">SAVE THOUGHT</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('thoughtModal')">CANCEL</button>
     </div>
   </div>
 
@@ -455,8 +504,9 @@
     ];
 
     let habitHistoryLogs = [];
+    let thoughtLogsHistory = [];
+    let currentCalDate = new Date();
     let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
-    let activeTeachingData = {};
 
     function scrollToPage(index) {
       const viewport = document.getElementById('swipeViewport');
@@ -479,7 +529,7 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // RENDER HABITS WITH NOTE INPUTS
+    // RENDER HABITS
     function renderHabitsList() {
       const container = document.getElementById('habitsContainer');
       container.innerHTML = '';
@@ -496,7 +546,7 @@
             </div>
             <span style="color:#999; font-size:0.6rem; cursor:pointer;" onclick="removeHabit(${idx})">[x]</span>
           </div>
-          <input type="text" class="habit-note-input" id="note_habit_${idx}" placeholder="Session note (pages, workout, strain, mood...)">
+          <input type="text" class="habit-note-input" id="note_habit_${idx}" placeholder="Session note...">
         `;
         container.appendChild(item);
       });
@@ -523,12 +573,46 @@
         permanentHabits.push({ id, emoji, label: name });
         renderHabitsList();
         closeModal('addHabitModal');
-        document.getElementById('newHabitEmoji').value = '';
-        document.getElementById('newHabitName').value = '';
       }
     }
 
-    // SAVE CHECKED HABITS WITH NOTES TO COMBINED "Habits" SHEET
+    // LOG RANDOM THOUGHT
+    function submitThoughtLog() {
+      const tag = document.getElementById('thoughtTagInput').value.trim().toLowerCase() || 'ideas';
+      const detail = document.getElementById('thoughtDetailInput').value.trim();
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING THOUGHT...";
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const formattedDateTime = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addThoughtLog",
+        dateTime: formattedDateTime,
+        dateLogged: formattedDate,
+        tag: tag,
+        detail: detail || "-"
+      };
+
+      closeModal('thoughtModal');
+      document.getElementById('thoughtTagInput').value = '';
+      document.getElementById('thoughtDetailInput').value = '';
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] THOUGHT LOGGED UNDER #${tag}`;
+        fetchDashboardData();
+      });
+    }
+
+    // SAVE HABITS
     function saveCheckedHabits() {
       const statusDiv = document.getElementById('status');
       statusDiv.innerText = "SAVING HABITS...";
@@ -552,7 +636,7 @@
       });
 
       if (habitsToSave.length === 0) {
-        statusDiv.innerText = "[!] NO HABITS CHECKED TO SAVE";
+        statusDiv.innerText = "[!] NO HABITS CHECKED";
         return;
       }
 
@@ -570,7 +654,7 @@
         body: JSON.stringify(payload)
       })
       .then(() => {
-        statusDiv.innerText = `[✓] SAVED ${habitsToSave.length} HABIT LOGS`;
+        statusDiv.innerText = `[✓] SAVED ${habitsToSave.length} HABITS`;
         permanentHabits.forEach((_, idx) => {
           const chk = document.getElementById(`chk_habit_${idx}`);
           const noteInput = document.getElementById(`note_habit_${idx}`);
@@ -578,20 +662,24 @@
           if (noteInput) { noteInput.value = ''; noteInput.classList.remove('active'); }
         });
         fetchDashboardData();
-      })
-      .catch(() => {
-        statusDiv.innerText = "[X] ERROR SAVING HABITS";
       });
     }
 
-    // MULTI-HABIT CALENDAR RENDERER
+    // MONTH SWITCH & CALENDAR RENDER
+    function changeMonth(delta) {
+      currentCalDate.setMonth(currentCalDate.getMonth() + delta);
+      renderHabitCalendar();
+    }
+
     function renderHabitCalendar() {
       const grid = document.getElementById('calGridCells');
       grid.innerHTML = '';
 
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth();
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+
+      const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+      document.getElementById('calMonthTitle').innerText = `${monthNames[month]} ${year}`;
 
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -620,6 +708,40 @@
 
         grid.appendChild(cell);
       }
+
+      renderTagCloud();
+    }
+
+    // THOUGHT TAG FREQUENCY BUBBLES
+    function renderTagCloud() {
+      const container = document.getElementById('tagCloudContainer');
+      container.innerHTML = '';
+
+      if (!thoughtLogsHistory || thoughtLogsHistory.length === 0) {
+        container.innerHTML = '<span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>';
+        return;
+      }
+
+      const tagCounts = {};
+      thoughtLogsHistory.forEach(t => {
+        const tag = t.tag || 'general';
+        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+      });
+
+      const maxCount = Math.max(...Object.values(tagCounts));
+
+      Object.keys(tagCounts).forEach(tag => {
+        const count = tagCounts[tag];
+        const bubble = document.createElement('div');
+        bubble.className = 'tag-bubble';
+        
+        // Dynamic font size scaling based on frequency
+        const fontSize = 0.6 + (count / maxCount) * 0.6; // Scale from 0.6rem to 1.2rem
+        bubble.style.fontSize = `${fontSize}rem`;
+        bubble.innerHTML = `#${tag} <span style="font-size:0.55rem; opacity:0.7; margin-left:4px;">(${count})</span>`;
+        
+        container.appendChild(bubble);
+      });
     }
 
     function showDayDetails(dateStr, logs) {
@@ -652,13 +774,11 @@
       wakeBtn.disabled = true;
       wakeBtn.innerText = "SAVING...";
 
-      const cleanStreakVal = parseInt(document.getElementById('cleanMindVal').innerText || '0', 10);
-
       const payload = {
         date: currentDate,
         wakeTime: currentTime,
         smokeStreak: getSmokeStreakDays(),
-        cleanStreak: cleanStreakVal
+        cleanStreak: parseInt(document.getElementById('cleanMindVal').innerText || '0', 10)
       };
 
       fetch(SCRIPT_URL, {
@@ -668,7 +788,7 @@
         body: JSON.stringify(payload)
       })
       .then(() => {
-        statusDiv.innerText = `[✓] LOGGED WAKE UP AT ${currentTime}`;
+        statusDiv.innerText = `[✓] WAKE UP LOGGED AT ${currentTime}`;
         wakeBtn.disabled = false;
         wakeBtn.innerText = "LOG WAKE UP NOW";
         fetchDashboardData();
@@ -690,17 +810,15 @@
               document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author}`;
             }
 
-            if (data.purityTeaching) {
-              activeTeachingData = data.purityTeaching;
-              document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
-              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
-              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
-            }
-
             if (data.habitHistory) {
               habitHistoryLogs = data.habitHistory;
-              renderHabitCalendar();
             }
+
+            if (data.thoughtLogs) {
+              thoughtLogsHistory = data.thoughtLogs;
+            }
+
+            renderHabitCalendar();
           }
         });
     }

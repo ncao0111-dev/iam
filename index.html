@@ -114,7 +114,6 @@
     .kpi-val { font-size: 1.4rem; font-weight: bold; }
     .kpi-lbl { font-size: 0.52rem; text-transform: uppercase; margin-top: 2px; }
 
-    /* CHAKRA SECTION */
     .chakra-section {
       border: 2px solid var(--fg);
       padding: 10px;
@@ -128,7 +127,6 @@
     .chakra-symbol { font-size: 1.8rem; }
     .chakra-name { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
 
-    /* CLEAN MIND SECTION */
     .clean-mind-section { border: 2px solid var(--fg); padding: 12px; margin-bottom: 14px; background: #fdfdfd; }
     .clean-mind-header { font-size: 0.7rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; border-bottom: 2px solid var(--fg); padding-bottom: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     .clean-mind-badge { background: var(--fg); color: var(--bg); padding: 2px 6px; font-size: 0.6rem; }
@@ -192,7 +190,6 @@
     .habit-note-input.active { display: block; }
     .toggle-note-btn { font-size: 0.58rem; cursor: pointer; text-decoration: underline; margin-left: 6px; color: #555; }
 
-    /* CALENDAR CONTROL HEADER */
     .cal-header-nav {
       display: flex;
       justify-content: space-between;
@@ -214,7 +211,6 @@
 
     .cal-month-title { font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; }
 
-    /* CALENDAR GRID */
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -238,7 +234,6 @@
     .cal-day-cell.completed { background: #f4f4f4; border-color: #000; }
     .cal-emojis { font-size: 0.7rem; margin-top: 2px; line-height: 1.1; word-break: break-all; }
 
-    /* THOUGHT TAG FREQUENCY BUBBLE CONTAINER */
     .tag-cloud-section {
       margin-top: 16px;
       border-top: 2px solid var(--fg);
@@ -276,7 +271,6 @@
       font-weight: bold;
       text-transform: lowercase;
       box-shadow: 2px 2px 0px var(--fg);
-      transition: transform 0.2s;
     }
 
     .modal-overlay {
@@ -326,7 +320,7 @@
         </div>
 
         <!-- CHAKRA MASTERY CARD -->
-        <div class="chakra-section" onclick="openModal('chakraModal')">
+        <div class="chakra-section" onclick="openChakraModal()">
           <div class="chakra-day-title" id="chakraDayDisplay">TODAY'S CHAKRA WORK</div>
           <div class="chakra-symbol" id="chakraSymbolDisplay">लं</div>
           <div class="chakra-name" id="chakraNameDisplay">MULADHARA (ROOT)</div>
@@ -413,7 +407,6 @@
       <div class="cal-container">
         <h1>HABITS & THOUGHTS CALENDAR</h1>
 
-        <!-- MONTH SWITCH NAVIGATION -->
         <div class="cal-header-nav">
           <button type="button" class="cal-nav-btn" onclick="changeMonth(-1)">&lt; PREV</button>
           <div class="cal-month-title" id="calMonthTitle">OCTOBER 2026</div>
@@ -427,7 +420,6 @@
         </div>
         <div class="calendar-grid" id="calGridCells"></div>
 
-        <!-- THOUGHT TAG FREQUENCY CLOUD -->
         <div class="tag-cloud-section">
           <div class="tag-cloud-title">🧠 THOUGHT TAG FREQUENCY BUBBLES</div>
           <div class="tag-bubbles-wrapper" id="tagCloudContainer">
@@ -443,6 +435,14 @@
   <div id="status"></div>
 
   <!-- MODALS -->
+  <div class="modal-overlay" id="chakraModal">
+    <div class="modal-card">
+      <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
+      <div id="chakraModalContent" style="font-size:0.75rem; line-height:1.45;"></div>
+      <button type="button" class="secondary-btn" style="margin-top:14px;" onclick="closeModal('chakraModal')">CLOSE LESSON</button>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="thoughtModal">
     <div class="modal-card">
       <div class="modal-title">💡 LOG RANDOM THOUGHT</div>
@@ -495,6 +495,80 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
 
+    // 7-DAY CHAKRA MASTERY FRAMEWORK
+    const CHAKRA_CURRICULUM = [
+      {
+        day: 'SUNDAY',
+        name: 'MULADHARA (ROOT)',
+        symbol: 'लं',
+        bija: 'LAM',
+        element: 'Earth',
+        focus: 'Physical grounding, survival security, root stability, discipline.',
+        lesson: 'Mastery over fear and raw instinct. Root yourself firmly before building upwards.',
+        exercise: '10 mins bare-foot stance or deep belly grounding meditation.'
+      },
+      {
+        day: 'MONDAY',
+        name: 'SVADHISTHANA (SACRAL)',
+        symbol: 'वं',
+        bija: 'VAM',
+        element: 'Water',
+        focus: 'Creative energy, emotional fluidity, sensual transmutation.',
+        lesson: 'Transmute raw vital energy into artistic work, strategic focus, and spiritual strength.',
+        exercise: 'Mind Purity observation & breath retention (Kumbhaka).'
+      },
+      {
+        day: 'TUESDAY',
+        name: 'MANIPURA (SOLAR PLEXUS)',
+        symbol: 'रं',
+        bija: 'RAM',
+        element: 'Fire',
+        focus: 'Willpower, personal sovereignty, digestive fire, execution.',
+        lesson: 'Fanning the internal fire of action. Self-mastery through unwavering resolve.',
+        exercise: 'Cold shower or intense core physical exercise.'
+      },
+      {
+        day: 'WEDNESDAY',
+        name: 'ANAHATA (HEART)',
+        symbol: 'यं',
+        bija: 'YAM',
+        element: 'Air',
+        focus: 'Compassion, devotion, marital harmony, balance.',
+        lesson: 'Openness without weakness. Cultivating deep care for your wife and loved ones.',
+        exercise: 'Heart-focused breathing & loving presence act for your wife.'
+      },
+      {
+        day: 'THURSDAY',
+        name: 'VISHUDDHA (THROAT)',
+        symbol: 'हं',
+        bija: 'HAM',
+        element: 'Ether / Space',
+        focus: 'Truthful expression, vocal integrity, pure intent.',
+        lesson: 'Speak only truth. Align words with quiet action and gentlemanly dignity.',
+        exercise: 'Chant Bija Mantra HAM (108x) or practice intentional silence.'
+      },
+      {
+        day: 'FRIDAY',
+        name: 'AJNA (THIRD EYE)',
+        symbol: 'ॐ',
+        bija: 'OM',
+        element: 'Mind / Light',
+        focus: 'Intuition, mental clarity, focus, inner vision.',
+        lesson: 'Penetrating clarity over chaotic thoughts. Guard the mind threshold at all times.',
+        exercise: '15 mins Trataka (candle gaze) or third-eye breath focus.'
+      },
+      {
+        day: 'SATURDAY',
+        name: 'SAHASRARA (CROWN)',
+        symbol: '🪷',
+        bija: 'AUM',
+        element: 'Pure Consciousness',
+        focus: 'Spiritual alignment, ultimate oneness, timeless wisdom.',
+        lesson: 'Surrender ego desires to cosmic order and high virtue.',
+        exercise: '20 mins silent meditation on pure awareness.'
+      }
+    ];
+
     let permanentHabits = JSON.parse(localStorage.getItem('saved_permanent_habits')) || [
       { id: 'reading', emoji: '📚', label: 'Reading' },
       { id: 'exercise', emoji: '🏋️', label: 'Exercise' },
@@ -529,7 +603,36 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // RENDER HABITS
+    // RENDER TODAY'S CHAKRA WORK
+    function renderChakraSection() {
+      const todayIndex = new Date().getDay(); // 0 = Sun, 1 = Mon ...
+      const chakra = CHAKRA_CURRICULUM[todayIndex];
+
+      document.getElementById('chakraDayDisplay').innerText = `TODAY'S WORK // ${chakra.day}`;
+      document.getElementById('chakraSymbolDisplay').innerText = chakra.symbol;
+      document.getElementById('chakraNameDisplay').innerText = chakra.name;
+    }
+
+    function openChakraModal() {
+      const todayIndex = new Date().getDay();
+      const chakra = CHAKRA_CURRICULUM[todayIndex];
+
+      document.getElementById('chakraModalTitle').innerText = `${chakra.symbol} ${chakra.name}`;
+      document.getElementById('chakraModalContent').innerHTML = `
+        <div style="margin-bottom:8px;"><strong>DAY:</strong> ${chakra.day}</div>
+        <div style="margin-bottom:8px;"><strong>BIJA MANTRA:</strong> ${chakra.bija} | <strong>ELEMENT:</strong> ${chakra.element}</div>
+        <div style="margin-bottom:8px;"><strong>FOCUS:</strong> ${chakra.focus}</div>
+        <div style="margin-bottom:8px; background:#f5f5f5; padding:8px; border-left:3px solid #000;">
+          <strong>LESSON:</strong><br>${chakra.lesson}
+        </div>
+        <div style="margin-bottom:8px; background:#f0f0f0; padding:8px; border-left:3px solid #000;">
+          <strong>DAILY PRACTICE EXERCISE:</strong><br>${chakra.exercise}
+        </div>
+      `;
+
+      openModal('chakraModal');
+    }
+
     function renderHabitsList() {
       const container = document.getElementById('habitsContainer');
       container.innerHTML = '';
@@ -576,7 +679,6 @@
       }
     }
 
-    // LOG RANDOM THOUGHT
     function submitThoughtLog() {
       const tag = document.getElementById('thoughtTagInput').value.trim().toLowerCase() || 'ideas';
       const detail = document.getElementById('thoughtDetailInput').value.trim();
@@ -612,7 +714,6 @@
       });
     }
 
-    // SAVE HABITS
     function saveCheckedHabits() {
       const statusDiv = document.getElementById('status');
       statusDiv.innerText = "SAVING HABITS...";
@@ -665,7 +766,6 @@
       });
     }
 
-    // MONTH SWITCH & CALENDAR RENDER
     function changeMonth(delta) {
       currentCalDate.setMonth(currentCalDate.getMonth() + delta);
       renderHabitCalendar();
@@ -691,15 +791,31 @@
       }
 
       for (let day = 1; day <= daysInMonth; day++) {
-        const cellDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const targetYear = String(year);
+        const targetMonth = String(month + 1).padStart(2, '0');
+        const targetDay = String(day).padStart(2, '0');
+        const cellDateStr = `${targetYear}-${targetMonth}-${targetDay}`;
+
         const cell = document.createElement('div');
         cell.className = 'cal-day-cell';
 
-        const dayLogs = habitHistoryLogs.filter(l => l.date === cellDateStr);
+        const dayLogs = habitHistoryLogs.filter(l => {
+          if (!l.date) return false;
+          if (l.date === cellDateStr) return true;
+
+          const logD = new Date(l.date);
+          if (!isNaN(logD.getTime())) {
+            const lYear = logD.getFullYear();
+            const lMonth = String(logD.getMonth() + 1).padStart(2, '0');
+            const lDay = String(logD.getDate()).padStart(2, '0');
+            return `${lYear}-${lMonth}-${lDay}` === cellDateStr;
+          }
+          return false;
+        });
 
         if (dayLogs.length > 0) {
           cell.classList.add('completed');
-          const emojisCombined = Array.from(new Set(dayLogs.map(l => l.emoji))).join(' ');
+          const emojisCombined = Array.from(new Set(dayLogs.map(l => l.emoji || '⚡'))).join(' ');
           cell.innerHTML = `<span>${day}</span><div class="cal-emojis">${emojisCombined}</div>`;
           cell.onclick = () => showDayDetails(cellDateStr, dayLogs);
         } else {
@@ -712,7 +828,6 @@
       renderTagCloud();
     }
 
-    // THOUGHT TAG FREQUENCY BUBBLES
     function renderTagCloud() {
       const container = document.getElementById('tagCloudContainer');
       container.innerHTML = '';
@@ -735,8 +850,7 @@
         const bubble = document.createElement('div');
         bubble.className = 'tag-bubble';
         
-        // Dynamic font size scaling based on frequency
-        const fontSize = 0.6 + (count / maxCount) * 0.6; // Scale from 0.6rem to 1.2rem
+        const fontSize = 0.6 + (count / maxCount) * 0.6; 
         bubble.style.fontSize = `${fontSize}rem`;
         bubble.innerHTML = `#${tag} <span style="font-size:0.55rem; opacity:0.7; margin-left:4px;">(${count})</span>`;
         
@@ -829,6 +943,7 @@
       return Math.max(0, Math.floor((today - quit) / (1000 * 60 * 60 * 24)));
     }
 
+    renderChakraSection();
     renderHabitsList();
     fetchDashboardData();
     document.getElementById('smokeStreakDisplay').innerText = getSmokeStreakDays();

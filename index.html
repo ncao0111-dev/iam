@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LOG // HABITS & CALENDAR</title>
+  <title>LOG // PERSONAL TRACKER</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -24,7 +24,6 @@
       flex-direction: column;
     }
 
-    /* TOP NAVIGATION BAR */
     .top-nav {
       display: flex;
       width: 100%;
@@ -125,18 +124,36 @@
     .kpi-val { font-size: 1.4rem; font-weight: bold; }
     .kpi-lbl { font-size: 0.52rem; text-transform: uppercase; margin-top: 2px; }
 
+    /* CHAKRA SECTION */
+    .chakra-section {
+      border: 2px solid var(--fg);
+      padding: 10px;
+      margin-bottom: 14px;
+      background: #fcfcfc;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .chakra-day-title { font-size: 0.6rem; font-weight: bold; border-bottom: 1px solid var(--fg); padding-bottom: 2px; margin-bottom: 4px; }
+    .chakra-symbol { font-size: 1.8rem; }
+    .chakra-name { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+
+    /* CLEAN MIND SECTION */
     .clean-mind-section { border: 2px solid var(--fg); padding: 12px; margin-bottom: 14px; background: #fdfdfd; }
     .clean-mind-header { font-size: 0.7rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; border-bottom: 2px solid var(--fg); padding-bottom: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     .clean-mind-badge { background: var(--fg); color: var(--bg); padding: 2px 6px; font-size: 0.6rem; }
 
+    .teaching-box { border: 1px solid var(--fg); padding: 8px; margin-bottom: 8px; background: #fff; }
+    .teaching-content { font-size: 0.72rem; font-style: italic; line-height: 1.35; margin-bottom: 6px; }
+
     button.wake-btn {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       background-color: var(--fg);
       color: var(--bg);
       border: none;
       font-family: var(--font);
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: bold;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -162,7 +179,6 @@
 
     button.secondary-btn:hover { background-color: #f0f0f0; }
 
-    /* PERMANENT HABIT LIST STYLING WITH NOTE INPUTS */
     .habit-card-item {
       border: 1px solid var(--fg);
       padding: 8px;
@@ -205,15 +221,6 @@
     }
 
     /* CALENDAR GRID */
-    .cal-selector {
-      width: 100%;
-      padding: 8px;
-      font-family: var(--font);
-      font-size: 0.72rem;
-      border: 1px solid var(--fg);
-      margin-bottom: 12px;
-    }
-
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -225,17 +232,18 @@
     .cal-day-hdr { font-size: 0.55rem; font-weight: bold; padding: 4px; background: #f0f0f0; }
     .cal-day-cell {
       border: 1px solid var(--border);
-      min-height: 42px;
+      min-height: 48px;
       padding: 2px;
       font-size: 0.6rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
+      cursor: pointer;
     }
 
-    .cal-day-cell.completed { background: #e8f5e9; border-color: #2e7d32; font-weight: bold; }
-    .cal-time-lbl { font-size: 0.5rem; color: #2e7d32; }
+    .cal-day-cell.completed { background: #f4f4f4; border-color: #000; }
+    .cal-emojis { font-size: 0.7rem; margin-top: 2px; line-height: 1.1; word-break: break-all; }
 
     .modal-overlay {
       display: none;
@@ -269,12 +277,14 @@
     <!-- PAGE 1: HABITS TRACKER -->
     <div class="swipe-page">
       <div class="container">
+        
+        <!-- RESTORED MOTIVATIONAL QUOTE -->
         <div class="quote-box">
           <div class="quote-text" id="quoteText">"Loading daily motivation..."</div>
           <div class="quote-author" id="quoteAuthor">--</div>
         </div>
 
-        <h1>LOG // HABIT STACK</h1>
+        <h1>LOG // MY HABITS</h1>
 
         <div class="kpi-grid-3">
           <div class="kpi-card">
@@ -291,19 +301,36 @@
           </div>
         </div>
 
-        <!-- CLEAN MIND SECTION -->
+        <!-- RESTORED DAILY CHAKRA MASTERY CARD -->
+        <div class="chakra-section" onclick="openModal('chakraModal')">
+          <div class="chakra-day-title" id="chakraDayDisplay">TODAY'S CHAKRA WORK</div>
+          <div class="chakra-symbol" id="chakraSymbolDisplay">लं</div>
+          <div class="chakra-name" id="chakraNameDisplay">MULADHARA (ROOT)</div>
+          <div style="font-size: 0.58rem; text-transform: uppercase; margin-top: 4px; color: #666;">[ 🔍 CLICK FOR LESSON & PRACTICE ]</div>
+        </div>
+
+        <!-- RESTORED CLEAN MIND TRACKER SECTION -->
         <div class="clean-mind-section">
           <div class="clean-mind-header">
             <span>🧠 MIND PURITY TRACKER</span>
             <span class="clean-mind-badge" id="cleanMindBadge">DAY 1 / 365</span>
           </div>
-          <button type="button" class="wake-btn" onclick="commitCleanMindToday()">⚡ COMMIT TO CLEAN MIND</button>
+
+          <div class="teaching-box">
+            <div style="font-size:0.6rem; font-weight:bold; color:#444;" id="teachingMetaDisplay">PATH: LOADING...</div>
+            <div class="teaching-content" id="teachingContentText">Loading daily teaching from master sheet...</div>
+            <div style="font-size:0.62rem; background:#f4f4f4; padding:6px; border-left:2px solid var(--fg);">
+              <strong>ACTION FOCUS:</strong> <span id="teachingReflectionText">Loading focus...</span>
+            </div>
+          </div>
+
+          <button type="button" class="wake-btn" style="margin-bottom:6px;" onclick="commitCleanMindToday()">⚡ COMMIT TO CLEAN MIND TODAY</button>
           <button type="button" class="secondary-btn" style="color: #900; border-color: #900;" onclick="openModal('lapseModal')">⚠️ LOG LAPSE / RESET STREAK</button>
         </div>
 
         <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0 6px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 12px 0 6px 0;">
           <strong style="font-size:0.72rem;">PERMANENT HABIT STACK</strong>
           <span style="font-size:0.6rem; text-decoration:underline; cursor:pointer;" onclick="openModal('addHabitModal')">+ Add Habit</span>
         </div>
@@ -311,14 +338,21 @@
         <!-- PERMANENT HABITS CONTAINER -->
         <div id="habitsContainer"></div>
 
-        <div class="btn-grid" style="margin-top:12px;">
-          <button type="button" class="secondary-btn" onclick="openVirtuesModal()">Log Sleep & Virtues</button>
+        <button type="button" class="wake-btn" style="background:#222; margin-top:10px;" onclick="saveCheckedHabits()">SAVE HABITS & NOTES LOG</button>
+
+        <div class="btn-grid" style="margin-top:10px;">
           <button type="button" class="secondary-btn" onclick="openModal('quoteModal')">+ Add Quote</button>
-        </div>
-        <div class="btn-grid">
           <button type="button" class="secondary-btn" onclick="openModal('keywordModal')">+ Add Keyword</button>
-          <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
         </div>
+        
+        <div class="btn-grid">
+          <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
+          <button type="button" class="secondary-btn" onclick="openEditVirtuesModal()">⚙ Edit Virtues</button>
+        </div>
+
+        <!-- MOVED SLEEP & VIRTUES BUTTON TO END OF PAGE -->
+        <button type="button" class="wake-btn" style="margin-top:12px; background:#000;" onclick="openVirtuesModal()">🌙 LOG SLEEP & VIRTUES CHECK-OUT</button>
+
       </div>
     </div>
 
@@ -352,10 +386,7 @@
     <!-- PAGE 3: CALENDAR & FREQUENCY TRACKER -->
     <div class="swipe-page">
       <div class="cal-container">
-        <h1>HABIT CALENDAR</h1>
-
-        <label style="font-size:0.65rem; font-weight:bold; text-transform:uppercase;">Select Habit to View Frequency:</label>
-        <select class="cal-selector" id="calHabitSelector" onchange="renderHabitCalendar()"></select>
+        <h1>ALL HABITS CALENDAR</h1>
 
         <div class="calendar-grid">
           <div class="cal-day-hdr">SUN</div><div class="cal-day-hdr">MON</div><div class="cal-day-hdr">TUE</div>
@@ -371,6 +402,14 @@
   <div id="status"></div>
 
   <!-- MODALS -->
+  <div class="modal-overlay" id="chakraModal">
+    <div class="modal-card">
+      <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
+      <div id="chakraModalContent" style="font-size:0.75rem; line-height:1.45;"></div>
+      <button type="button" class="secondary-btn" style="margin-top:14px;" onclick="closeModal('chakraModal')">CLOSE LESSON</button>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="addHabitModal">
     <div class="modal-card">
       <div class="modal-title">+ ADD PERMANENT HABIT</div>
@@ -387,6 +426,14 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="dayDetailModal">
+    <div class="modal-card">
+      <div class="modal-title" id="dayDetailTitle">DATE LOGS</div>
+      <div id="dayDetailContent" style="font-size:0.72rem; line-height:1.4;"></div>
+      <button type="button" class="secondary-btn" style="margin-top:12px;" onclick="closeModal('dayDetailModal')">CLOSE</button>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="lapseModal">
     <div class="modal-card">
       <div class="modal-title">⚠️ LOG CLEAN MIND LAPSE</div>
@@ -399,7 +446,6 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
 
-    // PERMANENT HABIT LIST WITH EMOJIS (Includes Reading, Exercise, Sex, Marijuana)
     let permanentHabits = JSON.parse(localStorage.getItem('saved_permanent_habits')) || [
       { id: 'reading', emoji: '📚', label: 'Reading' },
       { id: 'exercise', emoji: '🏋️', label: 'Exercise' },
@@ -410,8 +456,8 @@
 
     let habitHistoryLogs = [];
     let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
+    let activeTeachingData = {};
 
-    // NAV / SWIPE
     function scrollToPage(index) {
       const viewport = document.getElementById('swipeViewport');
       viewport.scrollTo({ left: window.innerWidth * index, behavior: 'smooth' });
@@ -433,7 +479,7 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // RENDER HABIT LIST WITH NOTE TOGGLES
+    // RENDER HABITS WITH NOTE INPUTS
     function renderHabitsList() {
       const container = document.getElementById('habitsContainer');
       container.innerHTML = '';
@@ -450,13 +496,12 @@
             </div>
             <span style="color:#999; font-size:0.6rem; cursor:pointer;" onclick="removeHabit(${idx})">[x]</span>
           </div>
-          <input type="text" class="habit-note-input" id="note_habit_${idx}" placeholder="Add session notes (e.g. 20 mins, strain, workout details...)">
+          <input type="text" class="habit-note-input" id="note_habit_${idx}" placeholder="Session note (pages, workout, strain, mood...)">
         `;
         container.appendChild(item);
       });
 
       localStorage.setItem('saved_permanent_habits', JSON.stringify(permanentHabits));
-      populateCalendarSelector();
     }
 
     function toggleNoteInput(idx) {
@@ -483,40 +528,39 @@
       }
     }
 
-    // LOG WAKE UP & HABITS
-    function logWakeUp() {
-      const wakeBtn = document.getElementById('wakeBtn');
+    // SAVE CHECKED HABITS WITH NOTES TO COMBINED "Habits" SHEET
+    function saveCheckedHabits() {
       const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING HABITS...";
 
       const now = new Date();
-      const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const formattedDateTime = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-      wakeBtn.disabled = true;
-      wakeBtn.innerText = "SAVING...";
-
-      const habitsData = {};
+      const habitsToSave = [];
       permanentHabits.forEach((h, idx) => {
         const chk = document.getElementById(`chk_habit_${idx}`);
-        const note = document.getElementById(`note_habit_${idx}`);
+        const noteInput = document.getElementById(`note_habit_${idx}`);
         
         if (chk && chk.checked) {
-          habitsData[h.label] = {
-            done: true,
-            note: note ? note.value.trim() : "",
-            time: currentTime
-          };
+          habitsToSave.push({
+            label: h.label,
+            emoji: h.emoji,
+            note: noteInput ? noteInput.value.trim() : ""
+          });
         }
       });
 
-      const cleanStreakVal = parseInt(document.getElementById('cleanMindVal').innerText || '0', 10);
+      if (habitsToSave.length === 0) {
+        statusDiv.innerText = "[!] NO HABITS CHECKED TO SAVE";
+        return;
+      }
 
       const payload = {
-        date: currentDate,
-        wakeTime: currentTime,
-        smokeStreak: getSmokeStreakDays(),
-        cleanStreak: cleanStreakVal,
-        habits: habitsData
+        action: "addHabitLog",
+        dateTime: formattedDateTime,
+        dateLogged: formattedDate,
+        habits: habitsToSave
       };
 
       fetch(SCRIPT_URL, {
@@ -526,41 +570,22 @@
         body: JSON.stringify(payload)
       })
       .then(() => {
-        statusDiv.innerText = `[✓] LOGGED HABITS AT ${currentTime}`;
-        wakeBtn.disabled = false;
-        wakeBtn.innerText = "LOG WAKE UP NOW";
-
+        statusDiv.innerText = `[✓] SAVED ${habitsToSave.length} HABIT LOGS`;
         permanentHabits.forEach((_, idx) => {
           const chk = document.getElementById(`chk_habit_${idx}`);
-          const note = document.getElementById(`note_habit_${idx}`);
+          const noteInput = document.getElementById(`note_habit_${idx}`);
           if (chk) chk.checked = false;
-          if (note) { note.value = ''; note.classList.remove('active'); }
+          if (noteInput) { noteInput.value = ''; noteInput.classList.remove('active'); }
         });
-
         fetchDashboardData();
       })
       .catch(() => {
-        statusDiv.innerText = "[X] ERROR SAVING";
-        wakeBtn.disabled = false;
-        wakeBtn.innerText = "LOG WAKE UP NOW";
+        statusDiv.innerText = "[X] ERROR SAVING HABITS";
       });
     }
 
-    // CALENDAR TAB LOGIC
-    function populateCalendarSelector() {
-      const selector = document.getElementById('calHabitSelector');
-      selector.innerHTML = '';
-      permanentHabits.forEach(h => {
-        const opt = document.createElement('option');
-        opt.value = h.label;
-        opt.innerText = `${h.emoji} ${h.label}`;
-        selector.appendChild(opt);
-      });
-      renderHabitCalendar();
-    }
-
+    // MULTI-HABIT CALENDAR RENDERER
     function renderHabitCalendar() {
-      const selectedHabit = document.getElementById('calHabitSelector').value;
       const grid = document.getElementById('calGridCells');
       grid.innerHTML = '';
 
@@ -571,33 +596,83 @@
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      // Empty padding cells
       for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement('div');
         emptyCell.className = 'cal-day-cell';
         grid.appendChild(emptyCell);
       }
 
-      // Render days
       for (let day = 1; day <= daysInMonth; day++) {
         const cellDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const cell = document.createElement('div');
         cell.className = 'cal-day-cell';
 
-        // Check if habit was logged on this date
-        const logMatch = habitHistoryLogs.find(l => l.date === cellDateStr && l.habits && l.habits[selectedHabit]);
+        const dayLogs = habitHistoryLogs.filter(l => l.date === cellDateStr);
 
-        if (logMatch) {
+        if (dayLogs.length > 0) {
           cell.classList.add('completed');
-          const hObj = logMatch.habits[selectedHabit];
-          const timeText = (typeof hObj === 'object' && hObj.time) ? hObj.time : logMatch.time;
-          cell.innerHTML = `<span>${day}</span><span class="cal-time-lbl">✓ ${timeText}</span>`;
+          const emojisCombined = Array.from(new Set(dayLogs.map(l => l.emoji))).join(' ');
+          cell.innerHTML = `<span>${day}</span><div class="cal-emojis">${emojisCombined}</div>`;
+          cell.onclick = () => showDayDetails(cellDateStr, dayLogs);
         } else {
           cell.innerHTML = `<span>${day}</span>`;
         }
 
         grid.appendChild(cell);
       }
+    }
+
+    function showDayDetails(dateStr, logs) {
+      document.getElementById('dayDetailTitle').innerText = `LOGS FOR ${dateStr}`;
+      const container = document.getElementById('dayDetailContent');
+      container.innerHTML = '';
+
+      logs.forEach(l => {
+        const item = document.createElement('div');
+        item.style.marginBottom = '8px';
+        item.style.borderBottom = '1px solid #ccc';
+        item.style.paddingBottom = '4px';
+        item.innerHTML = `
+          <strong>${l.emoji} ${l.habitName}</strong> (${l.dateTime.split(' ')[1] || ''})<br>
+          <em>Note: ${l.note && l.note !== '-' ? l.note : 'No notes entered'}</em>
+        `;
+        container.appendChild(item);
+      });
+
+      openModal('dayDetailModal');
+    }
+
+    function logWakeUp() {
+      const wakeBtn = document.getElementById('wakeBtn');
+      const statusDiv = document.getElementById('status');
+      const now = new Date();
+      const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      wakeBtn.disabled = true;
+      wakeBtn.innerText = "SAVING...";
+
+      const cleanStreakVal = parseInt(document.getElementById('cleanMindVal').innerText || '0', 10);
+
+      const payload = {
+        date: currentDate,
+        wakeTime: currentTime,
+        smokeStreak: getSmokeStreakDays(),
+        cleanStreak: cleanStreakVal
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = `[✓] LOGGED WAKE UP AT ${currentTime}`;
+        wakeBtn.disabled = false;
+        wakeBtn.innerText = "LOG WAKE UP NOW";
+        fetchDashboardData();
+      });
     }
 
     function fetchDashboardData() {
@@ -613,6 +688,13 @@
             if (data.wifeQuote) {
               document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote}"`;
               document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author}`;
+            }
+
+            if (data.purityTeaching) {
+              activeTeachingData = data.purityTeaching;
+              document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
+              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
+              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
             }
 
             if (data.habitHistory) {

@@ -321,9 +321,9 @@
 
         <!-- CHAKRA MASTERY CARD -->
         <div class="chakra-section" onclick="openChakraModal()">
-          <div class="chakra-day-title" id="chakraDayDisplay">TODAY'S CHAKRA WORK</div>
+          <div class="chakra-day-title" id="chakraDayDisplay">TODAY'S WORK</div>
           <div class="chakra-symbol" id="chakraSymbolDisplay">लं</div>
-          <div class="chakra-name" id="chakraNameDisplay">MULADHARA (ROOT)</div>
+          <div class="chakra-name" id="chakraNameDisplay">MULADHARA</div>
           <div style="font-size: 0.58rem; text-transform: uppercase; margin-top: 4px; color: #666;">[ 🔍 CLICK FOR LESSON & PRACTICE ]</div>
         </div>
 
@@ -356,8 +356,6 @@
         <div id="habitsContainer"></div>
 
         <button type="button" class="wake-btn" style="background:#222; margin-top:10px;" onclick="saveCheckedHabits()">SAVE HABITS & NOTES LOG</button>
-
-        <!-- RANDOM THOUGHTS BUTTON -->
         <button type="button" class="wake-btn" style="background:#444; margin-top:4px;" onclick="openModal('thoughtModal')">💡 + LOG RANDOM THOUGHT</button>
 
         <div class="btn-grid" style="margin-top:10px;">
@@ -387,11 +385,11 @@
         <h1>WIFE CYCLE & CARE</h1>
 
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-val" id="wifeCycleDayVal">--</div><div class="kpi-lbl">Cycle Day</div></div>
-          <div class="kpi-card"><div class="kpi-val" id="wifePhaseVal" style="font-size:0.85rem;">--</div><div class="kpi-lbl">Phase</div></div>
+          <div class="kpi-card"><div class="kpi-val" id="wifeCycleDayVal">14</div><div class="kpi-lbl">Cycle Day</div></div>
+          <div class="kpi-card"><div class="kpi-val" id="wifePhaseVal" style="font-size:0.75rem;">Follicular Phase</div><div class="kpi-lbl">Phase</div></div>
         </div>
 
-        <div style="font-size:0.68rem; padding:8px; border:1px solid var(--fg); margin-bottom:12px;" id="wifeCareGuide">Loading guide...</div>
+        <div style="font-size:0.68rem; padding:8px; border:1px solid var(--fg); margin-bottom:12px;" id="wifeCareGuide">High energy phase. Support her creative efforts.</div>
 
         <div style="margin-bottom:8px;">
           <label style="font-size:0.65rem; font-weight:bold;">Her Experience Today</label>
@@ -434,7 +432,7 @@
 
   <div id="status"></div>
 
-  <!-- MODALS -->
+  <!-- ALL MODALS FULLY DEFINED BELOW -->
   <div class="modal-overlay" id="chakraModal">
     <div class="modal-card">
       <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
@@ -475,6 +473,50 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="quoteModal">
+    <div class="modal-card">
+      <div class="modal-title">+ ADD MOTIVATIONAL QUOTE</div>
+      <input type="text" id="newQuoteText" placeholder="Quote text..." style="width:100%; padding:6px; border:1px solid var(--fg); margin-bottom:8px;">
+      <input type="text" id="newQuoteAuthor" placeholder="Author..." style="width:100%; padding:6px; border:1px solid var(--fg); margin-bottom:12px;">
+      <button type="button" class="wake-btn" onclick="submitAddQuote()">SAVE QUOTE</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('quoteModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="keywordModal">
+    <div class="modal-card">
+      <div class="modal-title">+ ADD KEYWORD</div>
+      <input type="text" id="newKeywordText" placeholder="Keyword / Focus word..." style="width:100%; padding:6px; border:1px solid var(--fg); margin-bottom:12px;">
+      <button type="button" class="wake-btn" onclick="submitAddKeyword()">SAVE KEYWORD</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('keywordModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="virtuesModal">
+    <div class="modal-card">
+      <div class="modal-title">🌙 SLEEP & VIRTUES CHECK-OUT</div>
+      <div style="margin-bottom:8px;">
+        <label style="font-size:0.62rem; font-weight:bold;">Planned Bedtime</label>
+        <input type="time" id="sleepTimeInput" style="width:100%; padding:6px; border:1px solid var(--fg);" value="22:30">
+      </div>
+      <div id="virtuesChecklistContainer" style="margin-bottom:12px;"></div>
+      <button type="button" class="wake-btn" onclick="submitSleepVirtues()">SAVE SLEEP & VIRTUES LOG</button>
+      <button type="button" class="secondary-btn" onclick="closeModal('virtuesModal')">CANCEL</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="editVirtuesModal">
+    <div class="modal-card">
+      <div class="modal-title">⚙ EDIT DAILY VIRTUES</div>
+      <div id="editVirtuesListContainer" style="margin-bottom:12px;"></div>
+      <div style="display:flex; gap:6px; margin-bottom:12px;">
+        <input type="text" id="newVirtueInput" placeholder="New virtue name..." style="flex:1; padding:6px; border:1px solid var(--fg);">
+        <button type="button" class="secondary-btn" style="width:auto; padding:6px 12px;" onclick="addNewVirtue()">+ Add</button>
+      </div>
+      <button type="button" class="wake-btn" onclick="closeModal('editVirtuesModal')">DONE</button>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="dayDetailModal">
     <div class="modal-card">
       <div class="modal-title" id="dayDetailTitle">DATE LOGS</div>
@@ -495,78 +537,14 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
 
-    // 7-DAY CHAKRA MASTERY FRAMEWORK
     const CHAKRA_CURRICULUM = [
-      {
-        day: 'SUNDAY',
-        name: 'MULADHARA (ROOT)',
-        symbol: 'लं',
-        bija: 'LAM',
-        element: 'Earth',
-        focus: 'Physical grounding, survival security, root stability, discipline.',
-        lesson: 'Mastery over fear and raw instinct. Root yourself firmly before building upwards.',
-        exercise: '10 mins bare-foot stance or deep belly grounding meditation.'
-      },
-      {
-        day: 'MONDAY',
-        name: 'SVADHISTHANA (SACRAL)',
-        symbol: 'वं',
-        bija: 'VAM',
-        element: 'Water',
-        focus: 'Creative energy, emotional fluidity, sensual transmutation.',
-        lesson: 'Transmute raw vital energy into artistic work, strategic focus, and spiritual strength.',
-        exercise: 'Mind Purity observation & breath retention (Kumbhaka).'
-      },
-      {
-        day: 'TUESDAY',
-        name: 'MANIPURA (SOLAR PLEXUS)',
-        symbol: 'रं',
-        bija: 'RAM',
-        element: 'Fire',
-        focus: 'Willpower, personal sovereignty, digestive fire, execution.',
-        lesson: 'Fanning the internal fire of action. Self-mastery through unwavering resolve.',
-        exercise: 'Cold shower or intense core physical exercise.'
-      },
-      {
-        day: 'WEDNESDAY',
-        name: 'ANAHATA (HEART)',
-        symbol: 'यं',
-        bija: 'YAM',
-        element: 'Air',
-        focus: 'Compassion, devotion, marital harmony, balance.',
-        lesson: 'Openness without weakness. Cultivating deep care for your wife and loved ones.',
-        exercise: 'Heart-focused breathing & loving presence act for your wife.'
-      },
-      {
-        day: 'THURSDAY',
-        name: 'VISHUDDHA (THROAT)',
-        symbol: 'हं',
-        bija: 'HAM',
-        element: 'Ether / Space',
-        focus: 'Truthful expression, vocal integrity, pure intent.',
-        lesson: 'Speak only truth. Align words with quiet action and gentlemanly dignity.',
-        exercise: 'Chant Bija Mantra HAM (108x) or practice intentional silence.'
-      },
-      {
-        day: 'FRIDAY',
-        name: 'AJNA (THIRD EYE)',
-        symbol: 'ॐ',
-        bija: 'OM',
-        element: 'Mind / Light',
-        focus: 'Intuition, mental clarity, focus, inner vision.',
-        lesson: 'Penetrating clarity over chaotic thoughts. Guard the mind threshold at all times.',
-        exercise: '15 mins Trataka (candle gaze) or third-eye breath focus.'
-      },
-      {
-        day: 'SATURDAY',
-        name: 'SAHASRARA (CROWN)',
-        symbol: '🪷',
-        bija: 'AUM',
-        element: 'Pure Consciousness',
-        focus: 'Spiritual alignment, ultimate oneness, timeless wisdom.',
-        lesson: 'Surrender ego desires to cosmic order and high virtue.',
-        exercise: '20 mins silent meditation on pure awareness.'
-      }
+      { day: 'SUNDAY', name: 'MULADHARA (ROOT)', symbol: 'लं', bija: 'LAM', element: 'Earth', focus: 'Physical grounding, survival security, root stability.', lesson: 'Mastery over fear and raw instinct. Root yourself firmly.', exercise: '10 mins bare-foot stance or deep belly grounding.' },
+      { day: 'MONDAY', name: 'SVADHISTHANA (SACRAL)', symbol: 'वं', bija: 'VAM', element: 'Water', focus: 'Creative energy, emotional fluidity, sensual transmutation.', lesson: 'Transmute raw vital energy into artistic focus and spiritual strength.', exercise: 'Mind Purity observation & breath retention (Kumbhaka).' },
+      { day: 'TUESDAY', name: 'MANIPURA (SOLAR PLEXUS)', symbol: 'रं', bija: 'RAM', element: 'Fire', focus: 'Willpower, personal sovereignty, execution.', lesson: 'Fanning internal fire of action. Self-mastery through resolve.', exercise: 'Cold shower or intense core workout.' },
+      { day: 'WEDNESDAY', name: 'ANAHATA (HEART)', symbol: 'यं', bija: 'YAM', element: 'Air', focus: 'Compassion, devotion, marital harmony, balance.', lesson: 'Openness without weakness. Cultivating deep care for your wife.', exercise: 'Heart-focused breathing & devoted act for wife.' },
+      { day: 'THURSDAY', name: 'VISHUDDHA (THROAT)', symbol: 'हं', bija: 'HAM', element: 'Ether / Space', focus: 'Truthful expression, vocal integrity, pure intent.', lesson: 'Speak only truth. Align words with quiet action.', exercise: 'Chant Bija Mantra HAM (108x) or practice intentional silence.' },
+      { day: 'FRIDAY', name: 'AJNA (THIRD EYE)', symbol: 'ॐ', bija: 'OM', element: 'Mind / Light', focus: 'Intuition, mental clarity, inner vision.', lesson: 'Penetrating clarity over chaotic thoughts. Guard the threshold.', exercise: '15 mins Trataka (candle gaze) or third-eye breath.' },
+      { day: 'SATURDAY', name: 'SAHASRARA (CROWN)', symbol: '🪷', bija: 'AUM', element: 'Pure Consciousness', focus: 'Spiritual alignment, ultimate oneness, timeless wisdom.', lesson: 'Surrender ego desires to cosmic order and high virtue.', exercise: '20 mins silent meditation on pure awareness.' }
     ];
 
     let permanentHabits = JSON.parse(localStorage.getItem('saved_permanent_habits')) || [
@@ -577,10 +555,15 @@
       { id: 'meditation', emoji: '🧘', label: 'Meditation' }
     ];
 
+    let defaultVirtues = JSON.parse(localStorage.getItem('saved_virtues_list')) || [
+      'Purity in Mind', 'Honesty in Word', 'Love for Wife', 'Physical Discipline', 'No Unnecessary Consumption'
+    ];
+
     let habitHistoryLogs = [];
     let thoughtLogsHistory = [];
     let currentCalDate = new Date();
     let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
+    let activeTeachingData = {};
 
     function scrollToPage(index) {
       const viewport = document.getElementById('swipeViewport');
@@ -603,11 +586,9 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // RENDER TODAY'S CHAKRA WORK
     function renderChakraSection() {
-      const todayIndex = new Date().getDay(); // 0 = Sun, 1 = Mon ...
+      const todayIndex = new Date().getDay();
       const chakra = CHAKRA_CURRICULUM[todayIndex];
-
       document.getElementById('chakraDayDisplay').innerText = `TODAY'S WORK // ${chakra.day}`;
       document.getElementById('chakraSymbolDisplay').innerText = chakra.symbol;
       document.getElementById('chakraNameDisplay').innerText = chakra.name;
@@ -616,20 +597,14 @@
     function openChakraModal() {
       const todayIndex = new Date().getDay();
       const chakra = CHAKRA_CURRICULUM[todayIndex];
-
       document.getElementById('chakraModalTitle').innerText = `${chakra.symbol} ${chakra.name}`;
       document.getElementById('chakraModalContent').innerHTML = `
         <div style="margin-bottom:8px;"><strong>DAY:</strong> ${chakra.day}</div>
         <div style="margin-bottom:8px;"><strong>BIJA MANTRA:</strong> ${chakra.bija} | <strong>ELEMENT:</strong> ${chakra.element}</div>
         <div style="margin-bottom:8px;"><strong>FOCUS:</strong> ${chakra.focus}</div>
-        <div style="margin-bottom:8px; background:#f5f5f5; padding:8px; border-left:3px solid #000;">
-          <strong>LESSON:</strong><br>${chakra.lesson}
-        </div>
-        <div style="margin-bottom:8px; background:#f0f0f0; padding:8px; border-left:3px solid #000;">
-          <strong>DAILY PRACTICE EXERCISE:</strong><br>${chakra.exercise}
-        </div>
+        <div style="margin-bottom:8px; background:#f5f5f5; padding:8px; border-left:3px solid #000;"><strong>LESSON:</strong><br>${chakra.lesson}</div>
+        <div style="margin-bottom:8px; background:#f0f0f0; padding:8px; border-left:3px solid #000;"><strong>DAILY PRACTICE:</strong><br>${chakra.exercise}</div>
       `;
-
       openModal('chakraModal');
     }
 
@@ -711,6 +686,198 @@
       .then(() => {
         statusDiv.innerText = `[✓] THOUGHT LOGGED UNDER #${tag}`;
         fetchDashboardData();
+      });
+    }
+
+    function commitCleanMindToday() {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "COMMITTING TO CLEAN MIND...";
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const formattedDateTime = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addCleanCommitment",
+        dateTime: formattedDateTime,
+        dayNum: activeTeachingData.day || 1,
+        tradition: activeTeachingData.tradition || "Mind Purity",
+        source: activeTeachingData.source || "Master Teachings",
+        teaching: activeTeachingData.teaching || "",
+        reflection: activeTeachingData.reflection || ""
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = "[✓] CLEAN MIND COMMITMENT LOGGED";
+        fetchDashboardData();
+      });
+    }
+
+    function submitLapseLog() {
+      const notes = document.getElementById('lapseDetailsTextarea').value.trim();
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "LOGGING LAPSE...";
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const formattedDateTime = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addCleanLapseLog",
+        dateTime: formattedDateTime,
+        previousStreak: parseInt(document.getElementById('cleanMindVal').innerText || '0', 10),
+        tradition: activeTeachingData.tradition || "Mind Purity",
+        source: activeTeachingData.source || "Master Teachings",
+        teaching: activeTeachingData.teaching || "",
+        reflection: activeTeachingData.reflection || "",
+        notes: notes || "Lapse recorded"
+      };
+
+      closeModal('lapseModal');
+      document.getElementById('lapseDetailsTextarea').value = '';
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        statusDiv.innerText = "[✓] LAPSE RECORDED & STREAK RESET";
+        fetchDashboardData();
+      });
+    }
+
+    function submitAddQuote() {
+      const q = document.getElementById('newQuoteText').value.trim();
+      const a = document.getElementById('newQuoteAuthor').value.trim() || 'Anonymous';
+      if (!q) return;
+
+      const payload = { action: 'addQuote', quote: q, author: a, date: new Date().toISOString() };
+      closeModal('quoteModal');
+      document.getElementById('newQuoteText').value = '';
+      document.getElementById('newQuoteAuthor').value = '';
+
+      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      .then(() => { document.getElementById('status').innerText = "[✓] QUOTE ADDED"; });
+    }
+
+    function submitAddKeyword() {
+      const k = document.getElementById('newKeywordText').value.trim();
+      if (!k) return;
+
+      const payload = { action: 'addKeyword', keyword: k, date: new Date().toISOString() };
+      closeModal('keywordModal');
+      document.getElementById('newKeywordText').value = '';
+
+      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      .then(() => { document.getElementById('status').innerText = "[✓] KEYWORD ADDED"; });
+    }
+
+    function openVirtuesModal() {
+      const container = document.getElementById('virtuesChecklistContainer');
+      container.innerHTML = '';
+      defaultVirtues.forEach((v, idx) => {
+        container.innerHTML += `
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:0.75rem;">
+            <input type="checkbox" id="virtue_chk_${idx}" checked style="width:16px; height:16px; accent-color:#000;">
+            <label for="virtue_chk_${idx}">${v}</label>
+          </div>
+        `;
+      });
+      openModal('virtuesModal');
+    }
+
+    function submitSleepVirtues() {
+      const sleepTime = document.getElementById('sleepTimeInput').value || '22:30';
+      const virtuesResult = {};
+      defaultVirtues.forEach((v, idx) => {
+        const chk = document.getElementById(`virtue_chk_${idx}`);
+        virtuesResult[v] = chk ? chk.checked : false;
+      });
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      const payload = { action: 'addSleepVirtuesLog', date: formattedDate, sleepTime: sleepTime, virtues: virtuesResult };
+      closeModal('virtuesModal');
+
+      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      .then(() => { document.getElementById('status').innerText = "[✓] SLEEP & VIRTUES LOGGED"; });
+    }
+
+    function openEditVirtuesModal() {
+      renderEditVirtuesList();
+      openModal('editVirtuesModal');
+    }
+
+    function renderEditVirtuesList() {
+      const container = document.getElementById('editVirtuesListContainer');
+      container.innerHTML = '';
+      defaultVirtues.forEach((v, idx) => {
+        container.innerHTML += `
+          <div style="display:flex; justify-content:space-between; align-items:center; border:1px solid #000; padding:6px; margin-bottom:4px; font-size:0.72rem;">
+            <span>${v}</span>
+            <span style="color:#900; font-weight:bold; cursor:pointer;" onclick="deleteVirtue(${idx})">[Delete]</span>
+          </div>
+        `;
+      });
+    }
+
+    function addNewVirtue() {
+      const val = document.getElementById('newVirtueInput').value.trim();
+      if (val) {
+        defaultVirtues.push(val);
+        localStorage.setItem('saved_virtues_list', JSON.stringify(defaultVirtues));
+        document.getElementById('newVirtueInput').value = '';
+        renderEditVirtuesList();
+      }
+    }
+
+    function deleteVirtue(idx) {
+      defaultVirtues.splice(idx, 1);
+      localStorage.setItem('saved_virtues_list', JSON.stringify(defaultVirtues));
+      renderEditVirtuesList();
+    }
+
+    function resetSmokeQuitDate() {
+      const newDate = prompt("Enter new smoke quit date (YYYY-MM-DD):", "2026-08-01");
+      if (newDate) {
+        smokeQuitDate = newDate;
+        localStorage.setItem('smoke_quit_date', smokeQuitDate);
+        document.getElementById('smokeStreakDisplay').innerText = getSmokeStreakDays();
+        document.getElementById('status').innerText = "[✓] SMOKE QUIT DATE UPDATED";
+      }
+    }
+
+    function logWifeCycle() {
+      const exp = document.getElementById('wifeExperienceInput').value.trim();
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerText = "SAVING WIFE CYCLE...";
+
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      const payload = {
+        action: "addWifeCycleLog",
+        date: formattedDate,
+        cycleDay: document.getElementById('wifeCycleDayVal').innerText || "14",
+        hormonePhase: document.getElementById('wifePhaseVal').innerText || "Follicular Phase",
+        experience: exp || "Normal",
+        comfortGuide: document.getElementById('wifeCareGuide').innerText || "-",
+        notes: exp || "Logged via web app",
+        timestamp: `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+      };
+
+      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      .then(() => {
+        statusDiv.innerText = "[✓] WIFE CYCLE LOGGED";
+        document.getElementById('wifeExperienceInput').value = '';
       });
     }
 
@@ -924,16 +1091,28 @@
               document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author}`;
             }
 
-            if (data.habitHistory) {
-              habitHistoryLogs = data.habitHistory;
+            if (data.wifeCycle) {
+              document.getElementById('wifeCycleDayVal').innerText = data.wifeCycle.cycleDay;
+              document.getElementById('wifePhaseVal').innerText = data.wifeCycle.phase;
+              document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide;
             }
 
-            if (data.thoughtLogs) {
-              thoughtLogsHistory = data.thoughtLogs;
+            if (data.purityTeaching) {
+              activeTeachingData = data.purityTeaching;
+              document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day} / 365`;
+              document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
+              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
+              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
             }
+
+            if (data.habitHistory) habitHistoryLogs = data.habitHistory;
+            if (data.thoughtLogs) thoughtLogsHistory = data.thoughtLogs;
 
             renderHabitCalendar();
           }
+        })
+        .catch(err => {
+          console.error("Dashboard fetch error:", err);
         });
     }
 

@@ -393,18 +393,18 @@
       <div class="kpi-card"><div class="kpi-val" id="wifePhaseVal" style="font-size:0.7rem;">--</div><div class="kpi-lbl">Phase</div></div>
     </div>
 
-    <!-- PRIMARY CARE & SUPPORT SUMMARY -->
+    <!-- PRACTICAL CARE SUMMARY -->
     <div style="border:2px solid var(--fg); padding:10px; margin-bottom:10px; background:#f8f8f8;">
       <div style="font-size:0.6rem; font-weight:bold; text-transform:uppercase;">🤲 PRACTICAL CARE & SUPPORT</div>
       <div style="font-size:0.72rem; margin-top:4px; line-height:1.35; font-weight:bold;" id="wifeCareGuide">Loading guidance...</div>
     </div>
 
-    <!-- COLLAPSIBLE ACCORDION BUTTON FOR DETAILED INSIGHTS -->
+    <!-- TOGGLE ACCORDION BUTTON -->
     <button type="button" class="secondary-btn" style="width:100%; margin-bottom:12px; font-size:0.62rem; text-align:center;" onclick="toggleCycleDetails()">
       🔍 <span id="toggleDetailsLabel">CLICK TO VIEW DAY DETAILS</span>
     </button>
 
-    <!-- HIDDEN COLLAPSED DETAILS CONTAINER -->
+    <!-- COLLAPSED DAY DETAILS -->
     <div id="wifeCycleDetailsContainer" style="display:none; margin-bottom:12px;">
       <div style="border:1px solid var(--fg); padding:8px; margin-bottom:6px; background:#fafafa;">
         <div style="font-size:0.58rem; font-weight:bold; text-transform:uppercase; color:#444;">⚙️ MECHANISM & HORMONES</div>
@@ -430,20 +430,6 @@
     <button type="button" class="wake-btn" id="wifeCycleBtn" onclick="logWifeCycle()">SAVE WIFE CYCLE LOG</button>
   </div>
 </div>
-
-<script>
-  function toggleCycleDetails() {
-    const detailsDiv = document.getElementById('wifeCycleDetailsContainer');
-    const label = document.getElementById('toggleDetailsLabel');
-    if (detailsDiv.style.display === 'none') {
-      detailsDiv.style.display = 'block';
-      label.innerText = 'HIDE DAY DETAILS';
-    } else {
-      detailsDiv.style.display = 'none';
-      label.innerText = 'CLICK TO VIEW DAY DETAILS';
-    }
-  }
-</script>
 
     <!-- PAGE 3: CALENDAR & THOUGHT TAG FREQUENCY BUBBLES -->
     <div class="swipe-page">

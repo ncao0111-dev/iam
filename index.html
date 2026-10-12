@@ -377,32 +377,73 @@
       </div>
     </div>
 
-    <!-- PAGE 2: WIFE CYCLE & CARE -->
-    <div class="swipe-page">
-      <div class="wife-container">
-        <div class="quote-box" style="border-left: 3px solid var(--fg); background: #fff; text-align: left;">
-          <div style="font-size: 0.58rem; font-weight: bold; text-transform: uppercase; color: #555;" id="wifeQuoteTopic">GENTLEMAN'S THOUGHT FOR HER</div>
-          <div class="quote-text" id="wifeQuoteText">"Loading..."</div>
-          <div class="quote-author" id="wifeQuoteAuthor" style="text-align: right;">--</div>
-        </div>
+   <!-- PAGE 2: WIFE CYCLE & CARE -->
+<div class="swipe-page">
+  <div class="wife-container">
+    <div class="quote-box" style="border-left: 3px solid var(--fg); background: #fff; text-align: left;">
+      <div style="font-size: 0.58rem; font-weight: bold; text-transform: uppercase; color: #555;" id="wifeQuoteTopic">GENTLEMAN'S THOUGHT FOR HER</div>
+      <div class="quote-text" id="wifeQuoteText">"Loading..."</div>
+      <div class="quote-author" id="wifeQuoteAuthor" style="text-align: right;">--</div>
+    </div>
 
-        <h1>WIFE CYCLE & CARE</h1>
+    <h1>WIFE CYCLE & CARE</h1>
 
-        <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-val" id="wifeCycleDayVal">14</div><div class="kpi-lbl">Cycle Day</div></div>
-          <div class="kpi-card"><div class="kpi-val" id="wifePhaseVal" style="font-size:0.75rem;">Follicular Phase</div><div class="kpi-lbl">Phase</div></div>
-        </div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-val" id="wifeCycleDayVal">--</div><div class="kpi-lbl">Cycle Day</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="wifePhaseVal" style="font-size:0.7rem;">--</div><div class="kpi-lbl">Phase</div></div>
+    </div>
 
-        <div style="font-size:0.68rem; padding:8px; border:1px solid var(--fg); margin-bottom:12px;" id="wifeCareGuide">High energy phase. Support her creative efforts.</div>
+    <!-- PRIMARY CARE & SUPPORT SUMMARY -->
+    <div style="border:2px solid var(--fg); padding:10px; margin-bottom:10px; background:#f8f8f8;">
+      <div style="font-size:0.6rem; font-weight:bold; text-transform:uppercase;">🤲 PRACTICAL CARE & SUPPORT</div>
+      <div style="font-size:0.72rem; margin-top:4px; line-height:1.35; font-weight:bold;" id="wifeCareGuide">Loading guidance...</div>
+    </div>
 
-        <div style="margin-bottom:8px;">
-          <label style="font-size:0.65rem; font-weight:bold;">Her Experience Today</label>
-          <input type="text" id="wifeExperienceInput" style="width:100%; padding:6px; font-size:0.7rem; border:1px solid var(--fg);" placeholder="Symptoms, mood...">
-        </div>
+    <!-- COLLAPSIBLE ACCORDION BUTTON FOR DETAILED INSIGHTS -->
+    <button type="button" class="secondary-btn" style="width:100%; margin-bottom:12px; font-size:0.62rem; text-align:center;" onclick="toggleCycleDetails()">
+      🔍 <span id="toggleDetailsLabel">CLICK TO VIEW DAY DETAILS</span>
+    </button>
 
-        <button type="button" class="wake-btn" id="wifeCycleBtn" onclick="logWifeCycle()">SAVE WIFE CYCLE LOG</button>
+    <!-- HIDDEN COLLAPSED DETAILS CONTAINER -->
+    <div id="wifeCycleDetailsContainer" style="display:none; margin-bottom:12px;">
+      <div style="border:1px solid var(--fg); padding:8px; margin-bottom:6px; background:#fafafa;">
+        <div style="font-size:0.58rem; font-weight:bold; text-transform:uppercase; color:#444;">⚙️ MECHANISM & HORMONES</div>
+        <div style="font-size:0.68rem; margin-top:2px; line-height:1.3;" id="wifeMechanismVal">Loading...</div>
+      </div>
+
+      <div style="border:1px solid var(--fg); padding:8px; margin-bottom:6px; background:#fff;">
+        <div style="font-size:0.58rem; font-weight:bold; text-transform:uppercase; color:#444;">🧘 POSSIBLE BODY CHANGES</div>
+        <div style="font-size:0.68rem; margin-top:2px; line-height:1.3;" id="wifeBodyChangesVal">Loading...</div>
+      </div>
+
+      <div style="border:1px solid var(--fg); padding:8px; margin-bottom:6px; background:#fff;">
+        <div style="font-size:0.58rem; font-weight:bold; text-transform:uppercase; color:#444;">🌸 PREGNANCY POSSIBILITY</div>
+        <div style="font-size:0.68rem; margin-top:2px; line-height:1.3;" id="wifePregnancyVal">Loading...</div>
       </div>
     </div>
+
+    <div style="margin-bottom:8px;">
+      <label style="font-size:0.65rem; font-weight:bold;">Her Experience Today</label>
+      <input type="text" id="wifeExperienceInput" style="width:100%; padding:6px; font-size:0.7rem; border:1px solid var(--fg);" placeholder="Symptoms, mood...">
+    </div>
+
+    <button type="button" class="wake-btn" id="wifeCycleBtn" onclick="logWifeCycle()">SAVE WIFE CYCLE LOG</button>
+  </div>
+</div>
+
+<script>
+  function toggleCycleDetails() {
+    const detailsDiv = document.getElementById('wifeCycleDetailsContainer');
+    const label = document.getElementById('toggleDetailsLabel');
+    if (detailsDiv.style.display === 'none') {
+      detailsDiv.style.display = 'block';
+      label.innerText = 'HIDE DAY DETAILS';
+    } else {
+      detailsDiv.style.display = 'none';
+      label.innerText = 'CLICK TO VIEW DAY DETAILS';
+    }
+  }
+</script>
 
     <!-- PAGE 3: CALENDAR & THOUGHT TAG FREQUENCY BUBBLES -->
     <div class="swipe-page">

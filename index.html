@@ -92,7 +92,11 @@
       margin-bottom: 14px;
       text-align: center;
       background: #fafafa;
+      cursor: pointer;
+      transition: background 0.2s;
     }
+
+    .quote-box:hover { background: #f0f0f0; }
 
     .quote-text { font-size: 0.78rem; font-style: italic; line-height: 1.3; margin-bottom: 4px; }
     .quote-author { font-size: 0.62rem; font-weight: bold; text-transform: uppercase; }
@@ -196,6 +200,26 @@
     .habit-note-input.active { display: block; }
     .toggle-note-btn { font-size: 0.58rem; cursor: pointer; text-decoration: underline; margin-left: 6px; color: #555; }
 
+    .srs-btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .srs-option-btn {
+      padding: 10px;
+      font-family: var(--font);
+      font-size: 0.65rem;
+      font-weight: bold;
+      border: 1px solid var(--fg);
+      background: #fff;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .srs-option-btn:hover { background: #f0f0f0; }
+
     .cal-header-nav {
       display: flex;
       justify-content: space-between;
@@ -239,43 +263,11 @@
 
     .cal-day-cell.completed { background: #f4f4f4; border-color: #000; }
 
-    .tag-cloud-section {
-      margin-top: 16px;
-      border-top: 2px solid var(--fg);
-      padding-top: 12px;
-    }
-
-    .tag-cloud-title {
-      font-size: 0.68rem;
-      font-weight: bold;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .tag-bubbles-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      justify-content: center;
-      padding: 8px;
+    .virtue-score-card {
       border: 1px solid var(--fg);
+      padding: 8px;
+      margin-bottom: 8px;
       background: #fafafa;
-      min-height: 80px;
-    }
-
-    .tag-bubble {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1.5px solid var(--fg);
-      border-radius: 20px;
-      padding: 4px 10px;
-      background: #fff;
-      font-weight: bold;
-      text-transform: lowercase;
-      box-shadow: 2px 2px 0px var(--fg);
     }
 
     .modal-overlay {
@@ -309,8 +301,10 @@
     <div class="swipe-page">
       <div class="container">
         
-        <div class="quote-box">
-          <div class="quote-text" id="quoteText">"Loading daily motivation..."</div>
+        <!-- CLICKABLE QUOTE BOX FOR SPACED REPETITION PRACTICE -->
+        <div class="quote-box" onclick="openSrsModal()">
+          <div style="font-size:0.52rem; font-weight:bold; color:#777; margin-bottom:2px;">[ TAP QUOTE TO PRACTICE CONCEPT ]</div>
+          <div class="quote-text" id="quoteText">"Loading daily quote..."</div>
           <div class="quote-author" id="quoteAuthor">--</div>
         </div>
 
@@ -472,7 +466,27 @@
 
   </div>
 
-  <!-- ALL MODALS -->
+  <!-- SPACED REPETITION QUOTE PRACTICE MODAL -->
+  <div class="modal-overlay" id="srsQuoteModal">
+    <div class="modal-card">
+      <div class="modal-title">🧠 QUOTE REPETITION PRACTICE</div>
+      <div style="background:#fafafa; border:1px solid var(--fg); padding:10px; margin-bottom:12px; text-align:center;">
+        <div style="font-size:0.8rem; font-style:italic; line-height:1.35; margin-bottom:4px;" id="srsModalQuoteText">"Loading quote..."</div>
+        <div style="font-size:0.62rem; font-weight:bold;" id="srsModalQuoteAuthor">--</div>
+      </div>
+      <div style="font-size:0.65rem; font-weight:bold; margin-bottom:6px; text-align:center;">How well do you remember or practice this concept?</div>
+      
+      <div class="srs-btn-grid">
+        <button type="button" class="srs-option-btn" style="border-color:#900; color:#900;" onclick="submitQuoteSRS(0)">❌ Forgot / Haven't</button>
+        <button type="button" class="srs-option-btn" style="border-color:#d9534f; color:#d9534f;" onclick="submitQuoteSRS(3)">🟡 Hard / Barely</button>
+        <button type="button" class="srs-option-btn" style="border-color:#f0ad4e; color:#f0ad4e;" onclick="submitQuoteSRS(4)">🟢 Good / Practiced</button>
+        <button type="button" class="srs-option-btn" style="border-color:#000; background:#000; color:#fff;" onclick="submitQuoteSRS(5)">🌟 Easy / Mastered</button>
+      </div>
+      <button type="button" class="secondary-btn" style="margin-top:12px;" onclick="closeModal('srsQuoteModal')">CLOSE</button>
+    </div>
+  </div>
+
+  <!-- ALL OTHER MODALS -->
   <div class="modal-overlay" id="chakraModal">
     <div class="modal-card">
       <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
@@ -534,20 +548,20 @@
 
   <div class="modal-overlay" id="virtuesModal">
     <div class="modal-card">
-      <div class="modal-title">🌙 SLEEP & VIRTUES CHECK-OUT</div>
-      <div style="margin-bottom:8px;">
-        <label style="font-size:0.62rem; font-weight:bold;">Planned Bedtime</label>
+      <div class="modal-title">🌙 SLEEP & VIRTUES EVALUATION</div>
+      <div style="margin-bottom:10px;">
+        <label style="font-size:0.62rem; font-weight:bold;">Target Bedtime</label>
         <input type="time" id="sleepTimeInput" style="width:100%; padding:6px; border:1px solid var(--fg);" value="22:30">
       </div>
       <div id="virtuesChecklistContainer" style="margin-bottom:12px;"></div>
-      <button type="button" class="wake-btn" id="submitSleepVirtuesBtn" onclick="submitSleepVirtues()">SAVE SLEEP & VIRTUES LOG</button>
+      <button type="button" class="wake-btn" id="submitSleepVirtuesBtn" onclick="submitSleepVirtues()">SAVE EVALUATION & SLEEP LOG</button>
       <button type="button" class="secondary-btn" onclick="closeModal('virtuesModal')">CANCEL</button>
     </div>
   </div>
 
   <div class="modal-overlay" id="editVirtuesModal">
     <div class="modal-card">
-      <div class="modal-title">⚙ EDIT DAILY VIRTUES</div>
+      <div class="modal-title">GM EDIT DAILY VIRTUES</div>
       <div id="editVirtuesListContainer" style="margin-bottom:12px;"></div>
       <div style="display:flex; gap:6px; margin-bottom:12px;">
         <input type="text" id="newVirtueInput" placeholder="New virtue name..." style="flex:1; padding:6px; border:1px solid var(--fg);">
@@ -601,6 +615,7 @@
 
     let habitHistoryLogs = [];
     let thoughtLogsHistory = [];
+    let activeSrsQuote = {};
     let currentCalDate = new Date();
     let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
     let activeTeachingData = {};
@@ -662,6 +677,36 @@
 
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function openSrsModal() {
+      const qText = document.getElementById('quoteText').innerText;
+      const qAuthor = document.getElementById('quoteAuthor').innerText;
+      document.getElementById('srsModalQuoteText').innerText = qText;
+      document.getElementById('srsModalQuoteAuthor').innerText = qAuthor;
+      openModal('srsQuoteModal');
+    }
+
+    function submitQuoteSRS(qualityScore) {
+      const payload = {
+        action: "reviewQuoteSRS",
+        id: activeSrsQuote.id || 1,
+        quote: document.getElementById('quoteText').innerText.replace(/^"|"$/g, ''),
+        author: document.getElementById('quoteAuthor').innerText.replace(/^- /, ''),
+        quality: qualityScore,
+        repetition: activeSrsQuote.repetition || 0,
+        interval: activeSrsQuote.interval || 1,
+        easeFactor: activeSrsQuote.easeFactor || 2.5
+      };
+
+      closeModal('srsQuoteModal');
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(() => fetchDashboardData());
+    }
 
     function renderChakraSection() {
       const todayIndex = new Date().getDay();
@@ -725,9 +770,18 @@
 
       if (name) {
         const id = name.toLowerCase().replace(/\s+/g, '_');
-        permanentHabits.push({ id, emoji, label: name });
+        const newHabit = { id, emoji, label: name };
+        
+        permanentHabits.push(newHabit);
         renderHabitsList();
         closeModal('addHabitModal');
+
+        fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: "addPermanentHabit", id: id, emoji: emoji, label: name })
+        }).then(() => fetchDashboardData());
       }
     }
 
@@ -886,9 +940,13 @@
       container.innerHTML = '';
       defaultVirtues.forEach((v, idx) => {
         container.innerHTML += `
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:0.75rem;">
-            <input type="checkbox" id="virtue_chk_${idx}" checked style="width:16px; height:16px; accent-color:#000;">
-            <label for="virtue_chk_${idx}">${v}</label>
+          <div class="virtue-score-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <strong style="font-size:0.72rem;">${v}</strong>
+              <span style="font-size:0.7rem; font-weight:bold;" id="score_lbl_${idx}">5 / 5</span>
+            </div>
+            <input type="range" id="virtue_score_${idx}" min="1" max="5" value="5" style="width:100%; accent-color:#000;" oninput="document.getElementById('score_lbl_${idx}').innerText = this.value + ' / 5'">
+            <input type="text" id="virtue_note_${idx}" placeholder="Reflection / note for this virtue..." style="width:100%; margin-top:4px; padding:4px; font-size:0.65rem; border:1px dashed #ccc;">
           </div>
         `;
       });
@@ -899,21 +957,33 @@
       const btn = document.getElementById('submitSleepVirtuesBtn');
       const sleepTime = document.getElementById('sleepTimeInput').value || '22:30';
       const virtuesResult = {};
+      let totalScore = 0;
+
       defaultVirtues.forEach((v, idx) => {
-        const chk = document.getElementById(`virtue_chk_${idx}`);
-        virtuesResult[v] = chk ? chk.checked : false;
+        const scoreVal = parseInt(document.getElementById(`virtue_score_${idx}`).value || '5', 10);
+        const noteVal = document.getElementById(`virtue_note_${idx}`).value.trim();
+        totalScore += scoreVal;
+        virtuesResult[v] = { score: scoreVal, note: noteVal || "-" };
       });
 
-      setButtonState(btn, 'saving', 'SAVING VIRTUES...');
+      const avgScore = (totalScore / defaultVirtues.length).toFixed(1);
+
+      setButtonState(btn, 'saving', 'SAVING EVALUATION...');
 
       const now = new Date();
       const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
-      const payload = { action: 'addSleepVirtuesLog', date: formattedDate, sleepTime: sleepTime, virtues: virtuesResult };
+      const payload = { 
+        action: 'addSleepVirtuesLog', 
+        date: formattedDate, 
+        sleepTime: sleepTime, 
+        avgScore: avgScore,
+        virtues: virtuesResult 
+      };
 
       fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       .then(() => {
-        setButtonState(btn, 'success', 'VIRTUES SAVED! ✓');
+        setButtonState(btn, 'success', 'EVALUATION SAVED! ✓');
         setTimeout(() => {
           closeModal('virtuesModal');
           setButtonState(btn, 'reset');
@@ -1117,7 +1187,6 @@
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      // Anchor: Sept 24, 2026 = Day 1
       const anchorDate = new Date(2026, 8, 24);
 
       for (let i = 0; i < firstDay; i++) {
@@ -1258,6 +1327,13 @@
             document.getElementById('quoteAuthor').innerText = `- ${data.author}`;
             document.getElementById('cleanMindVal').innerText = data.cleanStreak || 0;
             
+            if (data.srsQuote) activeSrsQuote = data.srsQuote;
+
+            if (data.masterHabits && data.masterHabits.length > 0) {
+              permanentHabits = data.masterHabits;
+              renderHabitsList();
+            }
+
             if (data.wifeQuote) {
               document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote}"`;
               document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author}`;

@@ -263,6 +263,45 @@
 
     .cal-day-cell.completed { background: #f4f4f4; border-color: #000; }
 
+    .tag-cloud-section {
+      margin-top: 16px;
+      border-top: 2px solid var(--fg);
+      padding-top: 12px;
+    }
+
+    .tag-cloud-title {
+      font-size: 0.68rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .tag-bubbles-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border: 1px solid var(--fg);
+      background: #fafafa;
+      min-height: 80px;
+    }
+
+    .tag-bubble {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--fg);
+      border-radius: 20px;
+      padding: 4px 10px;
+      background: #fff;
+      font-weight: bold;
+      text-transform: lowercase;
+      box-shadow: 2px 2px 0px var(--fg);
+    }
+
     .virtue-score-card {
       border: 1px solid var(--fg);
       padding: 8px;
@@ -486,7 +525,7 @@
     </div>
   </div>
 
-  <!-- ALL OTHER MODALS -->
+  <!-- MODALS -->
   <div class="modal-overlay" id="chakraModal">
     <div class="modal-card">
       <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
@@ -677,6 +716,15 @@
 
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function sanitizeAuthorString(rawAuthor) {
+      if (!rawAuthor) return "Anonymous";
+      let str = String(rawAuthor).trim().replace(/^-\s*/, '');
+      if (str.includes("GMT") || str.includes("00:00:00") || (str.length > 25 && str.includes("202"))) {
+        return "Anonymous";
+      }
+      return str || "Anonymous";
+    }
 
     function openSrsModal() {
       const qText = document.getElementById('quoteText').innerText;
@@ -1121,7 +1169,6 @@
       renderHabitCalendar();
     }
 
-    // RENDER PAGE 2 CIRCULAR WHEEL SVG
     function renderPage2Wheel(activeDay = 21) {
       const svg = document.getElementById('wifeWheelSvg');
       if (!svg) return;
@@ -1173,7 +1220,6 @@
       svg.innerHTML = svgHtml;
     }
 
-    // RENDER PAGE 3 CALENDAR WITH EMOJI INDICATORS
     function renderHabitCalendar() {
       const grid = document.getElementById('calGridCells');
       if (!grid) return;
@@ -1200,9 +1246,9 @@
         const cellDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
         let lunarStr = `${day}/9`;
-        if (month === 9) { // Oct
+        if (month === 9) {
           lunarStr = (day < 11) ? `Âm ${day + 20}/8` : `Âm ${day - 10}/9`;
-        } else if (month === 10) { // Nov
+        } else if (month === 10) {
           lunarStr = (day < 9) ? `Âm ${day + 20}/9` : `Âm ${day - 8}/10`;
         }
 
@@ -1241,6 +1287,7 @@
 
     function renderTagCloud() {
       const container = document.getElementById('tagCloudContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       if (!thoughtLogsHistory || thoughtLogsHistory.length === 0) {
@@ -1250,18 +1297,25 @@
 
       const tagCounts = {};
       thoughtLogsHistory.forEach(t => {
-        const tag = t.tag || 'general';
+        let tag = (t.tag || 'general').trim().toLowerCase().replace(/^#/, '');
+        if (!tag) tag = 'general';
         tagCounts[tag] = (tagCounts[tag] || 0) + 1;
       });
 
-      const maxCount = Math.max(...Object.values(tagCounts));
+      const countsArr = Object.values(tagCounts);
+      if (countsArr.length === 0) {
+        container.innerHTML = '<span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>';
+        return;
+      }
+
+      const maxCount = Math.max(...countsArr);
 
       Object.keys(tagCounts).forEach(tag => {
         const count = tagCounts[tag];
         const bubble = document.createElement('div');
         bubble.className = 'tag-bubble';
         
-        const fontSize = 0.6 + (count / maxCount) * 0.6; 
+        const fontSize = 0.65 + (count / maxCount) * 0.45; 
         bubble.style.fontSize = `${fontSize}rem`;
         bubble.innerHTML = `#${tag} <span style="font-size:0.55rem; opacity:0.7; margin-left:4px;">(${count})</span>`;
         
@@ -1317,73 +1371,64 @@
       .catch(() => { setButtonState(wakeBtn, 'error', 'ERROR SAVING'); });
     }
 
-function sanitizeAuthorString(rawAuthor) {
-  if (!rawAuthor) return "Anonymous";
-  let str = String(rawAuthor).trim().replace(/^-\s*/, '');
-  if (str.includes("GMT") || str.includes("00:00:00") || (str.length > 25 && str.includes("202"))) {
-    return "Anonymous";
-  }
-  return str || "Anonymous";
-}
+    function fetchDashboardData() {
+      fetch(SCRIPT_URL)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            document.getElementById('streakDisplay').innerText = data.streak;
+            
+            const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
+            const qAuthor = sanitizeAuthorString(data.author);
 
-function fetchDashboardData() {
-  fetch(SCRIPT_URL)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === 'success') {
-        document.getElementById('streakDisplay').innerText = data.streak;
-        
-        // Clean Quote & Author
-        const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
-        const qAuthor = sanitizeAuthorString(data.author);
+            document.getElementById('quoteText').innerText = `"${qText}"`;
+            document.getElementById('quoteAuthor').innerText = `- ${qAuthor}`;
+            document.getElementById('cleanMindVal').innerText = data.cleanStreak || 0;
+            
+            if (data.srsQuote) activeSrsQuote = data.srsQuote;
 
-        document.getElementById('quoteText').innerText = `"${qText}"`;
-        document.getElementById('quoteAuthor').innerText = `- ${qAuthor}`;
-        
-        if (data.srsQuote) activeSrsQuote = data.srsQuote;
+            if (data.masterHabits && data.masterHabits.length > 0) {
+              permanentHabits = data.masterHabits;
+              renderHabitsList();
+            }
 
-        if (data.masterHabits && data.masterHabits.length > 0) {
-          permanentHabits = data.masterHabits;
-          renderHabitsList();
-        }
+            if (data.wifeQuote) {
+              document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote}"`;
+              document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author}`;
+            }
 
-        if (data.wifeQuote) {
-          document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote}"`;
-          document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author}`;
-        }
+            if (data.wifeCycle) {
+              document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
+              
+              if (document.getElementById('wifeMechanismVal')) {
+                document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
+              }
+              if (document.getElementById('wifeBodyChangesVal')) {
+                document.getElementById('wifeBodyChangesVal').innerText = data.wifeCycle.bodyChanges || "Breast tenderness, bloating, fatigue, or no symptoms.";
+              }
+              if (document.getElementById('wifePregnancyVal')) {
+                document.getElementById('wifePregnancyVal').innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window; uncertainty about actual ovulation remains.";
+              }
+            }
 
-        if (data.wifeCycle) {
-          document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
-          
-          if (document.getElementById('wifeMechanismVal')) {
-            document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
+            if (data.purityTeaching) {
+              activeTeachingData = data.purityTeaching;
+              document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day} / 365`;
+              document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
+              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
+              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
+            }
+
+            if (data.habitHistory) habitHistoryLogs = data.habitHistory;
+            if (data.thoughtLogs) thoughtLogsHistory = data.thoughtLogs;
+
+            renderHabitCalendar();
           }
-          if (document.getElementById('wifeBodyChangesVal')) {
-            document.getElementById('wifeBodyChangesVal').innerText = data.wifeCycle.bodyChanges || "Breast tenderness, bloating, fatigue, or no symptoms.";
-          }
-          if (document.getElementById('wifePregnancyVal')) {
-            document.getElementById('wifePregnancyVal').innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window; uncertainty about actual ovulation remains.";
-          }
-        }
-
-        if (data.purityTeaching) {
-          activeTeachingData = data.purityTeaching;
-          document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day} / 365`;
-          document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
-          document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
-          document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
-        }
-
-        if (data.habitHistory) habitHistoryLogs = data.habitHistory;
-        if (data.thoughtLogs) thoughtLogsHistory = data.thoughtLogs;
-
-        renderHabitCalendar();
-      }
-    })
-    .catch(err => {
-      console.error("Dashboard fetch error:", err);
-    });
-}
+        })
+        .catch(err => {
+          console.error("Dashboard fetch error:", err);
+        });
+    }
 
     function getSmokeStreakDays() {
       const quit = new Date(smokeQuitDate);

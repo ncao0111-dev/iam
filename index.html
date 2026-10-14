@@ -1317,60 +1317,73 @@
       .catch(() => { setButtonState(wakeBtn, 'error', 'ERROR SAVING'); });
     }
 
-    function fetchDashboardData() {
-      fetch(SCRIPT_URL)
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 'success') {
-            document.getElementById('streakDisplay').innerText = data.streak;
-            document.getElementById('quoteText').innerText = `"${data.quote}"`;
-            document.getElementById('quoteAuthor').innerText = `- ${data.author}`;
-            document.getElementById('cleanMindVal').innerText = data.cleanStreak || 0;
-            
-            if (data.srsQuote) activeSrsQuote = data.srsQuote;
+function sanitizeAuthorString(rawAuthor) {
+  if (!rawAuthor) return "Anonymous";
+  let str = String(rawAuthor).trim().replace(/^-\s*/, '');
+  if (str.includes("GMT") || str.includes("00:00:00") || (str.length > 25 && str.includes("202"))) {
+    return "Anonymous";
+  }
+  return str || "Anonymous";
+}
 
-            if (data.masterHabits && data.masterHabits.length > 0) {
-              permanentHabits = data.masterHabits;
-              renderHabitsList();
-            }
+function fetchDashboardData() {
+  fetch(SCRIPT_URL)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        document.getElementById('streakDisplay').innerText = data.streak;
+        
+        // Clean Quote & Author
+        const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
+        const qAuthor = sanitizeAuthorString(data.author);
 
-            if (data.wifeQuote) {
-              document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote}"`;
-              document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author}`;
-            }
+        document.getElementById('quoteText').innerText = `"${qText}"`;
+        document.getElementById('quoteAuthor').innerText = `- ${qAuthor}`;
+        
+        if (data.srsQuote) activeSrsQuote = data.srsQuote;
 
-            if (data.wifeCycle) {
-              document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
-              
-              if (document.getElementById('wifeMechanismVal')) {
-                document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
-              }
-              if (document.getElementById('wifeBodyChangesVal')) {
-                document.getElementById('wifeBodyChangesVal').innerText = data.wifeCycle.bodyChanges || "Breast tenderness, bloating, fatigue, or no symptoms.";
-              }
-              if (document.getElementById('wifePregnancyVal')) {
-                document.getElementById('wifePregnancyVal').innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window; uncertainty about actual ovulation remains.";
-              }
-            }
+        if (data.masterHabits && data.masterHabits.length > 0) {
+          permanentHabits = data.masterHabits;
+          renderHabitsList();
+        }
 
-            if (data.purityTeaching) {
-              activeTeachingData = data.purityTeaching;
-              document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day} / 365`;
-              document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
-              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
-              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
-            }
+        if (data.wifeQuote) {
+          document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote}"`;
+          document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author}`;
+        }
 
-            if (data.habitHistory) habitHistoryLogs = data.habitHistory;
-            if (data.thoughtLogs) thoughtLogsHistory = data.thoughtLogs;
-
-            renderHabitCalendar();
+        if (data.wifeCycle) {
+          document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
+          
+          if (document.getElementById('wifeMechanismVal')) {
+            document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
           }
-        })
-        .catch(err => {
-          console.error("Dashboard fetch error:", err);
-        });
-    }
+          if (document.getElementById('wifeBodyChangesVal')) {
+            document.getElementById('wifeBodyChangesVal').innerText = data.wifeCycle.bodyChanges || "Breast tenderness, bloating, fatigue, or no symptoms.";
+          }
+          if (document.getElementById('wifePregnancyVal')) {
+            document.getElementById('wifePregnancyVal').innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window; uncertainty about actual ovulation remains.";
+          }
+        }
+
+        if (data.purityTeaching) {
+          activeTeachingData = data.purityTeaching;
+          document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day} / 365`;
+          document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
+          document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
+          document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
+        }
+
+        if (data.habitHistory) habitHistoryLogs = data.habitHistory;
+        if (data.thoughtLogs) thoughtLogsHistory = data.thoughtLogs;
+
+        renderHabitCalendar();
+      }
+    })
+    .catch(err => {
+      console.error("Dashboard fetch error:", err);
+    });
+}
 
     function getSmokeStreakDays() {
       const quit = new Date(smokeQuitDate);

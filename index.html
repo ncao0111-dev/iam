@@ -431,6 +431,87 @@
       </div>
     </div>
 
+<!-- CIRCULAR CYCLE DIAL COMPONENT -->
+<div style="display:flex; flex-direction:column; align-items:center; margin-bottom:16px;">
+  <svg id="cycleWheelSvg" width="280" height="280" viewBox="0 0 280 280">
+    <!-- SVG Content generated dynamically -->
+  </svg>
+</div>
+
+<script>
+  function renderCircularCycleDial(activeDay = 19) {
+    const svg = document.getElementById('cycleWheelSvg');
+    if (!svg) return;
+
+    const cx = 140, cy = 140, rOuter = 125, rInner = 95;
+    const totalDays = 28;
+    let svgContent = '';
+
+    // Phase Colors
+    function getPhaseColor(day) {
+      if (day <= 5) return '#D9534F';       // Menstrual (Red)
+      if (day <= 10) return '#5BC0DE';      // Follicular (Teal)
+      if (day <= 16) return '#F0AD4E';      // Fertile/Ovulation (Gold)
+      return '#6F42C1';                     // Luteal (Purple)
+    }
+
+    // Draw 28 Segments
+    for (let day = 1; day <= totalDays; day++) {
+      const startAngle = ((day - 1) / totalDays) * 2 * Math.PI - Math.PI / 2;
+      const endAngle = (day / totalDays) * 2 * Math.PI - Math.PI / 2;
+
+      const x1 = cx + rOuter * Math.cos(startAngle);
+      const y1 = cy + rOuter * Math.sin(startAngle);
+      const x2 = cx + rOuter * Math.cos(endAngle);
+      const y2 = cy + rOuter * Math.sin(endAngle);
+
+      const x3 = cx + rInner * Math.cos(endAngle);
+      const y3 = cy + rInner * Math.sin(endAngle);
+      const x4 = cx + rInner * Math.cos(startAngle);
+      const y4 = cy + rInner * Math.sin(startAngle);
+
+      const isCurrentDay = (day === activeDay);
+      const color = getPhaseColor(day);
+      const strokeWidth = isCurrentDay ? '3' : '1';
+      const strokeColor = isCurrentDay ? '#000' : '#fff';
+      const fillOpacity = isCurrentDay ? '1' : '0.65';
+
+      const pathData = `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${rInner} ${rInner} 0 0 0 ${x4} ${y4} Z`;
+
+      svgContent += `<path d="${pathData}" fill="${color}" fill-opacity="${fillOpacity}" stroke="${strokeColor}" stroke-width="${strokeWidth}" style="cursor:pointer;" onclick="selectDialDay(${day})" />`;
+
+      // Day Number Label
+      const midAngle = (startAngle + endAngle) / 2;
+      const rText = (rOuter + rInner) / 2;
+      const tx = cx + rText * Math.cos(midAngle);
+      const ty = cy + rText * Math.sin(midAngle) + 3;
+
+      svgContent += `<text x="${tx}" y="${ty}" font-size="8" font-family="Courier New" font-weight="bold" fill="${isCurrentDay ? '#fff' : '#000'}" text-anchor="middle">${day}</text>`;
+    }
+
+    // Center Display
+    svgContent += `
+      <circle cx="${cx}" cy="${cy}" r="${rInner - 8}" fill="#fff" stroke="#000" stroke-width="2" />
+      <text x="${cx}" y="${cy - 12}" font-size="22" font-family="Courier New" font-weight="bold" text-anchor="middle">DAY ${activeDay}</text>
+      <text x="${cx}" y="${cy + 8}" font-size="9" font-family="Courier New" font-weight="bold" fill="#555" text-anchor="middle" id="dialPhaseLabel">LUTEAL PHASE</text>
+      <text x="${cx}" y="${cy + 22}" font-size="7" font-family="Courier New" fill="#888" text-anchor="middle">[ TAP DAY TO VIEW ]</text>
+    `;
+
+    svg.innerHTML = svgContent;
+  }
+
+  function selectDialDay(dayNum) {
+    renderCircularCycleDial(dayNum);
+    // Dynamically updates UI text according to selected day
+    if (typeof fetchDayDetails === 'function') {
+      fetchDayDetails(dayNum);
+    }
+  }
+
+  // Render on load
+  renderCircularCycleDial(19);
+</script>
+    
     <!-- PAGE 3: CALENDAR & THOUGHT TAG BUBBLES -->
     <div class="swipe-page">
       <div class="cal-container">

@@ -238,7 +238,6 @@
     }
 
     .cal-day-cell.completed { background: #f4f4f4; border-color: #000; }
-    .cal-emojis { font-size: 0.7rem; margin-top: 2px; line-height: 1.1; word-break: break-all; }
 
     .tag-cloud-section {
       margin-top: 16px;
@@ -377,7 +376,7 @@
       </div>
     </div>
 
-    <!-- PAGE 2: WIFE CYCLE & CARE -->
+    <!-- PAGE 2: WIFE CYCLE & CARE (WITH CIRCULAR WHEEL DIAL) -->
     <div class="swipe-page">
       <div class="wife-container">
         <div class="quote-box" style="border-left: 3px solid var(--fg); background: #fff; text-align: left;">
@@ -388,9 +387,9 @@
 
         <h1>WIFE CYCLE & CARE</h1>
 
-        <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-val" id="wifeCycleDayVal">--</div><div class="kpi-lbl">Cycle Day</div></div>
-          <div class="kpi-card"><div class="kpi-val" id="wifePhaseVal" style="font-size:0.7rem;">--</div><div class="kpi-lbl">Phase</div></div>
+        <!-- MINIMALIST CIRCULAR WHEEL DIAL -->
+        <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:12px; border:2px solid var(--fg); padding:10px; background:#fff; box-shadow:4px 4px 0px var(--fg);">
+          <svg id="wifeWheelSvg" width="280" height="280" viewBox="0 0 280 280" style="max-width:100%; height:auto;"></svg>
         </div>
 
         <!-- PRACTICAL CARE & SUPPORT SUMMARY -->
@@ -399,12 +398,12 @@
           <div style="font-size:0.72rem; margin-top:4px; line-height:1.35; font-weight:bold;" id="wifeCareGuide">Loading guidance...</div>
         </div>
 
-        <!-- ACCORDION / EXPAND DETAILS BUTTON -->
+        <!-- TOGGLE ACCORDION BUTTON -->
         <button type="button" class="secondary-btn" style="width:100%; margin-bottom:12px; font-size:0.62rem; text-align:center;" onclick="toggleCycleDetails()">
           🔍 <span id="toggleDetailsLabel">CLICK TO VIEW DAY DETAILS</span>
         </button>
 
-        <!-- HIDDEN / EXPANDABLE DETAILS CONTAINER -->
+        <!-- COLLAPSED DAY DETAILS CONTAINER -->
         <div id="wifeCycleDetailsContainer" style="display:none; margin-bottom:12px;">
           <div style="border:1px solid var(--fg); padding:8px; margin-bottom:6px; background:#fafafa;">
             <div style="font-size:0.58rem; font-weight:bold; text-transform:uppercase; color:#444;">⚙️ MECHANISM & HORMONES</div>
@@ -431,95 +430,26 @@
       </div>
     </div>
 
-<!-- CIRCULAR CYCLE DIAL COMPONENT -->
-<div style="display:flex; flex-direction:column; align-items:center; margin-bottom:16px;">
-  <svg id="cycleWheelSvg" width="280" height="280" viewBox="0 0 280 280">
-    <!-- SVG Content generated dynamically -->
-  </svg>
-</div>
-
-<script>
-  function renderCircularCycleDial(activeDay = 19) {
-    const svg = document.getElementById('cycleWheelSvg');
-    if (!svg) return;
-
-    const cx = 140, cy = 140, rOuter = 125, rInner = 95;
-    const totalDays = 28;
-    let svgContent = '';
-
-    // Phase Colors
-    function getPhaseColor(day) {
-      if (day <= 5) return '#D9534F';       // Menstrual (Red)
-      if (day <= 10) return '#5BC0DE';      // Follicular (Teal)
-      if (day <= 16) return '#F0AD4E';      // Fertile/Ovulation (Gold)
-      return '#6F42C1';                     // Luteal (Purple)
-    }
-
-    // Draw 28 Segments
-    for (let day = 1; day <= totalDays; day++) {
-      const startAngle = ((day - 1) / totalDays) * 2 * Math.PI - Math.PI / 2;
-      const endAngle = (day / totalDays) * 2 * Math.PI - Math.PI / 2;
-
-      const x1 = cx + rOuter * Math.cos(startAngle);
-      const y1 = cy + rOuter * Math.sin(startAngle);
-      const x2 = cx + rOuter * Math.cos(endAngle);
-      const y2 = cy + rOuter * Math.sin(endAngle);
-
-      const x3 = cx + rInner * Math.cos(endAngle);
-      const y3 = cy + rInner * Math.sin(endAngle);
-      const x4 = cx + rInner * Math.cos(startAngle);
-      const y4 = cy + rInner * Math.sin(startAngle);
-
-      const isCurrentDay = (day === activeDay);
-      const color = getPhaseColor(day);
-      const strokeWidth = isCurrentDay ? '3' : '1';
-      const strokeColor = isCurrentDay ? '#000' : '#fff';
-      const fillOpacity = isCurrentDay ? '1' : '0.65';
-
-      const pathData = `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${rInner} ${rInner} 0 0 0 ${x4} ${y4} Z`;
-
-      svgContent += `<path d="${pathData}" fill="${color}" fill-opacity="${fillOpacity}" stroke="${strokeColor}" stroke-width="${strokeWidth}" style="cursor:pointer;" onclick="selectDialDay(${day})" />`;
-
-      // Day Number Label
-      const midAngle = (startAngle + endAngle) / 2;
-      const rText = (rOuter + rInner) / 2;
-      const tx = cx + rText * Math.cos(midAngle);
-      const ty = cy + rText * Math.sin(midAngle) + 3;
-
-      svgContent += `<text x="${tx}" y="${ty}" font-size="8" font-family="Courier New" font-weight="bold" fill="${isCurrentDay ? '#fff' : '#000'}" text-anchor="middle">${day}</text>`;
-    }
-
-    // Center Display
-    svgContent += `
-      <circle cx="${cx}" cy="${cy}" r="${rInner - 8}" fill="#fff" stroke="#000" stroke-width="2" />
-      <text x="${cx}" y="${cy - 12}" font-size="22" font-family="Courier New" font-weight="bold" text-anchor="middle">DAY ${activeDay}</text>
-      <text x="${cx}" y="${cy + 8}" font-size="9" font-family="Courier New" font-weight="bold" fill="#555" text-anchor="middle" id="dialPhaseLabel">LUTEAL PHASE</text>
-      <text x="${cx}" y="${cy + 22}" font-size="7" font-family="Courier New" fill="#888" text-anchor="middle">[ TAP DAY TO VIEW ]</text>
-    `;
-
-    svg.innerHTML = svgContent;
-  }
-
-  function selectDialDay(dayNum) {
-    renderCircularCycleDial(dayNum);
-    // Dynamically updates UI text according to selected day
-    if (typeof fetchDayDetails === 'function') {
-      fetchDayDetails(dayNum);
-    }
-  }
-
-  // Render on load
-  renderCircularCycleDial(19);
-</script>
-    
-    <!-- PAGE 3: CALENDAR & THOUGHT TAG BUBBLES -->
+    <!-- PAGE 3: CALENDAR & DUAL PREDICTIONS WITH PHASE EMOJIS -->
     <div class="swipe-page">
       <div class="cal-container">
-        <h1>HABITS & THOUGHTS CALENDAR</h1>
+        <h1>HABITS & CYCLE CALENDAR</h1>
+
+        <!-- MINIMALIST EMOJI LEGEND -->
+        <div style="display:flex; justify-content:space-around; align-items:center; margin-bottom:10px; padding:6px; background:#fafafa; border:1px solid var(--fg); font-size:0.55rem; font-weight:bold;">
+          <span>🩸 Period</span>
+          <span>🌿 Follicular</span>
+          <span>✨ Ovulation</span>
+          <span>🌙 Luteal</span>
+          <span>🔮 Prediction</span>
+        </div>
 
         <div class="cal-header-nav">
           <button type="button" class="cal-nav-btn" onclick="changeMonth(-1)">&lt; PREV</button>
-          <div class="cal-month-title" id="calMonthTitle">OCTOBER 2026</div>
+          <div style="text-align:center;">
+            <div class="cal-month-title" id="calMonthTitle">OCTOBER 2026</div>
+            <div style="font-size:0.5rem; color:#666;">SOLAR (SUN) // LUNAR (MOON)</div>
+          </div>
           <button type="button" class="cal-nav-btn" onclick="changeMonth(1)">NEXT &gt;</button>
         </div>
 
@@ -542,7 +472,7 @@
 
   </div>
 
-  <!-- MODALS -->
+  <!-- ALL MODALS -->
   <div class="modal-overlay" id="chakraModal">
     <div class="modal-card">
       <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
@@ -1046,8 +976,8 @@
       const payload = {
         action: "addWifeCycleLog",
         date: formattedDate,
-        cycleDay: document.getElementById('wifeCycleDayVal').innerText || "Day 19",
-        hormonePhase: document.getElementById('wifePhaseVal').innerText || "Luteal Phase",
+        cycleDay: "Day 21",
+        hormonePhase: "Luteal Phase",
         experience: exp || "Normal",
         comfortGuide: document.getElementById('wifeCareGuide').innerText || "-",
         notes: exp || "Logged via web app",
@@ -1121,18 +1051,74 @@
       renderHabitCalendar();
     }
 
+    // RENDER PAGE 2 CIRCULAR WHEEL SVG
+    function renderPage2Wheel(activeDay = 21) {
+      const svg = document.getElementById('wifeWheelSvg');
+      if (!svg) return;
+
+      const cx = 140, cy = 140, rOuter = 130, rMid = 98, rInner = 68;
+      const totalDays = 28;
+      let svgHtml = '';
+
+      for (let day = 1; day <= totalDays; day++) {
+        const startAngle = ((day - 1) / totalDays) * 2 * Math.PI - Math.PI / 2;
+        const endAngle = (day / totalDays) * 2 * Math.PI - Math.PI / 2;
+
+        const x1 = cx + rOuter * Math.cos(startAngle); const y1 = cy + rOuter * Math.sin(startAngle);
+        const x2 = cx + rOuter * Math.cos(endAngle);   const y2 = cy + rOuter * Math.sin(endAngle);
+        const x3 = cx + rMid * Math.cos(endAngle);     const y3 = cy + rMid * Math.sin(endAngle);
+        const x4 = cx + rMid * Math.cos(startAngle);   const y4 = cy + rMid * Math.sin(startAngle);
+
+        const isCurrent = (day === activeDay);
+        let fillC = '#fff';
+        if (day <= 5) fillC = '#111';
+        else if (day <= 10) fillC = '#e0e0e0';
+        else if (day <= 16) fillC = '#fdf2f2';
+
+        const strokeW = isCurrent ? '2.5' : '1';
+        const strokeC = isCurrent ? '#000' : '#888';
+        const outerPath = `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${rMid} ${rMid} 0 0 0 ${x4} ${y4} Z`;
+
+        svgHtml += `<path d="${outerPath}" fill="${fillC}" stroke="${strokeC}" stroke-width="${strokeW}" style="cursor:pointer;" onclick="renderPage2Wheel(${day})" />`;
+
+        const midAngle = (startAngle + endAngle) / 2;
+        const tx1 = cx + ((rOuter + rMid) / 2) * Math.cos(midAngle);
+        const ty1 = cy + ((rOuter + rMid) / 2) * Math.sin(midAngle) + 3;
+        const txtC = (day <= 5) ? '#fff' : '#000';
+
+        svgHtml += `<text x="${tx1}" y="${ty1}" font-size="7.5" font-family="Courier New" font-weight="bold" fill="${txtC}" text-anchor="middle" pointer-events="none">${day}</text>`;
+      }
+
+      let phaseTitle = "LUTEAL PHASE";
+      if (activeDay <= 5) phaseTitle = "MENSTRUAL";
+      else if (activeDay <= 10) phaseTitle = "FOLLICULAR";
+      else if (activeDay <= 16) phaseTitle = "OVULATORY WINDOW";
+
+      svgHtml += `
+        <circle cx="${cx}" cy="${cy}" r="${rInner - 3}" fill="#fff" stroke="#000" stroke-width="2" />
+        <text x="${cx}" y="${cy - 10}" font-size="16" font-family="Courier New" font-weight="bold" text-anchor="middle">DAY ${activeDay}</text>
+        <text x="${cx}" y="${cy + 6}" font-size="7.5" font-family="Courier New" font-weight="bold" fill="#555" text-anchor="middle">${phaseTitle}</text>
+      `;
+
+      svg.innerHTML = svgHtml;
+    }
+
+    // RENDER PAGE 3 CALENDAR WITH EMOJI INDICATORS
     function renderHabitCalendar() {
       const grid = document.getElementById('calGridCells');
+      if (!grid) return;
       grid.innerHTML = '';
 
       const year = currentCalDate.getFullYear();
       const month = currentCalDate.getMonth();
-
       const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
       document.getElementById('calMonthTitle').innerText = `${monthNames[month]} ${year}`;
 
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // Anchor: Sept 24, 2026 = Day 1
+      const anchorDate = new Date(2026, 8, 24);
 
       for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement('div');
@@ -1141,35 +1127,41 @@
       }
 
       for (let day = 1; day <= daysInMonth; day++) {
-        const targetYear = String(year);
-        const targetMonth = String(month + 1).padStart(2, '0');
-        const targetDay = String(day).padStart(2, '0');
-        const cellDateStr = `${targetYear}-${targetMonth}-${targetDay}`;
+        const cellDate = new Date(year, month, day);
+        const cellDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+        let lunarStr = `${day}/9`;
+        if (month === 9) { // Oct
+          lunarStr = (day < 11) ? `Âm ${day + 20}/8` : `Âm ${day - 10}/9`;
+        } else if (month === 10) { // Nov
+          lunarStr = (day < 9) ? `Âm ${day + 20}/9` : `Âm ${day - 8}/10`;
+        }
+
+        const diffDays = Math.floor((cellDate - anchorDate) / (1000 * 60 * 60 * 24));
+        const cycleDay = ((diffDays % 28) + 28) % 28 + 1;
+        const isPredictedCycle = cellDate > new Date(2026, 9, 21);
+
+        let cycleEmoji = '';
+        if (cycleDay <= 5) cycleEmoji = isPredictedCycle ? '🔮🩸' : '🩸';
+        else if (cycleDay <= 10) cycleEmoji = isPredictedCycle ? '🔮🌿' : '🌿';
+        else if (cycleDay <= 16) cycleEmoji = isPredictedCycle ? '🔮✨' : '✨';
+        else cycleEmoji = isPredictedCycle ? '🔮🌙' : '🌙';
 
         const cell = document.createElement('div');
         cell.className = 'cal-day-cell';
 
-        const dayLogs = habitHistoryLogs.filter(l => {
-          if (!l.date) return false;
-          if (l.date === cellDateStr) return true;
+        const dayLogs = habitHistoryLogs.filter(l => l.date === cellDateStr);
+        const habitEmojis = Array.from(new Set(dayLogs.map(l => l.emoji || '⚡'))).join('');
 
-          const logD = new Date(l.date);
-          if (!isNaN(logD.getTime())) {
-            const lYear = logD.getFullYear();
-            const lMonth = String(logD.getMonth() + 1).padStart(2, '0');
-            const lDay = String(logD.getDate()).padStart(2, '0');
-            return `${lYear}-${lMonth}-${lDay}` === cellDateStr;
-          }
-          return false;
-        });
+        cell.innerHTML = `
+          <div style="font-size:0.65rem; font-weight:bold;">${day}</div>
+          <div style="font-size:0.48rem; color:#666;">${lunarStr}</div>
+          <div style="font-size:0.65rem; margin-top:2px;">${cycleEmoji} ${habitEmojis}</div>
+        `;
 
         if (dayLogs.length > 0) {
           cell.classList.add('completed');
-          const emojisCombined = Array.from(new Set(dayLogs.map(l => l.emoji || '⚡'))).join(' ');
-          cell.innerHTML = `<span>${day}</span><div class="cal-emojis">${emojisCombined}</div>`;
           cell.onclick = () => showDayDetails(cellDateStr, dayLogs);
-        } else {
-          cell.innerHTML = `<span>${day}</span>`;
         }
 
         grid.appendChild(cell);
@@ -1272,8 +1264,6 @@
             }
 
             if (data.wifeCycle) {
-              document.getElementById('wifeCycleDayVal').innerText = data.wifeCycle.cycleDay || "Day 19";
-              document.getElementById('wifePhaseVal').innerText = data.wifeCycle.phase || "Luteal Phase";
               document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
               
               if (document.getElementById('wifeMechanismVal')) {
@@ -1314,6 +1304,7 @@
 
     renderChakraSection();
     renderHabitsList();
+    renderPage2Wheel(21);
     fetchDashboardData();
     document.getElementById('smokeStreakDisplay').innerText = getSmokeStreakDays();
   </script>

@@ -1347,64 +1347,73 @@
     }
 
     function fetchDashboardData() {
-      fetch(SCRIPT_URL)
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.status === 'success') {
-            document.getElementById('streakDisplay').innerText = data.streak !== undefined ? data.streak : '--';
-            document.getElementById('cleanMindVal').innerText = data.cleanStreak !== undefined ? data.cleanStreak : 0;
-            
-            const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
-            const qAuthor = sanitizeAuthorString(data.author);
+  fetch(SCRIPT_URL, {
+    method: 'GET',
+    redirect: 'follow'
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("HTTP error " + res.status);
+      return res.json();
+    })
+    .then(data => {
+      if (data && data.status === 'success') {
+        document.getElementById('streakDisplay').innerText = data.streak !== undefined ? data.streak : '--';
+        document.getElementById('cleanMindVal').innerText = data.cleanStreak !== undefined ? data.cleanStreak : 0;
+        
+        const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
+        const qAuthor = sanitizeAuthorString(data.author);
 
-            document.getElementById('quoteText').innerText = `"${qText}"`;
-            document.getElementById('quoteAuthor').innerText = `- ${qAuthor}`;
-            
-            if (data.srsQuote) activeSrsQuote = data.srsQuote;
+        document.getElementById('quoteText').innerText = `"${qText}"`;
+        document.getElementById('quoteAuthor').innerText = `- ${qAuthor}`;
+        
+        if (data.srsQuote) activeSrsQuote = data.srsQuote;
 
-            if (data.wifeQuote) {
-              document.getElementById('wifeQuoteTopic').innerText = (data.wifeQuote.topic || "GENTLEMAN'S THOUGHT FOR HER").toUpperCase();
-              document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote || ''}"`;
-              document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author || 'Anonymous'}`;
-            }
+        if (data.wifeQuote) {
+          document.getElementById('wifeQuoteTopic').innerText = (data.wifeQuote.topic || "GENTLEMAN'S THOUGHT FOR HER").toUpperCase();
+          document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote || ''}"`;
+          document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author || 'Anonymous'}`;
+        }
 
-            if (data.wifeCycle) {
-              const dayNum = parseInt(data.wifeCycle.dayNum || (data.wifeCycle.cycleDay ? data.wifeCycle.cycleDay.replace(/\D/g, '') : 21), 10) || 21;
-              document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
-              renderPage2Wheel(dayNum);
-              
-              if (document.getElementById('wifeMechanismVal')) {
-                document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
-              }
-              if (document.getElementById('wifeBodyChangesVal')) {
-                document.getElementById('wifeBodyChangesVal').innerText = data.wifeCycle.bodyChanges || "Breast tenderness, bloating, fatigue, or no symptoms.";
-              }
-              if (document.getElementById('wifePregnancyVal')) {
-                document.getElementById('wifePregnancyVal').innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window; uncertainty about actual ovulation remains.";
-              }
-            }
-
-            if (data.purityTeaching) {
-              activeTeachingData = data.purityTeaching;
-              document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day || 1} / 365`;
-              document.getElementById('teachingMetaDisplay').innerText = `${(activeTeachingData.tradition || 'Mind Purity').toUpperCase()} | ${(activeTeachingData.source || 'Master Teachings').toUpperCase()}`;
-              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching || ''}"`;
-              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection || '';
-            }
-
-            if (data.masterHabits && Array.isArray(data.masterHabits) && data.masterHabits.length > 0) {
-              permanentHabits = data.masterHabits;
-              renderHabitsList();
-            }
-
-            if (data.habitHistory && Array.isArray(data.habitHistory)) habitHistoryLogs = data.habitHistory;
-            if (data.thoughtLogs && Array.isArray(data.thoughtLogs)) thoughtLogsHistory = data.thoughtLogs;
-
-            renderHabitCalendar();
+        if (data.wifeCycle) {
+          const dayNum = parseInt(data.wifeCycle.dayNum || (data.wifeCycle.cycleDay ? data.wifeCycle.cycleDay.replace(/\D/g, '') : 21), 10) || 21;
+          document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
+          renderPage2Wheel(dayNum);
+          
+          if (document.getElementById('wifeMechanismVal')) {
+            document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
           }
-        })
-        .catch(err => console.error("Dashboard fetch error:", err));
-    }
+          if (document.getElementById('wifeBodyChangesVal')) {
+            document.getElementById('wifeBodyChangesVal').innerText = data.wifeCycle.bodyChanges || "Breast tenderness, bloating, fatigue, or no symptoms.";
+          }
+          if (document.getElementById('wifePregnancyVal')) {
+            document.getElementById('wifePregnancyVal').innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window; uncertainty about actual ovulation remains.";
+          }
+        }
+
+        if (data.purityTeaching) {
+          activeTeachingData = data.purityTeaching;
+          document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day || 1} / 365`;
+          document.getElementById('teachingMetaDisplay').innerText = `${(activeTeachingData.tradition || 'Mind Purity').toUpperCase()} | ${(activeTeachingData.source || 'Master Teachings').toUpperCase()}`;
+          document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching || ''}"`;
+          document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection || '';
+        }
+
+        if (data.masterHabits && Array.isArray(data.masterHabits) && data.masterHabits.length > 0) {
+          permanentHabits = data.masterHabits;
+          renderHabitsList();
+        }
+
+        if (data.habitHistory && Array.isArray(data.habitHistory)) habitHistoryLogs = data.habitHistory;
+        if (data.thoughtLogs && Array.isArray(data.thoughtLogs)) thoughtLogsHistory = data.thoughtLogs;
+
+        renderHabitCalendar();
+      }
+    })
+    .catch(err => {
+      console.error("Dashboard fetch error:", err);
+      // Fallback: If network fetch fails due to browser CORS, alert user or render cached layout
+    });
+}
 
     function getSmokeStreakDays() {
       const quit = new Date(smokeQuitDate);

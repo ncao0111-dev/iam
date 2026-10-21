@@ -469,7 +469,7 @@
         <h1>HABITS & CYCLE CALENDAR</h1>
 
         <!-- MINIMALIST EMOJI LEGEND -->
-        <div style="display:flex; justify-space-around; align-items:center; margin-bottom:10px; padding:6px; background:#fafafa; border:1px solid var(--fg); font-size:0.55rem; font-weight:bold;">
+        <div style="display:flex; justify-content:space-around; align-items:center; margin-bottom:10px; padding:6px; background:#fafafa; border:1px solid var(--fg); font-size:0.55rem; font-weight:bold;">
           <span>🩸 Period</span>
           <span>🌿 Follicular</span>
           <span>✨ Ovulation</span>
@@ -628,7 +628,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPH0YvXg9uIolkK3CCdKyVoY1S6ZZEONq0XE07QxxOWCWEOSEgg2j7HxvkxDzD_kJQiQ/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz06Huj6D6PvgvmsxX7vgAQTyM-FNmIz5f9-Vau8QYOh37aJuu2n887DUVVN_sCKm_3_A/exec';
 
     const CHAKRA_CURRICULUM = [
       { day: 'SUNDAY', name: 'MULADHARA (ROOT)', symbol: 'लं', bija: 'LAM', element: 'Earth', focus: 'Physical grounding, survival security, root stability.', lesson: 'Mastery over fear and raw instinct. Root yourself firmly.', exercise: '10 mins bare-foot stance or deep belly grounding.' },
@@ -1174,7 +1174,7 @@
 
         const strokeW = isCurrent ? '2.5' : '1';
         const strokeC = isCurrent ? '#000' : '#888';
-        const outerPath = `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${rMid} ${rMid} 0 0 0 ${x4} ${y4} Z`;
+        const outerPath = `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 0 1 ${x2} ${y2} L ${x3} ${rMid} 0 0 0 ${x4} ${y4} Z`;
 
         svgHtml += `<path d="${outerPath}" fill="${fillC}" stroke="${strokeC}" stroke-width="${strokeW}" style="cursor:pointer;" onclick="renderPage2Wheel(${day})" />`;
 
@@ -1350,9 +1350,9 @@
       fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
-          if (data.status === 'success') {
-            document.getElementById('streakDisplay').innerText = data.streak;
-            document.getElementById('cleanMindVal').innerText = data.cleanStreak || 0;
+          if (data && data.status === 'success') {
+            document.getElementById('streakDisplay').innerText = data.streak !== undefined ? data.streak : '--';
+            document.getElementById('cleanMindVal').innerText = data.cleanStreak !== undefined ? data.cleanStreak : 0;
             
             const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
             const qAuthor = sanitizeAuthorString(data.author);
@@ -1362,9 +1362,16 @@
             
             if (data.srsQuote) activeSrsQuote = data.srsQuote;
 
+            if (data.wifeQuote) {
+              document.getElementById('wifeQuoteTopic').innerText = (data.wifeQuote.topic || "GENTLEMAN'S THOUGHT FOR HER").toUpperCase();
+              document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote || ''}"`;
+              document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author || 'Anonymous'}`;
+            }
+
             if (data.wifeCycle) {
+              const dayNum = parseInt(data.wifeCycle.dayNum || (data.wifeCycle.cycleDay ? data.wifeCycle.cycleDay.replace(/\D/g, '') : 21), 10) || 21;
               document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
-              renderPage2Wheel(data.wifeCycle.dayNum || 24);
+              renderPage2Wheel(dayNum);
               
               if (document.getElementById('wifeMechanismVal')) {
                 document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
@@ -1379,14 +1386,19 @@
 
             if (data.purityTeaching) {
               activeTeachingData = data.purityTeaching;
-              document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day} / 365`;
-              document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
-              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
-              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
+              document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day || 1} / 365`;
+              document.getElementById('teachingMetaDisplay').innerText = `${(activeTeachingData.tradition || 'Mind Purity').toUpperCase()} | ${(activeTeachingData.source || 'Master Teachings').toUpperCase()}`;
+              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching || ''}"`;
+              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection || '';
             }
 
-            if (data.habitHistory) habitHistoryLogs = data.habitHistory;
-            if (data.thoughtLogs) thoughtLogsHistory = data.thoughtLogs;
+            if (data.masterHabits && Array.isArray(data.masterHabits) && data.masterHabits.length > 0) {
+              permanentHabits = data.masterHabits;
+              renderHabitsList();
+            }
+
+            if (data.habitHistory && Array.isArray(data.habitHistory)) habitHistoryLogs = data.habitHistory;
+            if (data.thoughtLogs && Array.isArray(data.thoughtLogs)) thoughtLogsHistory = data.thoughtLogs;
 
             renderHabitCalendar();
           }

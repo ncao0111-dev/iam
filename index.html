@@ -409,7 +409,7 @@
       </div>
     </div>
 
-    <!-- PAGE 2: WIFE CYCLE & CARE (WITH CIRCULAR WHEEL DIAL) -->
+    <!-- PAGE 2: WIFE CYCLE & CARE -->
     <div class="swipe-page">
       <div class="wife-container">
         <div class="quote-box" style="border-left: 3px solid var(--fg); background: #fff; text-align: left;">
@@ -469,7 +469,7 @@
         <h1>HABITS & CYCLE CALENDAR</h1>
 
         <!-- MINIMALIST EMOJI LEGEND -->
-        <div style="display:flex; justify-content:space-around; align-items:center; margin-bottom:10px; padding:6px; background:#fafafa; border:1px solid var(--fg); font-size:0.55rem; font-weight:bold;">
+        <div style="display:flex; justify-space-around; align-items:center; margin-bottom:10px; padding:6px; background:#fafafa; border:1px solid var(--fg); font-size:0.55rem; font-weight:bold;">
           <span>🩸 Period</span>
           <span>🌿 Follicular</span>
           <span>✨ Ovulation</span>
@@ -659,6 +659,14 @@
     let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
     let activeTeachingData = {};
 
+    function postToScript(payload) {
+      return fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+    }
+
     function setButtonState(btn, state, text) {
       if (!btn) return;
       if (!btn.dataset.origText) btn.dataset.origText = btn.innerText;
@@ -748,12 +756,8 @@
 
       closeModal('srsQuoteModal');
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).then(() => fetchDashboardData());
+      postToScript(payload)
+      .then(() => fetchDashboardData());
     }
 
     function renderChakraSection() {
@@ -824,12 +828,8 @@
         renderHabitsList();
         closeModal('addHabitModal');
 
-        fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: "addPermanentHabit", id: id, emoji: emoji, label: name })
-        }).then(() => fetchDashboardData());
+        postToScript({ action: "addPermanentHabit", id: id, emoji: emoji, label: name })
+        .then(() => fetchDashboardData());
       }
     }
 
@@ -852,12 +852,7 @@
         detail: detail || "-"
       };
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
+      postToScript(payload)
       .then(() => {
         setButtonState(btn, 'success', 'THOUGHT SAVED! ✓');
         setTimeout(() => {
@@ -889,12 +884,7 @@
         reflection: activeTeachingData.reflection || ""
       };
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
+      postToScript(payload)
       .then(() => {
         setButtonState(btn, 'success', 'COMMITTED! ✓');
         fetchDashboardData();
@@ -923,12 +913,7 @@
         notes: notes || "Lapse recorded"
       };
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
+      postToScript(payload)
       .then(() => {
         setButtonState(btn, 'success', 'LAPSE RECORDED! ✓');
         setTimeout(() => {
@@ -950,7 +935,7 @@
       setButtonState(btn, 'saving', 'SAVING QUOTE...');
       const payload = { action: 'addQuote', quote: q, author: a, date: new Date().toISOString() };
 
-      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      postToScript(payload)
       .then(() => {
         setButtonState(btn, 'success', 'QUOTE SAVED! ✓');
         setTimeout(() => {
@@ -971,7 +956,7 @@
       setButtonState(btn, 'saving', 'SAVING KEYWORD...');
       const payload = { action: 'addKeyword', keyword: k, date: new Date().toISOString() };
 
-      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      postToScript(payload)
       .then(() => {
         setButtonState(btn, 'success', 'KEYWORD SAVED! ✓');
         setTimeout(() => {
@@ -1029,7 +1014,7 @@
         virtues: virtuesResult 
       };
 
-      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      postToScript(payload)
       .then(() => {
         setButtonState(btn, 'success', 'EVALUATION SAVED! ✓');
         setTimeout(() => {
@@ -1102,7 +1087,7 @@
         timestamp: `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
       };
 
-      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      postToScript(payload)
       .then(() => {
         setButtonState(btn, 'success', 'LOG SAVED! ✓');
         document.getElementById('wifeExperienceInput').value = '';
@@ -1145,12 +1130,7 @@
         habits: habitsToSave
       };
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
+      postToScript(payload)
       .then(() => {
         setButtonState(btn, 'success', `SAVED ${habitsToSave.length} HABITS! ✓`);
         permanentHabits.forEach((_, idx) => {
@@ -1285,43 +1265,43 @@
       renderTagCloud();
     }
 
-function renderTagCloud() {
-  const container = document.getElementById('tagCloudContainer');
-  if (!container) return;
-  container.innerHTML = '';
+    function renderTagCloud() {
+      const container = document.getElementById('tagCloudContainer');
+      if (!container) return;
+      container.innerHTML = '';
 
-  if (!thoughtLogsHistory || thoughtLogsHistory.length === 0) {
-    container.innerHTML = '<span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>';
-    return;
-  }
+      if (!thoughtLogsHistory || thoughtLogsHistory.length === 0) {
+        container.innerHTML = '<span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>';
+        return;
+      }
 
-  const tagCounts = {};
-  thoughtLogsHistory.forEach(t => {
-    let tag = String(t.tag || 'general').trim().toLowerCase().replace(/^#/, '');
-    if (!tag) tag = 'general';
-    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-  });
+      const tagCounts = {};
+      thoughtLogsHistory.forEach(t => {
+        let tag = String(t.tag || 'general').trim().toLowerCase().replace(/^#/, '');
+        if (!tag) tag = 'general';
+        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+      });
 
-  const countsArr = Object.values(tagCounts);
-  if (countsArr.length === 0) {
-    container.innerHTML = '<span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>';
-    return;
-  }
+      const countsArr = Object.values(tagCounts);
+      if (countsArr.length === 0) {
+        container.innerHTML = '<span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>';
+        return;
+      }
 
-  const maxCount = Math.max(...countsArr);
+      const maxCount = Math.max(...countsArr);
 
-  Object.keys(tagCounts).forEach(tag => {
-    const count = tagCounts[tag];
-    const bubble = document.createElement('div');
-    bubble.className = 'tag-bubble';
-    
-    const fontSize = 0.65 + (count / maxCount) * 0.45; 
-    bubble.style.fontSize = `${fontSize}rem`;
-    bubble.innerHTML = `#${tag} <span style="font-size:0.55rem; opacity:0.7; margin-left:4px;">(${count})</span>`;
-    
-    container.appendChild(bubble);
-  });
-}
+      Object.keys(tagCounts).forEach(tag => {
+        const count = tagCounts[tag];
+        const bubble = document.createElement('div');
+        bubble.className = 'tag-bubble';
+        
+        const fontSize = 0.65 + (count / maxCount) * 0.45; 
+        bubble.style.fontSize = `${fontSize}rem`;
+        bubble.innerHTML = `#${tag} <span style="font-size:0.55rem; opacity:0.7; margin-left:4px;">(${count})</span>`;
+        
+        container.appendChild(bubble);
+      });
+    }
 
     function showDayDetails(dateStr, logs) {
       document.getElementById('dayDetailTitle').innerText = `LOGS FOR ${dateStr}`;
@@ -1358,12 +1338,7 @@ function renderTagCloud() {
         cleanStreak: parseInt(document.getElementById('cleanMindVal').innerText || '0', 10)
       };
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
+      postToScript(payload)
       .then(() => {
         setButtonState(wakeBtn, 'success', `LOGGED AT ${currentTime} ✓`);
         fetchDashboardData();
@@ -1372,52 +1347,52 @@ function renderTagCloud() {
     }
 
     function fetchDashboardData() {
-  fetch(SCRIPT_URL)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === 'success') {
-        document.getElementById('streakDisplay').innerText = data.streak;
-        document.getElementById('cleanMindVal').innerText = data.cleanStreak || 0;
-        
-        const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
-        const qAuthor = sanitizeAuthorString(data.author);
+      fetch(SCRIPT_URL)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            document.getElementById('streakDisplay').innerText = data.streak;
+            document.getElementById('cleanMindVal').innerText = data.cleanStreak || 0;
+            
+            const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
+            const qAuthor = sanitizeAuthorString(data.author);
 
-        document.getElementById('quoteText').innerText = `"${qText}"`;
-        document.getElementById('quoteAuthor').innerText = `- ${qAuthor}`;
-        
-        if (data.srsQuote) activeSrsQuote = data.srsQuote;
+            document.getElementById('quoteText').innerText = `"${qText}"`;
+            document.getElementById('quoteAuthor').innerText = `- ${qAuthor}`;
+            
+            if (data.srsQuote) activeSrsQuote = data.srsQuote;
 
-        if (data.wifeCycle) {
-          document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
-          renderPage2Wheel(data.wifeCycle.dayNum || 24);
-          
-          if (document.getElementById('wifeMechanismVal')) {
-            document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
+            if (data.wifeCycle) {
+              document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
+              renderPage2Wheel(data.wifeCycle.dayNum || 24);
+              
+              if (document.getElementById('wifeMechanismVal')) {
+                document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
+              }
+              if (document.getElementById('wifeBodyChangesVal')) {
+                document.getElementById('wifeBodyChangesVal').innerText = data.wifeCycle.bodyChanges || "Breast tenderness, bloating, fatigue, or no symptoms.";
+              }
+              if (document.getElementById('wifePregnancyVal')) {
+                document.getElementById('wifePregnancyVal').innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window; uncertainty about actual ovulation remains.";
+              }
+            }
+
+            if (data.purityTeaching) {
+              activeTeachingData = data.purityTeaching;
+              document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day} / 365`;
+              document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
+              document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
+              document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
+            }
+
+            if (data.habitHistory) habitHistoryLogs = data.habitHistory;
+            if (data.thoughtLogs) thoughtLogsHistory = data.thoughtLogs;
+
+            renderHabitCalendar();
           }
-          if (document.getElementById('wifeBodyChangesVal')) {
-            document.getElementById('wifeBodyChangesVal').innerText = data.wifeCycle.bodyChanges || "Breast tenderness, bloating, fatigue, or no symptoms.";
-          }
-          if (document.getElementById('wifePregnancyVal')) {
-            document.getElementById('wifePregnancyVal').innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window; uncertainty about actual ovulation remains.";
-          }
-        }
-
-        if (data.purityTeaching) {
-          activeTeachingData = data.purityTeaching;
-          document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day} / 365`;
-          document.getElementById('teachingMetaDisplay').innerText = `${activeTeachingData.tradition.toUpperCase()} | ${activeTeachingData.source.toUpperCase()}`;
-          document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching}"`;
-          document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection;
-        }
-
-        if (data.habitHistory) habitHistoryLogs = data.habitHistory;
-        if (data.thoughtLogs) thoughtLogsHistory = data.thoughtLogs;
-
-        renderHabitCalendar();
-      }
-    })
-    .catch(err => console.error("Dashboard fetch error:", err));
-}
+        })
+        .catch(err => console.error("Dashboard fetch error:", err));
+    }
 
     function getSmokeStreakDays() {
       const quit = new Date(smokeQuitDate);

@@ -1347,19 +1347,24 @@
     }
 
     function fetchDashboardData() {
-  fetch(SCRIPT_URL, {
+  // Add timestamp query parameter to bypass GitHub/Browser aggressive caching
+  const cacheBusterUrl = SCRIPT_URL + '?t=' + new Date().getTime();
+
+  fetch(cacheBusterUrl, {
     method: 'GET',
     redirect: 'follow'
   })
     .then(res => {
-      if (!res.ok) throw new Error("HTTP error " + res.status);
+      if (!res.ok) throw new Error("HTTP Status " + res.status);
       return res.json();
     })
     .then(data => {
       if (data && data.status === 'success') {
+        // 1. Top Metrics
         document.getElementById('streakDisplay').innerText = data.streak !== undefined ? data.streak : '--';
         document.getElementById('cleanMindVal').innerText = data.cleanStreak !== undefined ? data.cleanStreak : 0;
         
+        // 2. Daily Quotes
         const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
         const qAuthor = sanitizeAuthorString(data.author);
 
@@ -1369,14 +1374,23 @@
         if (data.srsQuote) activeSrsQuote = data.srsQuote;
 
         if (data.wifeQuote) {
-          document.getElementById('wifeQuoteTopic').innerText = (data.wifeQuote.topic || "GENTLEMAN'S THOUGHT FOR HER").toUpperCase();
-          document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote || ''}"`;
-          document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author || 'Anonymous'}`;
+          if (document.getElementById('wifeQuoteTopic')) {
+            document.getElementById('wifeQuoteTopic').innerText = (data.wifeQuote.topic || "GENTLEMAN'S THOUGHT FOR HER").toUpperCase();
+          }
+          if (document.getElementById('wifeQuoteText')) {
+            document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote || ''}"`;
+          }
+          if (document.getElementById('wifeQuoteAuthor')) {
+            document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author || 'Anonymous'}`;
+          }
         }
 
+        // 3. Wife Cycle & Guidance
         if (data.wifeCycle) {
           const dayNum = parseInt(data.wifeCycle.dayNum || (data.wifeCycle.cycleDay ? data.wifeCycle.cycleDay.replace(/\D/g, '') : 21), 10) || 21;
-          document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
+          if (document.getElementById('wifeCareGuide')) {
+            document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
+          }
           renderPage2Wheel(dayNum);
           
           if (document.getElementById('wifeMechanismVal')) {
@@ -1390,19 +1404,30 @@
           }
         }
 
+        // 4. Mind Purity Teaching
         if (data.purityTeaching) {
           activeTeachingData = data.purityTeaching;
-          document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day || 1} / 365`;
-          document.getElementById('teachingMetaDisplay').innerText = `${(activeTeachingData.tradition || 'Mind Purity').toUpperCase()} | ${(activeTeachingData.source || 'Master Teachings').toUpperCase()}`;
-          document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching || ''}"`;
-          document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection || '';
+          if (document.getElementById('cleanMindBadge')) {
+            document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day || 1} / 365`;
+          }
+          if (document.getElementById('teachingMetaDisplay')) {
+            document.getElementById('teachingMetaDisplay').innerText = `${(activeTeachingData.tradition || 'Mind Purity').toUpperCase()} | ${(activeTeachingData.source || 'Master Teachings').toUpperCase()}`;
+          }
+          if (document.getElementById('teachingContentText')) {
+            document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching || ''}"`;
+          }
+          if (document.getElementById('teachingReflectionText')) {
+            document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection || '';
+          }
         }
 
+        // 5. Permanent Habit Stack
         if (data.masterHabits && Array.isArray(data.masterHabits) && data.masterHabits.length > 0) {
           permanentHabits = data.masterHabits;
           renderHabitsList();
         }
 
+        // 6. Log Histories & Calendar
         if (data.habitHistory && Array.isArray(data.habitHistory)) habitHistoryLogs = data.habitHistory;
         if (data.thoughtLogs && Array.isArray(data.thoughtLogs)) thoughtLogsHistory = data.thoughtLogs;
 
@@ -1410,8 +1435,7 @@
       }
     })
     .catch(err => {
-      console.error("Dashboard fetch error:", err);
-      // Fallback: If network fetch fails due to browser CORS, alert user or render cached layout
+      console.error("Dashboard data load error:", err);
     });
 }
 

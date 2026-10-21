@@ -340,7 +340,7 @@
     <div class="swipe-page">
       <div class="container">
         
-        <!-- CLICKABLE QUOTE BOX FOR SPACED REPETITION PRACTICE -->
+        <!-- CLICKABLE QUOTE BOX -->
         <div class="quote-box" onclick="openSrsModal()">
           <div style="font-size:0.52rem; font-weight:bold; color:#777; margin-bottom:2px;">[ TAP QUOTE TO PRACTICE CONCEPT ]</div>
           <div class="quote-text" id="quoteText">"Loading daily quote..."</div>
@@ -420,23 +420,21 @@
 
         <h1>WIFE CYCLE & CARE</h1>
 
-        <!-- MINIMALIST CIRCULAR WHEEL DIAL -->
+        <!-- CIRCULAR WHEEL DIAL -->
         <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:12px; border:2px solid var(--fg); padding:10px; background:#fff; box-shadow:4px 4px 0px var(--fg);">
           <svg id="wifeWheelSvg" width="280" height="280" viewBox="0 0 280 280" style="max-width:100%; height:auto;"></svg>
         </div>
 
-        <!-- PRACTICAL CARE & SUPPORT SUMMARY -->
+        <!-- PRACTICAL CARE & SUPPORT -->
         <div style="border:2px solid var(--fg); padding:10px; margin-bottom:10px; background:#f8f8f8;">
           <div style="font-size:0.6rem; font-weight:bold; text-transform:uppercase;">🤲 PRACTICAL CARE & SUPPORT</div>
           <div style="font-size:0.72rem; margin-top:4px; line-height:1.35; font-weight:bold;" id="wifeCareGuide">Loading guidance...</div>
         </div>
 
-        <!-- TOGGLE ACCORDION BUTTON -->
         <button type="button" class="secondary-btn" style="width:100%; margin-bottom:12px; font-size:0.62rem; text-align:center;" onclick="toggleCycleDetails()">
           🔍 <span id="toggleDetailsLabel">CLICK TO VIEW DAY DETAILS</span>
         </button>
 
-        <!-- COLLAPSED DAY DETAILS CONTAINER -->
         <div id="wifeCycleDetailsContainer" style="display:none; margin-bottom:12px;">
           <div style="border:1px solid var(--fg); padding:8px; margin-bottom:6px; background:#fafafa;">
             <div style="font-size:0.58rem; font-weight:bold; text-transform:uppercase; color:#444;">⚙️ MECHANISM & HORMONES</div>
@@ -463,12 +461,11 @@
       </div>
     </div>
 
-    <!-- PAGE 3: CALENDAR & DUAL PREDICTIONS WITH PHASE EMOJIS -->
+    <!-- PAGE 3: CALENDAR -->
     <div class="swipe-page">
       <div class="cal-container">
         <h1>HABITS & CYCLE CALENDAR</h1>
 
-        <!-- MINIMALIST EMOJI LEGEND -->
         <div style="display:flex; justify-content:space-around; align-items:center; margin-bottom:10px; padding:6px; background:#fafafa; border:1px solid var(--fg); font-size:0.55rem; font-weight:bold;">
           <span>🩸 Period</span>
           <span>🌿 Follicular</span>
@@ -505,7 +502,7 @@
 
   </div>
 
-  <!-- SPACED REPETITION QUOTE PRACTICE MODAL -->
+  <!-- MODALS -->
   <div class="modal-overlay" id="srsQuoteModal">
     <div class="modal-card">
       <div class="modal-title">🧠 QUOTE REPETITION PRACTICE</div>
@@ -525,7 +522,6 @@
     </div>
   </div>
 
-  <!-- MODALS -->
   <div class="modal-overlay" id="chakraModal">
     <div class="modal-card">
       <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
@@ -641,11 +637,13 @@
     ];
 
     let permanentHabits = JSON.parse(localStorage.getItem('saved_permanent_habits')) || [
-      { id: 'reading', emoji: '📚', label: 'Reading' },
-      { id: 'exercise', emoji: '🏋️', label: 'Exercise' },
-      { id: 'sex', emoji: '👩‍❤️‍👨', label: 'Sexual Activity' },
-      { id: 'marijuana', emoji: '🍃', label: 'Marijuana Usage' },
-      { id: 'meditation', emoji: '🧘', label: 'Meditation' }
+      { id: 'draw', emoji: '🎨', label: 'Draw' },
+      { id: 'piano', emoji: '🎹', label: 'Piano' },
+      { id: 'play_with_cocochanel', emoji: '🐶', label: 'Play with CocoChanel' },
+      { id: 'xxx_with_ejaculation', emoji: '👩‍❤️‍👨💦', label: 'Xxx with ejaculation' },
+      { id: 'xxx', emoji: '👩‍❤️‍👨', label: 'Xxx' },
+      { id: 'voice_training', emoji: '🗣️', label: 'Voice training' },
+      { id: 'weed', emoji: '🌿', label: 'Weed' }
     ];
 
     let defaultVirtues = JSON.parse(localStorage.getItem('saved_virtues_list')) || [
@@ -695,35 +693,49 @@
     function toggleCycleDetails() {
       const detailsDiv = document.getElementById('wifeCycleDetailsContainer');
       const label = document.getElementById('toggleDetailsLabel');
+      if (!detailsDiv) return;
       if (detailsDiv.style.display === 'none' || !detailsDiv.style.display) {
         detailsDiv.style.display = 'block';
-        label.innerText = 'HIDE DAY DETAILS';
+        if (label) label.innerText = 'HIDE DAY DETAILS';
       } else {
         detailsDiv.style.display = 'none';
-        label.innerText = 'CLICK TO VIEW DAY DETAILS';
+        if (label) label.innerText = 'CLICK TO VIEW DAY DETAILS';
       }
     }
 
     function scrollToPage(index) {
       const viewport = document.getElementById('swipeViewport');
-      viewport.scrollTo({ left: window.innerWidth * index, behavior: 'smooth' });
+      if (viewport) {
+        viewport.scrollTo({ left: window.innerWidth * index, behavior: 'smooth' });
+      }
       updateActiveTab(index);
     }
 
     function updateActiveTab(index) {
-      document.getElementById('tab0').classList.toggle('active', index === 0);
-      document.getElementById('tab1').classList.toggle('active', index === 1);
-      document.getElementById('tab2').classList.toggle('active', index === 2);
+      const t0 = document.getElementById('tab0');
+      const t1 = document.getElementById('tab1');
+      const t2 = document.getElementById('tab2');
+      if (t0) t0.classList.toggle('active', index === 0);
+      if (t1) t1.classList.toggle('active', index === 1);
+      if (t2) t2.classList.toggle('active', index === 2);
     }
 
-    document.getElementById('swipeViewport').addEventListener('scroll', () => {
-      const viewport = document.getElementById('swipeViewport');
-      const pageIndex = Math.round(viewport.scrollLeft / window.innerWidth);
-      updateActiveTab(pageIndex);
-    });
+    const viewportEl = document.getElementById('swipeViewport');
+    if (viewportEl) {
+      viewportEl.addEventListener('scroll', () => {
+        const pageIndex = Math.round(viewportEl.scrollLeft / window.innerWidth);
+        updateActiveTab(pageIndex);
+      });
+    }
 
-    function openModal(id) { document.getElementById(id).classList.add('active'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    function openModal(id) { 
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active'); 
+    }
+    function closeModal(id) { 
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('active'); 
+    }
 
     function sanitizeAuthorString(rawAuthor) {
       if (!rawAuthor) return "Anonymous";
@@ -735,10 +747,10 @@
     }
 
     function openSrsModal() {
-      const qText = document.getElementById('quoteText').innerText;
-      const qAuthor = document.getElementById('quoteAuthor').innerText;
-      document.getElementById('srsModalQuoteText').innerText = qText;
-      document.getElementById('srsModalQuoteAuthor').innerText = qAuthor;
+      const qText = document.getElementById('quoteText');
+      const qAuthor = document.getElementById('quoteAuthor');
+      if (qText) document.getElementById('srsModalQuoteText').innerText = qText.innerText;
+      if (qAuthor) document.getElementById('srsModalQuoteAuthor').innerText = qAuthor.innerText;
       openModal('srsQuoteModal');
     }
 
@@ -746,8 +758,8 @@
       const payload = {
         action: "reviewQuoteSRS",
         id: activeSrsQuote.id || 1,
-        quote: document.getElementById('quoteText').innerText.replace(/^"|"$/g, ''),
-        author: document.getElementById('quoteAuthor').innerText.replace(/^- /, ''),
+        quote: (document.getElementById('quoteText')?.innerText || '').replace(/^"|"$/g, ''),
+        author: (document.getElementById('quoteAuthor')?.innerText || '').replace(/^- /, ''),
         quality: qualityScore,
         repetition: activeSrsQuote.repetition || 0,
         interval: activeSrsQuote.interval || 1,
@@ -755,35 +767,41 @@
       };
 
       closeModal('srsQuoteModal');
-
-      postToScript(payload)
-      .then(() => fetchDashboardData());
+      postToScript(payload).then(() => fetchDashboardData());
     }
 
     function renderChakraSection() {
       const todayIndex = new Date().getDay();
       const chakra = CHAKRA_CURRICULUM[todayIndex];
-      document.getElementById('chakraDayDisplay').innerText = `TODAY'S WORK // ${chakra.day}`;
-      document.getElementById('chakraSymbolDisplay').innerText = chakra.symbol;
-      document.getElementById('chakraNameDisplay').innerText = chakra.name;
+      const d = document.getElementById('chakraDayDisplay');
+      const s = document.getElementById('chakraSymbolDisplay');
+      const n = document.getElementById('chakraNameDisplay');
+      if (d) d.innerText = `TODAY'S WORK // ${chakra.day}`;
+      if (s) s.innerText = chakra.symbol;
+      if (n) n.innerText = chakra.name;
     }
 
     function openChakraModal() {
       const todayIndex = new Date().getDay();
       const chakra = CHAKRA_CURRICULUM[todayIndex];
-      document.getElementById('chakraModalTitle').innerText = `${chakra.symbol} ${chakra.name}`;
-      document.getElementById('chakraModalContent').innerHTML = `
-        <div style="margin-bottom:8px;"><strong>DAY:</strong> ${chakra.day}</div>
-        <div style="margin-bottom:8px;"><strong>BIJA MANTRA:</strong> ${chakra.bija} | <strong>ELEMENT:</strong> ${chakra.element}</div>
-        <div style="margin-bottom:8px;"><strong>FOCUS:</strong> ${chakra.focus}</div>
-        <div style="margin-bottom:8px; background:#f5f5f5; padding:8px; border-left:3px solid #000;"><strong>LESSON:</strong><br>${chakra.lesson}</div>
-        <div style="margin-bottom:8px; background:#f0f0f0; padding:8px; border-left:3px solid #000;"><strong>DAILY PRACTICE:</strong><br>${chakra.exercise}</div>
-      `;
+      const title = document.getElementById('chakraModalTitle');
+      const content = document.getElementById('chakraModalContent');
+      if (title) title.innerText = `${chakra.symbol} ${chakra.name}`;
+      if (content) {
+        content.innerHTML = `
+          <div style="margin-bottom:8px;"><strong>DAY:</strong> ${chakra.day}</div>
+          <div style="margin-bottom:8px;"><strong>BIJA MANTRA:</strong> ${chakra.bija} | <strong>ELEMENT:</strong> ${chakra.element}</div>
+          <div style="margin-bottom:8px;"><strong>FOCUS:</strong> ${chakra.focus}</div>
+          <div style="margin-bottom:8px; background:#f5f5f5; padding:8px; border-left:3px solid #000;"><strong>LESSON:</strong><br>${chakra.lesson}</div>
+          <div style="margin-bottom:8px; background:#f0f0f0; padding:8px; border-left:3px solid #000;"><strong>DAILY PRACTICE:</strong><br>${chakra.exercise}</div>
+        `;
+      }
       openModal('chakraModal');
     }
 
     function renderHabitsList() {
       const container = document.getElementById('habitsContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       permanentHabits.forEach((h, idx) => {
@@ -817,8 +835,8 @@
     }
 
     function submitAddHabit() {
-      const emoji = document.getElementById('newHabitEmoji').value.trim() || '⚡';
-      const name = document.getElementById('newHabitName').value.trim();
+      const emoji = document.getElementById('newHabitEmoji')?.value.trim() || '⚡';
+      const name = document.getElementById('newHabitName')?.value.trim();
 
       if (name) {
         const id = name.toLowerCase().replace(/\s+/g, '_');
@@ -835,8 +853,8 @@
 
     function submitThoughtLog() {
       const btn = document.getElementById('submitThoughtBtn');
-      const tag = document.getElementById('thoughtTagInput').value.trim().toLowerCase() || 'ideas';
-      const detail = document.getElementById('thoughtDetailInput').value.trim();
+      const tag = document.getElementById('thoughtTagInput')?.value.trim().toLowerCase() || 'ideas';
+      const detail = document.getElementById('thoughtDetailInput')?.value.trim() || '-';
 
       setButtonState(btn, 'saving', 'SAVING THOUGHT...');
 
@@ -849,7 +867,7 @@
         dateTime: formattedDateTime,
         dateLogged: formattedDate,
         tag: tag,
-        detail: detail || "-"
+        detail: detail
       };
 
       postToScript(payload)
@@ -858,8 +876,8 @@
         setTimeout(() => {
           closeModal('thoughtModal');
           setButtonState(btn, 'reset');
-          document.getElementById('thoughtTagInput').value = '';
-          document.getElementById('thoughtDetailInput').value = '';
+          if (document.getElementById('thoughtTagInput')) document.getElementById('thoughtTagInput').value = '';
+          if (document.getElementById('thoughtDetailInput')) document.getElementById('thoughtDetailInput').value = '';
         }, 800);
         fetchDashboardData();
       })
@@ -894,7 +912,7 @@
 
     function submitLapseLog() {
       const btn = document.getElementById('submitLapseBtn');
-      const notes = document.getElementById('lapseDetailsTextarea').value.trim();
+      const notes = document.getElementById('lapseDetailsTextarea')?.value.trim() || 'Lapse recorded';
 
       setButtonState(btn, 'saving', 'RESETTING STREAK...');
 
@@ -905,12 +923,12 @@
       const payload = {
         action: "addCleanLapseLog",
         dateTime: formattedDateTime,
-        previousStreak: parseInt(document.getElementById('cleanMindVal').innerText || '0', 10),
+        previousStreak: parseInt(document.getElementById('cleanMindVal')?.innerText || '0', 10),
         tradition: activeTeachingData.tradition || "Mind Purity",
         source: activeTeachingData.source || "Master Teachings",
         teaching: activeTeachingData.teaching || "",
         reflection: activeTeachingData.reflection || "",
-        notes: notes || "Lapse recorded"
+        notes: notes
       };
 
       postToScript(payload)
@@ -919,7 +937,7 @@
         setTimeout(() => {
           closeModal('lapseModal');
           setButtonState(btn, 'reset');
-          document.getElementById('lapseDetailsTextarea').value = '';
+          if (document.getElementById('lapseDetailsTextarea')) document.getElementById('lapseDetailsTextarea').value = '';
         }, 800);
         fetchDashboardData();
       })
@@ -928,8 +946,8 @@
 
     function submitAddQuote() {
       const btn = document.getElementById('submitQuoteBtn');
-      const q = document.getElementById('newQuoteText').value.trim();
-      const a = document.getElementById('newQuoteAuthor').value.trim() || 'Anonymous';
+      const q = document.getElementById('newQuoteText')?.value.trim();
+      const a = document.getElementById('newQuoteAuthor')?.value.trim() || 'Anonymous';
       if (!q) return;
 
       setButtonState(btn, 'saving', 'SAVING QUOTE...');
@@ -941,8 +959,8 @@
         setTimeout(() => {
           closeModal('quoteModal');
           setButtonState(btn, 'reset');
-          document.getElementById('newQuoteText').value = '';
-          document.getElementById('newQuoteAuthor').value = '';
+          if (document.getElementById('newQuoteText')) document.getElementById('newQuoteText').value = '';
+          if (document.getElementById('newQuoteAuthor')) document.getElementById('newQuoteAuthor').value = '';
         }, 800);
       })
       .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
@@ -950,7 +968,7 @@
 
     function submitAddKeyword() {
       const btn = document.getElementById('submitKeywordBtn');
-      const k = document.getElementById('newKeywordText').value.trim();
+      const k = document.getElementById('newKeywordText')?.value.trim();
       if (!k) return;
 
       setButtonState(btn, 'saving', 'SAVING KEYWORD...');
@@ -962,7 +980,7 @@
         setTimeout(() => {
           closeModal('keywordModal');
           setButtonState(btn, 'reset');
-          document.getElementById('newKeywordText').value = '';
+          if (document.getElementById('newKeywordText')) document.getElementById('newKeywordText').value = '';
         }, 800);
       })
       .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
@@ -970,6 +988,7 @@
 
     function openVirtuesModal() {
       const container = document.getElementById('virtuesChecklistContainer');
+      if (!container) return;
       container.innerHTML = '';
       defaultVirtues.forEach((v, idx) => {
         container.innerHTML += `
@@ -979,7 +998,7 @@
               <span style="font-size:0.7rem; font-weight:bold;" id="score_lbl_${idx}">5 / 5</span>
             </div>
             <input type="range" id="virtue_score_${idx}" min="1" max="5" value="5" style="width:100%; accent-color:#000;" oninput="document.getElementById('score_lbl_${idx}').innerText = this.value + ' / 5'">
-            <input type="text" id="virtue_note_${idx}" placeholder="Reflection / note for this virtue..." style="width:100%; margin-top:4px; padding:4px; font-size:0.65rem; border:1px dashed #ccc;">
+            <input type="text" id="virtue_note_${idx}" placeholder="Reflection / note..." style="width:100%; margin-top:4px; padding:4px; font-size:0.65rem; border:1px dashed #ccc;">
           </div>
         `;
       });
@@ -988,19 +1007,18 @@
 
     function submitSleepVirtues() {
       const btn = document.getElementById('submitSleepVirtuesBtn');
-      const sleepTime = document.getElementById('sleepTimeInput').value || '22:30';
+      const sleepTime = document.getElementById('sleepTimeInput')?.value || '22:30';
       const virtuesResult = {};
       let totalScore = 0;
 
       defaultVirtues.forEach((v, idx) => {
-        const scoreVal = parseInt(document.getElementById(`virtue_score_${idx}`).value || '5', 10);
-        const noteVal = document.getElementById(`virtue_note_${idx}`).value.trim();
+        const scoreVal = parseInt(document.getElementById(`virtue_score_${idx}`)?.value || '5', 10);
+        const noteVal = document.getElementById(`virtue_note_${idx}`)?.value.trim() || '-';
         totalScore += scoreVal;
-        virtuesResult[v] = { score: scoreVal, note: noteVal || "-" };
+        virtuesResult[v] = { score: scoreVal, note: noteVal };
       });
 
       const avgScore = (totalScore / defaultVirtues.length).toFixed(1);
-
       setButtonState(btn, 'saving', 'SAVING EVALUATION...');
 
       const now = new Date();
@@ -1032,6 +1050,7 @@
 
     function renderEditVirtuesList() {
       const container = document.getElementById('editVirtuesListContainer');
+      if (!container) return;
       container.innerHTML = '';
       defaultVirtues.forEach((v, idx) => {
         container.innerHTML += `
@@ -1044,11 +1063,12 @@
     }
 
     function addNewVirtue() {
-      const val = document.getElementById('newVirtueInput').value.trim();
+      const input = document.getElementById('newVirtueInput');
+      const val = input ? input.value.trim() : '';
       if (val) {
         defaultVirtues.push(val);
         localStorage.setItem('saved_virtues_list', JSON.stringify(defaultVirtues));
-        document.getElementById('newVirtueInput').value = '';
+        if (input) input.value = '';
         renderEditVirtuesList();
       }
     }
@@ -1064,13 +1084,15 @@
       if (newDate) {
         smokeQuitDate = newDate;
         localStorage.setItem('smoke_quit_date', smokeQuitDate);
-        document.getElementById('smokeStreakDisplay').innerText = getSmokeStreakDays();
+        if (document.getElementById('smokeStreakDisplay')) {
+          document.getElementById('smokeStreakDisplay').innerText = getSmokeStreakDays();
+        }
       }
     }
 
     function logWifeCycle() {
       const btn = document.getElementById('wifeCycleBtn');
-      const exp = document.getElementById('wifeExperienceInput').value.trim();
+      const exp = document.getElementById('wifeExperienceInput')?.value.trim() || 'Normal';
       setButtonState(btn, 'saving', 'SAVING LOG...');
 
       const now = new Date();
@@ -1081,16 +1103,16 @@
         date: formattedDate,
         cycleDay: "Day 21",
         hormonePhase: "Luteal Phase",
-        experience: exp || "Normal",
-        comfortGuide: document.getElementById('wifeCareGuide').innerText || "-",
-        notes: exp || "Logged via web app",
+        experience: exp,
+        comfortGuide: document.getElementById('wifeCareGuide')?.innerText || "-",
+        notes: exp,
         timestamp: `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
       };
 
       postToScript(payload)
       .then(() => {
         setButtonState(btn, 'success', 'LOG SAVED! ✓');
-        document.getElementById('wifeExperienceInput').value = '';
+        if (document.getElementById('wifeExperienceInput')) document.getElementById('wifeExperienceInput').value = '';
       })
       .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
     }
@@ -1161,10 +1183,14 @@
         const startAngle = ((day - 1) / totalDays) * 2 * Math.PI - Math.PI / 2;
         const endAngle = (day / totalDays) * 2 * Math.PI - Math.PI / 2;
 
-        const x1 = cx + rOuter * Math.cos(startAngle); const y1 = cy + rOuter * Math.sin(startAngle);
-        const x2 = cx + rOuter * Math.cos(endAngle);   const y2 = cy + rOuter * Math.sin(endAngle);
-        const x3 = cx + rMid * Math.cos(endAngle);     const y3 = cy + rMid * Math.sin(endAngle);
-        const x4 = cx + rMid * Math.cos(startAngle);   const y4 = cy + rMid * Math.sin(startAngle);
+        const x1 = cx + rOuter * Math.cos(startAngle);
+        const y1 = cy + rOuter * Math.sin(startAngle);
+        const x2 = cx + rOuter * Math.cos(endAngle);
+        const y2 = cy + rOuter * Math.sin(endAngle);
+        const x3 = cx + rMid * Math.cos(endAngle);
+        const y3 = cy + rMid * Math.sin(endAngle);
+        const x4 = cx + rMid * Math.cos(startAngle);
+        const y4 = cy + rMid * Math.sin(startAngle);
 
         const isCurrent = (day === activeDay);
         let fillC = '#fff';
@@ -1174,7 +1200,7 @@
 
         const strokeW = isCurrent ? '2.5' : '1';
         const strokeC = isCurrent ? '#000' : '#888';
-        const outerPath = `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 0 1 ${x2} ${y2} L ${x3} ${rMid} 0 0 0 ${x4} ${y4} Z`;
+        const outerPath = `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${rMid} ${rMid} 0 0 0 ${x4} ${y4} Z`;
 
         svgHtml += `<path d="${outerPath}" fill="${fillC}" stroke="${strokeC}" stroke-width="${strokeW}" style="cursor:pointer;" onclick="renderPage2Wheel(${day})" />`;
 
@@ -1208,11 +1234,12 @@
       const year = currentCalDate.getFullYear();
       const month = currentCalDate.getMonth();
       const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-      document.getElementById('calMonthTitle').innerText = `${monthNames[month]} ${year}`;
+      
+      const titleEl = document.getElementById('calMonthTitle');
+      if (titleEl) titleEl.innerText = `${monthNames[month]} ${year}`;
 
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
-
       const anchorDate = new Date(2026, 8, 24);
 
       for (let i = 0; i < firstDay; i++) {
@@ -1304,8 +1331,11 @@
     }
 
     function showDayDetails(dateStr, logs) {
-      document.getElementById('dayDetailTitle').innerText = `LOGS FOR ${dateStr}`;
+      const title = document.getElementById('dayDetailTitle');
+      if (title) title.innerText = `LOGS FOR ${dateStr}`;
+      
       const container = document.getElementById('dayDetailContent');
+      if (!container) return;
       container.innerHTML = '';
 
       logs.forEach(l => {
@@ -1314,7 +1344,7 @@
         item.style.borderBottom = '1px solid #ccc';
         item.style.paddingBottom = '4px';
         item.innerHTML = `
-          <strong>${l.emoji} ${l.habitName}</strong> (${l.dateTime.split(' ')[1] || ''})<br>
+          <strong>${l.emoji} ${l.habitName}</strong> (${l.dateTime ? (l.dateTime.split(' ')[1] || '') : ''})<br>
           <em>Note: ${l.note && l.note !== '-' ? l.note : 'No notes entered'}</em>
         `;
         container.appendChild(item);
@@ -1335,7 +1365,7 @@
         date: currentDate,
         wakeTime: currentTime,
         smokeStreak: getSmokeStreakDays(),
-        cleanStreak: parseInt(document.getElementById('cleanMindVal').innerText || '0', 10)
+        cleanStreak: parseInt(document.getElementById('cleanMindVal')?.innerText || '0', 10)
       };
 
       postToScript(payload)
@@ -1347,97 +1377,78 @@
     }
 
     function fetchDashboardData() {
-  // Add timestamp query parameter to bypass GitHub/Browser aggressive caching
-  const cacheBusterUrl = SCRIPT_URL + '?t=' + new Date().getTime();
+      const cacheBusterUrl = SCRIPT_URL + '?t=' + new Date().getTime();
 
-  fetch(cacheBusterUrl, {
-    method: 'GET',
-    redirect: 'follow'
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("HTTP Status " + res.status);
-      return res.json();
-    })
-    .then(data => {
-      if (data && data.status === 'success') {
-        // 1. Top Metrics
-        document.getElementById('streakDisplay').innerText = data.streak !== undefined ? data.streak : '--';
-        document.getElementById('cleanMindVal').innerText = data.cleanStreak !== undefined ? data.cleanStreak : 0;
-        
-        // 2. Daily Quotes
-        const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
-        const qAuthor = sanitizeAuthorString(data.author);
+      fetch(cacheBusterUrl)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.status === 'success') {
+            const streakDisplay = document.getElementById('streakDisplay');
+            const cleanMindVal = document.getElementById('cleanMindVal');
+            if (streakDisplay) streakDisplay.innerText = data.streak !== undefined ? data.streak : '--';
+            if (cleanMindVal) cleanMindVal.innerText = data.cleanStreak !== undefined ? data.cleanStreak : 0;
+            
+            const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
+            const qAuthor = sanitizeAuthorString(data.author);
 
-        document.getElementById('quoteText').innerText = `"${qText}"`;
-        document.getElementById('quoteAuthor').innerText = `- ${qAuthor}`;
-        
-        if (data.srsQuote) activeSrsQuote = data.srsQuote;
+            const quoteTextEl = document.getElementById('quoteText');
+            const quoteAuthorEl = document.getElementById('quoteAuthor');
+            if (quoteTextEl) quoteTextEl.innerText = `"${qText}"`;
+            if (quoteAuthorEl) quoteAuthorEl.innerText = `- ${qAuthor}`;
+            
+            if (data.srsQuote) activeSrsQuote = data.srsQuote;
 
-        if (data.wifeQuote) {
-          if (document.getElementById('wifeQuoteTopic')) {
-            document.getElementById('wifeQuoteTopic').innerText = (data.wifeQuote.topic || "GENTLEMAN'S THOUGHT FOR HER").toUpperCase();
-          }
-          if (document.getElementById('wifeQuoteText')) {
-            document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote || ''}"`;
-          }
-          if (document.getElementById('wifeQuoteAuthor')) {
-            document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author || 'Anonymous'}`;
-          }
-        }
+            if (data.wifeQuote) {
+              const topicEl = document.getElementById('wifeQuoteTopic');
+              const textEl = document.getElementById('wifeQuoteText');
+              const authorEl = document.getElementById('wifeQuoteAuthor');
+              if (topicEl) topicEl.innerText = (data.wifeQuote.topic || "GENTLEMAN'S THOUGHT FOR HER").toUpperCase();
+              if (textEl) textEl.innerText = `"${data.wifeQuote.quote || ''}"`;
+              if (authorEl) authorEl.innerText = `- ${data.wifeQuote.author || 'Anonymous'}`;
+            }
 
-        // 3. Wife Cycle & Guidance
-        if (data.wifeCycle) {
-          const dayNum = parseInt(data.wifeCycle.dayNum || (data.wifeCycle.cycleDay ? data.wifeCycle.cycleDay.replace(/\D/g, '') : 21), 10) || 21;
-          if (document.getElementById('wifeCareGuide')) {
-            document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
-          }
-          renderPage2Wheel(dayNum);
-          
-          if (document.getElementById('wifeMechanismVal')) {
-            document.getElementById('wifeMechanismVal').innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining and follicle progression.";
-          }
-          if (document.getElementById('wifeBodyChangesVal')) {
-            document.getElementById('wifeBodyChangesVal').innerText = data.wifeCycle.bodyChanges || "Breast tenderness, bloating, fatigue, or no symptoms.";
-          }
-          if (document.getElementById('wifePregnancyVal')) {
-            document.getElementById('wifePregnancyVal').innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window; uncertainty about actual ovulation remains.";
-          }
-        }
+            if (data.wifeCycle) {
+              const dayNum = parseInt(data.wifeCycle.dayNum || (data.wifeCycle.cycleDay ? data.wifeCycle.cycleDay.replace(/\D/g, '') : 21), 10) || 21;
+              const careGuideEl = document.getElementById('wifeCareGuide');
+              if (careGuideEl) careGuideEl.innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
+              
+              renderPage2Wheel(dayNum);
+              
+              const mechEl = document.getElementById('wifeMechanismVal');
+              const bodyEl = document.getElementById('wifeBodyChangesVal');
+              const pregEl = document.getElementById('wifePregnancyVal');
 
-        // 4. Mind Purity Teaching
-        if (data.purityTeaching) {
-          activeTeachingData = data.purityTeaching;
-          if (document.getElementById('cleanMindBadge')) {
-            document.getElementById('cleanMindBadge').innerText = `DAY ${activeTeachingData.day || 1} / 365`;
-          }
-          if (document.getElementById('teachingMetaDisplay')) {
-            document.getElementById('teachingMetaDisplay').innerText = `${(activeTeachingData.tradition || 'Mind Purity').toUpperCase()} | ${(activeTeachingData.source || 'Master Teachings').toUpperCase()}`;
-          }
-          if (document.getElementById('teachingContentText')) {
-            document.getElementById('teachingContentText').innerText = `"${activeTeachingData.teaching || ''}"`;
-          }
-          if (document.getElementById('teachingReflectionText')) {
-            document.getElementById('teachingReflectionText').innerText = activeTeachingData.reflection || '';
-          }
-        }
+              if (mechEl) mechEl.innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining.";
+              if (bodyEl) bodyEl.innerText = data.wifeCycle.bodyChanges || "Normal physiological changes.";
+              if (pregEl) pregEl.innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window.";
+            }
 
-        // 5. Permanent Habit Stack
-        if (data.masterHabits && Array.isArray(data.masterHabits) && data.masterHabits.length > 0) {
-          permanentHabits = data.masterHabits;
-          renderHabitsList();
-        }
+            if (data.purityTeaching) {
+              activeTeachingData = data.purityTeaching;
+              const badgeEl = document.getElementById('cleanMindBadge');
+              const metaEl = document.getElementById('teachingMetaDisplay');
+              const contentEl = document.getElementById('teachingContentText');
+              const reflectionEl = document.getElementById('teachingReflectionText');
 
-        // 6. Log Histories & Calendar
-        if (data.habitHistory && Array.isArray(data.habitHistory)) habitHistoryLogs = data.habitHistory;
-        if (data.thoughtLogs && Array.isArray(data.thoughtLogs)) thoughtLogsHistory = data.thoughtLogs;
+              if (badgeEl) badgeEl.innerText = `DAY ${activeTeachingData.day || 1} / 365`;
+              if (metaEl) metaEl.innerText = `${(activeTeachingData.tradition || 'Mind Purity').toUpperCase()} | ${(activeTeachingData.source || 'Master Teachings').toUpperCase()}`;
+              if (contentEl) contentEl.innerText = `"${activeTeachingData.teaching || ''}"`;
+              if (reflectionEl) reflectionEl.innerText = activeTeachingData.reflection || '';
+            }
 
-        renderHabitCalendar();
-      }
-    })
-    .catch(err => {
-      console.error("Dashboard data load error:", err);
-    });
-}
+            if (data.masterHabits && Array.isArray(data.masterHabits) && data.masterHabits.length > 0) {
+              permanentHabits = data.masterHabits;
+              renderHabitsList();
+            }
+
+            if (data.habitHistory && Array.isArray(data.habitHistory)) habitHistoryLogs = data.habitHistory;
+            if (data.thoughtLogs && Array.isArray(data.thoughtLogs)) thoughtLogsHistory = data.thoughtLogs;
+
+            renderHabitCalendar();
+          }
+        })
+        .catch(err => console.error("Dashboard fetch error:", err));
+    }
 
     function getSmokeStreakDays() {
       const quit = new Date(smokeQuitDate);
@@ -1445,11 +1456,15 @@
       return Math.max(0, Math.floor((today - quit) / (1000 * 60 * 60 * 24)));
     }
 
+    // Initial local rendering before network fetch
     renderChakraSection();
     renderHabitsList();
     renderPage2Wheel(21);
+    const smokeDisplay = document.getElementById('smokeStreakDisplay');
+    if (smokeDisplay) smokeDisplay.innerText = getSmokeStreakDays();
+
+    // Fetch live backend metrics
     fetchDashboardData();
-    document.getElementById('smokeStreakDisplay').innerText = getSmokeStreakDays();
   </script>
 </body>
 </html>

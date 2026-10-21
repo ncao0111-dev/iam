@@ -112,7 +112,6 @@
     }
 
     .kpi-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 14px; }
-    .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 
     .kpi-card { border: 1px solid var(--fg); text-align: center; padding: 8px 4px; background: #fff; }
     .kpi-val { font-size: 1.4rem; font-weight: bold; }
@@ -151,12 +150,6 @@
       text-transform: uppercase;
       cursor: pointer;
       margin-bottom: 8px;
-      transition: background-color 0.2s, color 0.2s;
-    }
-
-    button.wake-btn:disabled {
-      opacity: 0.85;
-      cursor: not-allowed;
     }
 
     .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
@@ -175,8 +168,6 @@
       cursor: pointer;
     }
 
-    button.secondary-btn:hover { background-color: #f0f0f0; }
-
     .habit-card-item {
       border: 1px solid var(--fg);
       padding: 8px;
@@ -187,60 +178,6 @@
     .habit-card-top { display: flex; align-items: center; justify-content: space-between; }
     .habit-label-group { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: bold; }
 
-    .habit-note-input {
-      width: 100%;
-      margin-top: 6px;
-      padding: 6px;
-      font-size: 0.65rem;
-      font-family: var(--font);
-      border: 1px dashed var(--fg);
-      display: none;
-    }
-
-    .habit-note-input.active { display: block; }
-    .toggle-note-btn { font-size: 0.58rem; cursor: pointer; text-decoration: underline; margin-left: 6px; color: #555; }
-
-    .srs-btn-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .srs-option-btn {
-      padding: 10px;
-      font-family: var(--font);
-      font-size: 0.65rem;
-      font-weight: bold;
-      border: 1px solid var(--fg);
-      background: #fff;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .srs-option-btn:hover { background: #f0f0f0; }
-
-    .cal-header-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      border: 1px solid var(--fg);
-      padding: 6px 10px;
-      background: #fafafa;
-    }
-
-    .cal-nav-btn {
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border: 1px solid var(--fg);
-      background: #fff;
-    }
-
-    .cal-month-title { font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; }
-
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -248,7 +185,6 @@
       text-align: center;
     }
 
-    .cal-day-hdr { font-size: 0.55rem; font-weight: bold; padding: 4px; background: #f0f0f0; }
     .cal-day-cell {
       border: 1px solid var(--border);
       min-height: 48px;
@@ -260,69 +196,6 @@
       justify-content: flex-start;
       cursor: pointer;
     }
-
-    .cal-day-cell.completed { background: #f4f4f4; border-color: #000; }
-
-    .tag-cloud-section {
-      margin-top: 16px;
-      border-top: 2px solid var(--fg);
-      padding-top: 12px;
-    }
-
-    .tag-cloud-title {
-      font-size: 0.68rem;
-      font-weight: bold;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .tag-bubbles-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      justify-content: center;
-      padding: 8px;
-      border: 1px solid var(--fg);
-      background: #fafafa;
-      min-height: 80px;
-    }
-
-    .tag-bubble {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1.5px solid var(--fg);
-      border-radius: 20px;
-      padding: 4px 10px;
-      background: #fff;
-      font-weight: bold;
-      text-transform: lowercase;
-      box-shadow: 2px 2px 0px var(--fg);
-    }
-
-    .virtue-score-card {
-      border: 1px solid var(--fg);
-      padding: 8px;
-      margin-bottom: 8px;
-      background: #fafafa;
-    }
-
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 15px;
-    }
-
-    .modal-overlay.active { display: flex; }
-    .modal-card { background: #fff; border: 2px solid var(--fg); box-shadow: 6px 6px 0px var(--fg); padding: 16px; width: 100%; max-width: 380px; max-height: 90vh; overflow-y: auto; }
-    .modal-title { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid var(--fg); padding-bottom: 4px; margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -340,9 +213,8 @@
     <div class="swipe-page">
       <div class="container">
         
-        <!-- CLICKABLE QUOTE BOX -->
-        <div class="quote-box" onclick="openSrsModal()">
-          <div style="font-size:0.52rem; font-weight:bold; color:#777; margin-bottom:2px;">[ TAP QUOTE TO PRACTICE CONCEPT ]</div>
+        <div class="quote-box">
+          <div style="font-size:0.52rem; font-weight:bold; color:#777; margin-bottom:2px;">[ DAILY INSPIRATION ]</div>
           <div class="quote-text" id="quoteText">"Loading daily quote..."</div>
           <div class="quote-author" id="quoteAuthor">--</div>
         </div>
@@ -355,15 +227,12 @@
           <div class="kpi-card"><div class="kpi-val" id="streakDisplay">--</div><div class="kpi-lbl">&lt; 5 AM Streak</div></div>
         </div>
 
-        <!-- CHAKRA MASTERY CARD -->
-        <div class="chakra-section" onclick="openChakraModal()">
+        <div class="chakra-section">
           <div class="chakra-day-title" id="chakraDayDisplay">TODAY'S WORK</div>
           <div class="chakra-symbol" id="chakraSymbolDisplay">लं</div>
           <div class="chakra-name" id="chakraNameDisplay">MULADHARA</div>
-          <div style="font-size: 0.58rem; text-transform: uppercase; margin-top: 4px; color: #666;">[ 🔍 CLICK FOR LESSON & PRACTICE ]</div>
         </div>
 
-        <!-- CLEAN MIND TRACKER SECTION -->
         <div class="clean-mind-section">
           <div class="clean-mind-header">
             <span>🧠 MIND PURITY TRACKER</span>
@@ -378,34 +247,16 @@
             </div>
           </div>
 
-          <button type="button" class="wake-btn" id="cleanMindBtn" style="margin-bottom:6px;" onclick="commitCleanMindToday()">⚡ COMMIT TO CLEAN MIND TODAY</button>
-          <button type="button" class="secondary-btn" style="color: #900; border-color: #900;" onclick="openModal('lapseModal')">⚠️ LOG LAPSE / RESET STREAK</button>
+          <button type="button" class="wake-btn" id="cleanMindBtn" onclick="commitCleanMindToday()">⚡ COMMIT TO CLEAN MIND TODAY</button>
         </div>
 
         <button type="button" class="wake-btn" id="wakeBtn" onclick="logWakeUp()">LOG WAKE UP NOW</button>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin: 12px 0 6px 0;">
-          <strong style="font-size:0.72rem;">PERMANENT HABIT STACK</strong>
-          <span style="font-size:0.6rem; text-decoration:underline; cursor:pointer;" onclick="openModal('addHabitModal')">+ Add Habit</span>
-        </div>
+        <div style="margin: 12px 0 6px 0;"><strong style="font-size:0.72rem;">PERMANENT HABIT STACK</strong></div>
 
         <div id="habitsContainer"></div>
 
         <button type="button" class="wake-btn" id="saveHabitsBtn" style="background:#222; margin-top:10px;" onclick="saveCheckedHabits()">SAVE HABITS & NOTES LOG</button>
-        <button type="button" class="wake-btn" id="thoughtBtn" style="background:#444; margin-top:4px;" onclick="openModal('thoughtModal')">💡 + LOG RANDOM THOUGHT</button>
-
-        <div class="btn-grid" style="margin-top:10px;">
-          <button type="button" class="secondary-btn" onclick="openModal('quoteModal')">+ Add Quote</button>
-          <button type="button" class="secondary-btn" onclick="openModal('keywordModal')">+ Add Keyword</button>
-        </div>
-        
-        <div class="btn-grid">
-          <button type="button" class="secondary-btn" onclick="resetSmokeQuitDate()">Reset Smoke Quit</button>
-          <button type="button" class="secondary-btn" onclick="openEditVirtuesModal()">⚙ Edit Virtues</button>
-        </div>
-
-        <button type="button" class="wake-btn" id="sleepVirtuesBtn" style="margin-top:12px; background:#000;" onclick="openVirtuesModal()">🌙 LOG SLEEP & VIRTUES CHECK-OUT</button>
-
       </div>
     </div>
 
@@ -420,36 +271,13 @@
 
         <h1>WIFE CYCLE & CARE</h1>
 
-        <!-- CIRCULAR WHEEL DIAL -->
         <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:12px; border:2px solid var(--fg); padding:10px; background:#fff; box-shadow:4px 4px 0px var(--fg);">
           <svg id="wifeWheelSvg" width="280" height="280" viewBox="0 0 280 280" style="max-width:100%; height:auto;"></svg>
         </div>
 
-        <!-- PRACTICAL CARE & SUPPORT -->
         <div style="border:2px solid var(--fg); padding:10px; margin-bottom:10px; background:#f8f8f8;">
           <div style="font-size:0.6rem; font-weight:bold; text-transform:uppercase;">🤲 PRACTICAL CARE & SUPPORT</div>
           <div style="font-size:0.72rem; margin-top:4px; line-height:1.35; font-weight:bold;" id="wifeCareGuide">Loading guidance...</div>
-        </div>
-
-        <button type="button" class="secondary-btn" style="width:100%; margin-bottom:12px; font-size:0.62rem; text-align:center;" onclick="toggleCycleDetails()">
-          🔍 <span id="toggleDetailsLabel">CLICK TO VIEW DAY DETAILS</span>
-        </button>
-
-        <div id="wifeCycleDetailsContainer" style="display:none; margin-bottom:12px;">
-          <div style="border:1px solid var(--fg); padding:8px; margin-bottom:6px; background:#fafafa;">
-            <div style="font-size:0.58rem; font-weight:bold; text-transform:uppercase; color:#444;">⚙️ MECHANISM & HORMONES</div>
-            <div style="font-size:0.68rem; margin-top:2px; line-height:1.3;" id="wifeMechanismVal">Loading...</div>
-          </div>
-
-          <div style="border:1px solid var(--fg); padding:8px; margin-bottom:6px; background:#fff;">
-            <div style="font-size:0.58rem; font-weight:bold; text-transform:uppercase; color:#444;">🧘 POSSIBLE BODY CHANGES</div>
-            <div style="font-size:0.68rem; margin-top:2px; line-height:1.3;" id="wifeBodyChangesVal">Loading...</div>
-          </div>
-
-          <div style="border:1px solid var(--fg); padding:8px; margin-bottom:6px; background:#fff;">
-            <div style="font-size:0.58rem; font-weight:bold; text-transform:uppercase; color:#444;">🌸 PREGNANCY POSSIBILITY</div>
-            <div style="font-size:0.68rem; margin-top:2px; line-height:1.3;" id="wifePregnancyVal">Loading...</div>
-          </div>
         </div>
 
         <div style="margin-bottom:8px;">
@@ -457,7 +285,11 @@
           <input type="text" id="wifeExperienceInput" style="width:100%; padding:6px; font-size:0.7rem; border:1px solid var(--fg);" placeholder="Symptoms, mood...">
         </div>
 
-        <button type="button" class="wake-btn" id="wifeCycleBtn" onclick="logWifeCycle()">SAVE WIFE CYCLE LOG</button>
+        <!-- SAVE LOG & RESET DAY 1 BUTTON GROUP -->
+        <div style="display: flex; gap: 6px; margin-top: 8px;">
+          <button type="button" class="wake-btn" id="wifeCycleBtn" style="flex: 2; margin-bottom: 0;" onclick="logWifeCycle()">SAVE WIFE CYCLE LOG</button>
+          <button type="button" class="secondary-btn" id="resetCycleDay1Btn" style="flex: 1; border-color: #900; color: #900;" onclick="resetWifeCycleDay1()">↺ RESET DAY 1 TODAY</button>
+        </div>
       </div>
     </div>
 
@@ -465,178 +297,16 @@
     <div class="swipe-page">
       <div class="cal-container">
         <h1>HABITS & CYCLE CALENDAR</h1>
-
-        <div style="display:flex; justify-content:space-around; align-items:center; margin-bottom:10px; padding:6px; background:#fafafa; border:1px solid var(--fg); font-size:0.55rem; font-weight:bold;">
-          <span>🩸 Period</span>
-          <span>🌿 Follicular</span>
-          <span>✨ Ovulation</span>
-          <span>🌙 Luteal</span>
-          <span>🔮 Prediction</span>
-        </div>
-
-        <div class="cal-header-nav">
-          <button type="button" class="cal-nav-btn" onclick="changeMonth(-1)">&lt; PREV</button>
-          <div style="text-align:center;">
-            <div class="cal-month-title" id="calMonthTitle">OCTOBER 2026</div>
-            <div style="font-size:0.5rem; color:#666;">SOLAR (SUN) // LUNAR (MOON)</div>
-          </div>
-          <button type="button" class="cal-nav-btn" onclick="changeMonth(1)">NEXT &gt;</button>
-        </div>
-
-        <div class="calendar-grid">
-          <div class="cal-day-hdr">SUN</div><div class="cal-day-hdr">MON</div><div class="cal-day-hdr">TUE</div>
-          <div class="cal-day-hdr">WED</div><div class="cal-day-hdr">THU</div><div class="cal-day-hdr">FRI</div>
-          <div class="cal-day-hdr">SAT</div>
-        </div>
-        <div class="calendar-grid" id="calGridCells"></div>
-
-        <div class="tag-cloud-section">
-          <div class="tag-cloud-title">🧠 THOUGHT TAG FREQUENCY BUBBLES</div>
-          <div class="tag-bubbles-wrapper" id="tagCloudContainer">
-            <span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>
-          </div>
-        </div>
-
+        <div class="calendar-grid" id="calGridCells" style="margin-top:10px;"></div>
       </div>
     </div>
 
-  </div>
-
-  <!-- MODALS -->
-  <div class="modal-overlay" id="srsQuoteModal">
-    <div class="modal-card">
-      <div class="modal-title">🧠 QUOTE REPETITION PRACTICE</div>
-      <div style="background:#fafafa; border:1px solid var(--fg); padding:10px; margin-bottom:12px; text-align:center;">
-        <div style="font-size:0.8rem; font-style:italic; line-height:1.35; margin-bottom:4px;" id="srsModalQuoteText">"Loading quote..."</div>
-        <div style="font-size:0.62rem; font-weight:bold;" id="srsModalQuoteAuthor">--</div>
-      </div>
-      <div style="font-size:0.65rem; font-weight:bold; margin-bottom:6px; text-align:center;">How well do you remember or practice this concept?</div>
-      
-      <div class="srs-btn-grid">
-        <button type="button" class="srs-option-btn" style="border-color:#900; color:#900;" onclick="submitQuoteSRS(0)">❌ Forgot / Haven't</button>
-        <button type="button" class="srs-option-btn" style="border-color:#d9534f; color:#d9534f;" onclick="submitQuoteSRS(3)">🟡 Hard / Barely</button>
-        <button type="button" class="srs-option-btn" style="border-color:#f0ad4e; color:#f0ad4e;" onclick="submitQuoteSRS(4)">🟢 Good / Practiced</button>
-        <button type="button" class="srs-option-btn" style="border-color:#000; background:#000; color:#fff;" onclick="submitQuoteSRS(5)">🌟 Easy / Mastered</button>
-      </div>
-      <button type="button" class="secondary-btn" style="margin-top:12px;" onclick="closeModal('srsQuoteModal')">CLOSE</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="chakraModal">
-    <div class="modal-card">
-      <div class="modal-title" id="chakraModalTitle">🔴 CHAKRA MASTERY</div>
-      <div id="chakraModalContent" style="font-size:0.75rem; line-height:1.45;"></div>
-      <button type="button" class="secondary-btn" style="margin-top:14px;" onclick="closeModal('chakraModal')">CLOSE LESSON</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="thoughtModal">
-    <div class="modal-card">
-      <div class="modal-title">💡 LOG RANDOM THOUGHT</div>
-      <div style="margin-bottom:8px;">
-        <label style="font-size:0.62rem; font-weight:bold;">Thought Tag / Category</label>
-        <input type="text" id="thoughtTagInput" placeholder="e.g. food, sex, ideas, philosophy, work" style="width:100%; padding:6px; border:1px solid var(--fg);">
-      </div>
-      <div style="margin-bottom:12px;">
-        <label style="font-size:0.62rem; font-weight:bold;">Thought Details</label>
-        <textarea id="thoughtDetailInput" style="width:100%; min-height:60px; padding:6px; border:1px solid var(--fg);" placeholder="What's on your mind?"></textarea>
-      </div>
-      <button type="button" class="wake-btn" id="submitThoughtBtn" onclick="submitThoughtLog()">SAVE THOUGHT</button>
-      <button type="button" class="secondary-btn" onclick="closeModal('thoughtModal')">CANCEL</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="addHabitModal">
-    <div class="modal-card">
-      <div class="modal-title">+ ADD PERMANENT HABIT</div>
-      <div style="margin-bottom:8px;">
-        <label style="font-size:0.62rem; font-weight:bold;">Emoji Icon</label>
-        <input type="text" id="newHabitEmoji" placeholder="e.g. 📖, 🧘, 🎸" style="width:100%; padding:6px; border:1px solid var(--fg);">
-      </div>
-      <div style="margin-bottom:12px;">
-        <label style="font-size:0.62rem; font-weight:bold;">Habit Name</label>
-        <input type="text" id="newHabitName" placeholder="e.g. Journaling, Meditation" style="width:100%; padding:6px; border:1px solid var(--fg);">
-      </div>
-      <button type="button" class="wake-btn" onclick="submitAddHabit()">SAVE HABIT</button>
-      <button type="button" class="secondary-btn" onclick="closeModal('addHabitModal')">CANCEL</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="quoteModal">
-    <div class="modal-card">
-      <div class="modal-title">+ ADD MOTIVATIONAL QUOTE</div>
-      <input type="text" id="newQuoteText" placeholder="Quote text..." style="width:100%; padding:6px; border:1px solid var(--fg); margin-bottom:8px;">
-      <input type="text" id="newQuoteAuthor" placeholder="Author..." style="width:100%; padding:6px; border:1px solid var(--fg); margin-bottom:12px;">
-      <button type="button" class="wake-btn" id="submitQuoteBtn" onclick="submitAddQuote()">SAVE QUOTE</button>
-      <button type="button" class="secondary-btn" onclick="closeModal('quoteModal')">CANCEL</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="keywordModal">
-    <div class="modal-card">
-      <div class="modal-title">+ ADD KEYWORD</div>
-      <input type="text" id="newKeywordText" placeholder="Keyword / Focus word..." style="width:100%; padding:6px; border:1px solid var(--fg); margin-bottom:12px;">
-      <button type="button" class="wake-btn" id="submitKeywordBtn" onclick="submitAddKeyword()">SAVE KEYWORD</button>
-      <button type="button" class="secondary-btn" onclick="closeModal('keywordModal')">CANCEL</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="virtuesModal">
-    <div class="modal-card">
-      <div class="modal-title">🌙 SLEEP & VIRTUES EVALUATION</div>
-      <div style="margin-bottom:10px;">
-        <label style="font-size:0.62rem; font-weight:bold;">Target Bedtime</label>
-        <input type="time" id="sleepTimeInput" style="width:100%; padding:6px; border:1px solid var(--fg);" value="22:30">
-      </div>
-      <div id="virtuesChecklistContainer" style="margin-bottom:12px;"></div>
-      <button type="button" class="wake-btn" id="submitSleepVirtuesBtn" onclick="submitSleepVirtues()">SAVE EVALUATION & SLEEP LOG</button>
-      <button type="button" class="secondary-btn" onclick="closeModal('virtuesModal')">CANCEL</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="editVirtuesModal">
-    <div class="modal-card">
-      <div class="modal-title">GM EDIT DAILY VIRTUES</div>
-      <div id="editVirtuesListContainer" style="margin-bottom:12px;"></div>
-      <div style="display:flex; gap:6px; margin-bottom:12px;">
-        <input type="text" id="newVirtueInput" placeholder="New virtue name..." style="flex:1; padding:6px; border:1px solid var(--fg);">
-        <button type="button" class="secondary-btn" style="width:auto; padding:6px 12px;" onclick="addNewVirtue()">+ Add</button>
-      </div>
-      <button type="button" class="wake-btn" onclick="closeModal('editVirtuesModal')">DONE</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="dayDetailModal">
-    <div class="modal-card">
-      <div class="modal-title" id="dayDetailTitle">DATE LOGS</div>
-      <div id="dayDetailContent" style="font-size:0.72rem; line-height:1.4;"></div>
-      <button type="button" class="secondary-btn" style="margin-top:12px;" onclick="closeModal('dayDetailModal')">CLOSE</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="lapseModal">
-    <div class="modal-card">
-      <div class="modal-title">⚠️ LOG CLEAN MIND LAPSE</div>
-      <textarea id="lapseDetailsTextarea" style="width:100%; min-height:60px; padding:6px; font-size:0.7rem; margin-bottom:10px;" placeholder="What led to this lapse?"></textarea>
-      <button type="button" class="wake-btn" id="submitLapseBtn" style="background:#900;" onclick="submitLapseLog()">RESET STREAK & LOG LAPSE</button>
-      <button type="button" class="secondary-btn" onclick="closeModal('lapseModal')">CANCEL</button>
-    </div>
   </div>
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPH0YvXg9uIolkK3CCdKyVoY1S6ZZEONq0XE07QxxOWCWEOSEgg2j7HxvkxDzD_kJQiQ/exec';
 
-    const CHAKRA_CURRICULUM = [
-      { day: 'SUNDAY', name: 'MULADHARA (ROOT)', symbol: 'लं', bija: 'LAM', element: 'Earth', focus: 'Physical grounding, survival security, root stability.', lesson: 'Mastery over fear and raw instinct. Root yourself firmly.', exercise: '10 mins bare-foot stance or deep belly grounding.' },
-      { day: 'MONDAY', name: 'SVADHISTHANA (SACRAL)', symbol: 'वं', bija: 'VAM', element: 'Water', focus: 'Creative energy, emotional fluidity, sensual transmutation.', lesson: 'Transmute raw vital energy into artistic focus and spiritual strength.', exercise: 'Mind Purity observation & breath retention (Kumbhaka).' },
-      { day: 'TUESDAY', name: 'MANIPURA (SOLAR PLEXUS)', symbol: 'रं', bija: 'RAM', element: 'Fire', focus: 'Willpower, personal sovereignty, execution.', lesson: 'Fanning internal fire of action. Self-mastery through resolve.', exercise: 'Cold shower or intense core workout.' },
-      { day: 'WEDNESDAY', name: 'ANAHATA (HEART)', symbol: 'यं', bija: 'YAM', element: 'Air', focus: 'Compassion, devotion, marital harmony, balance.', lesson: 'Openness without weakness. Cultivating deep care for your wife.', exercise: 'Heart-focused breathing & devoted act for wife.' },
-      { day: 'THURSDAY', name: 'VISHUDDHA (THROAT)', symbol: 'हं', bija: 'HAM', element: 'Ether / Space', focus: 'Truthful expression, vocal integrity, pure intent.', lesson: 'Speak only truth. Align words with quiet action.', exercise: 'Chant Bija Mantra HAM (108x) or practice intentional silence.' },
-      { day: 'FRIDAY', name: 'AJNA (THIRD EYE)', symbol: 'ॐ', bija: 'OM', element: 'Mind / Light', focus: 'Intuition, mental clarity, inner vision.', lesson: 'Penetrating clarity over chaotic thoughts. Guard the threshold.', exercise: '15 mins Trataka (candle gaze) or third-eye breath.' },
-      { day: 'SATURDAY', name: 'SAHASRARA (CROWN)', symbol: '🪷', bija: 'AUM', element: 'Pure Consciousness', focus: 'Spiritual alignment, ultimate oneness, timeless wisdom.', lesson: 'Surrender ego desires to cosmic order and high virtue.', exercise: '20 mins silent meditation on pure awareness.' }
-    ];
-
-    let permanentHabits = JSON.parse(localStorage.getItem('saved_permanent_habits')) || [
+    let permanentHabits = [
       { id: 'draw', emoji: '🎨', label: 'Draw' },
       { id: 'piano', emoji: '🎹', label: 'Piano' },
       { id: 'play_with_cocochanel', emoji: '🐶', label: 'Play with CocoChanel' },
@@ -645,17 +315,6 @@
       { id: 'voice_training', emoji: '🗣️', label: 'Voice training' },
       { id: 'weed', emoji: '🌿', label: 'Weed' }
     ];
-
-    let defaultVirtues = JSON.parse(localStorage.getItem('saved_virtues_list')) || [
-      'Purity in Mind', 'Honesty in Word', 'Love for Wife', 'Physical Discipline', 'No Unnecessary Consumption'
-    ];
-
-    let habitHistoryLogs = [];
-    let thoughtLogsHistory = [];
-    let activeSrsQuote = {};
-    let currentCalDate = new Date();
-    let smokeQuitDate = localStorage.getItem('smoke_quit_date') || '2026-08-01';
-    let activeTeachingData = {};
 
     function postToScript(payload) {
       return fetch(SCRIPT_URL, {
@@ -684,119 +343,12 @@
           btn.innerText = btn.dataset.origText;
           btn.disabled = false;
         }, 2200);
-      } else if (state === 'reset') {
-        btn.innerText = btn.dataset.origText;
-        btn.disabled = false;
-      }
-    }
-
-    function toggleCycleDetails() {
-      const detailsDiv = document.getElementById('wifeCycleDetailsContainer');
-      const label = document.getElementById('toggleDetailsLabel');
-      if (!detailsDiv) return;
-      if (detailsDiv.style.display === 'none' || !detailsDiv.style.display) {
-        detailsDiv.style.display = 'block';
-        if (label) label.innerText = 'HIDE DAY DETAILS';
-      } else {
-        detailsDiv.style.display = 'none';
-        if (label) label.innerText = 'CLICK TO VIEW DAY DETAILS';
       }
     }
 
     function scrollToPage(index) {
       const viewport = document.getElementById('swipeViewport');
-      if (viewport) {
-        viewport.scrollTo({ left: window.innerWidth * index, behavior: 'smooth' });
-      }
-      updateActiveTab(index);
-    }
-
-    function updateActiveTab(index) {
-      const t0 = document.getElementById('tab0');
-      const t1 = document.getElementById('tab1');
-      const t2 = document.getElementById('tab2');
-      if (t0) t0.classList.toggle('active', index === 0);
-      if (t1) t1.classList.toggle('active', index === 1);
-      if (t2) t2.classList.toggle('active', index === 2);
-    }
-
-    const viewportEl = document.getElementById('swipeViewport');
-    if (viewportEl) {
-      viewportEl.addEventListener('scroll', () => {
-        const pageIndex = Math.round(viewportEl.scrollLeft / window.innerWidth);
-        updateActiveTab(pageIndex);
-      });
-    }
-
-    function openModal(id) { 
-      const el = document.getElementById(id);
-      if (el) el.classList.add('active'); 
-    }
-    function closeModal(id) { 
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('active'); 
-    }
-
-    function sanitizeAuthorString(rawAuthor) {
-      if (!rawAuthor) return "Anonymous";
-      let str = String(rawAuthor).trim().replace(/^-\s*/, '');
-      if (str.includes("GMT") || str.includes("00:00:00") || (str.length > 25 && str.includes("202"))) {
-        return "Anonymous";
-      }
-      return str || "Anonymous";
-    }
-
-    function openSrsModal() {
-      const qText = document.getElementById('quoteText');
-      const qAuthor = document.getElementById('quoteAuthor');
-      if (qText) document.getElementById('srsModalQuoteText').innerText = qText.innerText;
-      if (qAuthor) document.getElementById('srsModalQuoteAuthor').innerText = qAuthor.innerText;
-      openModal('srsQuoteModal');
-    }
-
-    function submitQuoteSRS(qualityScore) {
-      const payload = {
-        action: "reviewQuoteSRS",
-        id: activeSrsQuote.id || 1,
-        quote: (document.getElementById('quoteText')?.innerText || '').replace(/^"|"$/g, ''),
-        author: (document.getElementById('quoteAuthor')?.innerText || '').replace(/^- /, ''),
-        quality: qualityScore,
-        repetition: activeSrsQuote.repetition || 0,
-        interval: activeSrsQuote.interval || 1,
-        easeFactor: activeSrsQuote.easeFactor || 2.5
-      };
-
-      closeModal('srsQuoteModal');
-      postToScript(payload).then(() => fetchDashboardData());
-    }
-
-    function renderChakraSection() {
-      const todayIndex = new Date().getDay();
-      const chakra = CHAKRA_CURRICULUM[todayIndex];
-      const d = document.getElementById('chakraDayDisplay');
-      const s = document.getElementById('chakraSymbolDisplay');
-      const n = document.getElementById('chakraNameDisplay');
-      if (d) d.innerText = `TODAY'S WORK // ${chakra.day}`;
-      if (s) s.innerText = chakra.symbol;
-      if (n) n.innerText = chakra.name;
-    }
-
-    function openChakraModal() {
-      const todayIndex = new Date().getDay();
-      const chakra = CHAKRA_CURRICULUM[todayIndex];
-      const title = document.getElementById('chakraModalTitle');
-      const content = document.getElementById('chakraModalContent');
-      if (title) title.innerText = `${chakra.symbol} ${chakra.name}`;
-      if (content) {
-        content.innerHTML = `
-          <div style="margin-bottom:8px;"><strong>DAY:</strong> ${chakra.day}</div>
-          <div style="margin-bottom:8px;"><strong>BIJA MANTRA:</strong> ${chakra.bija} | <strong>ELEMENT:</strong> ${chakra.element}</div>
-          <div style="margin-bottom:8px;"><strong>FOCUS:</strong> ${chakra.focus}</div>
-          <div style="margin-bottom:8px; background:#f5f5f5; padding:8px; border-left:3px solid #000;"><strong>LESSON:</strong><br>${chakra.lesson}</div>
-          <div style="margin-bottom:8px; background:#f0f0f0; padding:8px; border-left:3px solid #000;"><strong>DAILY PRACTICE:</strong><br>${chakra.exercise}</div>
-        `;
-      }
-      openModal('chakraModal');
+      if (viewport) viewport.scrollTo({ left: window.innerWidth * index, behavior: 'smooth' });
     }
 
     function renderHabitsList() {
@@ -810,365 +362,13 @@
         item.innerHTML = `
           <div class="habit-card-top">
             <div class="habit-label-group">
-              <input type="checkbox" id="chk_habit_${idx}" style="width:16px; height:16px; accent-color:#000;">
+              <input type="checkbox" id="chk_habit_${idx}" style="width:16px; height:16px;">
               <span>${h.emoji} ${h.label}</span>
-              <span class="toggle-note-btn" onclick="toggleNoteInput(${idx})">[+ Note]</span>
             </div>
-            <span style="color:#999; font-size:0.6rem; cursor:pointer;" onclick="removeHabit(${idx})">[x]</span>
           </div>
-          <input type="text" class="habit-note-input" id="note_habit_${idx}" placeholder="Session note...">
         `;
         container.appendChild(item);
       });
-
-      localStorage.setItem('saved_permanent_habits', JSON.stringify(permanentHabits));
-    }
-
-    function toggleNoteInput(idx) {
-      const input = document.getElementById(`note_habit_${idx}`);
-      if (input) input.classList.toggle('active');
-    }
-
-    function removeHabit(idx) {
-      permanentHabits.splice(idx, 1);
-      renderHabitsList();
-    }
-
-    function submitAddHabit() {
-      const emoji = document.getElementById('newHabitEmoji')?.value.trim() || '⚡';
-      const name = document.getElementById('newHabitName')?.value.trim();
-
-      if (name) {
-        const id = name.toLowerCase().replace(/\s+/g, '_');
-        const newHabit = { id, emoji, label: name };
-        
-        permanentHabits.push(newHabit);
-        renderHabitsList();
-        closeModal('addHabitModal');
-
-        postToScript({ action: "addPermanentHabit", id: id, emoji: emoji, label: name })
-        .then(() => fetchDashboardData());
-      }
-    }
-
-    function submitThoughtLog() {
-      const btn = document.getElementById('submitThoughtBtn');
-      const tag = document.getElementById('thoughtTagInput')?.value.trim().toLowerCase() || 'ideas';
-      const detail = document.getElementById('thoughtDetailInput')?.value.trim() || '-';
-
-      setButtonState(btn, 'saving', 'SAVING THOUGHT...');
-
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      const formattedDateTime = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      const payload = {
-        action: "addThoughtLog",
-        dateTime: formattedDateTime,
-        dateLogged: formattedDate,
-        tag: tag,
-        detail: detail
-      };
-
-      postToScript(payload)
-      .then(() => {
-        setButtonState(btn, 'success', 'THOUGHT SAVED! ✓');
-        setTimeout(() => {
-          closeModal('thoughtModal');
-          setButtonState(btn, 'reset');
-          if (document.getElementById('thoughtTagInput')) document.getElementById('thoughtTagInput').value = '';
-          if (document.getElementById('thoughtDetailInput')) document.getElementById('thoughtDetailInput').value = '';
-        }, 800);
-        fetchDashboardData();
-      })
-      .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
-    }
-
-    function commitCleanMindToday() {
-      const btn = document.getElementById('cleanMindBtn');
-      setButtonState(btn, 'saving', 'COMMITTING...');
-
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      const formattedDateTime = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      const payload = {
-        action: "addCleanCommitment",
-        dateTime: formattedDateTime,
-        dayNum: activeTeachingData.day || 1,
-        tradition: activeTeachingData.tradition || "Mind Purity",
-        source: activeTeachingData.source || "Master Teachings",
-        teaching: activeTeachingData.teaching || "",
-        reflection: activeTeachingData.reflection || ""
-      };
-
-      postToScript(payload)
-      .then(() => {
-        setButtonState(btn, 'success', 'COMMITTED! ✓');
-        fetchDashboardData();
-      })
-      .catch(() => { setButtonState(btn, 'error', 'ERROR COMMITTING'); });
-    }
-
-    function submitLapseLog() {
-      const btn = document.getElementById('submitLapseBtn');
-      const notes = document.getElementById('lapseDetailsTextarea')?.value.trim() || 'Lapse recorded';
-
-      setButtonState(btn, 'saving', 'RESETTING STREAK...');
-
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      const formattedDateTime = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      const payload = {
-        action: "addCleanLapseLog",
-        dateTime: formattedDateTime,
-        previousStreak: parseInt(document.getElementById('cleanMindVal')?.innerText || '0', 10),
-        tradition: activeTeachingData.tradition || "Mind Purity",
-        source: activeTeachingData.source || "Master Teachings",
-        teaching: activeTeachingData.teaching || "",
-        reflection: activeTeachingData.reflection || "",
-        notes: notes
-      };
-
-      postToScript(payload)
-      .then(() => {
-        setButtonState(btn, 'success', 'LAPSE RECORDED! ✓');
-        setTimeout(() => {
-          closeModal('lapseModal');
-          setButtonState(btn, 'reset');
-          if (document.getElementById('lapseDetailsTextarea')) document.getElementById('lapseDetailsTextarea').value = '';
-        }, 800);
-        fetchDashboardData();
-      })
-      .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
-    }
-
-    function submitAddQuote() {
-      const btn = document.getElementById('submitQuoteBtn');
-      const q = document.getElementById('newQuoteText')?.value.trim();
-      const a = document.getElementById('newQuoteAuthor')?.value.trim() || 'Anonymous';
-      if (!q) return;
-
-      setButtonState(btn, 'saving', 'SAVING QUOTE...');
-      const payload = { action: 'addQuote', quote: q, author: a, date: new Date().toISOString() };
-
-      postToScript(payload)
-      .then(() => {
-        setButtonState(btn, 'success', 'QUOTE SAVED! ✓');
-        setTimeout(() => {
-          closeModal('quoteModal');
-          setButtonState(btn, 'reset');
-          if (document.getElementById('newQuoteText')) document.getElementById('newQuoteText').value = '';
-          if (document.getElementById('newQuoteAuthor')) document.getElementById('newQuoteAuthor').value = '';
-        }, 800);
-      })
-      .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
-    }
-
-    function submitAddKeyword() {
-      const btn = document.getElementById('submitKeywordBtn');
-      const k = document.getElementById('newKeywordText')?.value.trim();
-      if (!k) return;
-
-      setButtonState(btn, 'saving', 'SAVING KEYWORD...');
-      const payload = { action: 'addKeyword', keyword: k, date: new Date().toISOString() };
-
-      postToScript(payload)
-      .then(() => {
-        setButtonState(btn, 'success', 'KEYWORD SAVED! ✓');
-        setTimeout(() => {
-          closeModal('keywordModal');
-          setButtonState(btn, 'reset');
-          if (document.getElementById('newKeywordText')) document.getElementById('newKeywordText').value = '';
-        }, 800);
-      })
-      .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
-    }
-
-    function openVirtuesModal() {
-      const container = document.getElementById('virtuesChecklistContainer');
-      if (!container) return;
-      container.innerHTML = '';
-      defaultVirtues.forEach((v, idx) => {
-        container.innerHTML += `
-          <div class="virtue-score-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-              <strong style="font-size:0.72rem;">${v}</strong>
-              <span style="font-size:0.7rem; font-weight:bold;" id="score_lbl_${idx}">5 / 5</span>
-            </div>
-            <input type="range" id="virtue_score_${idx}" min="1" max="5" value="5" style="width:100%; accent-color:#000;" oninput="document.getElementById('score_lbl_${idx}').innerText = this.value + ' / 5'">
-            <input type="text" id="virtue_note_${idx}" placeholder="Reflection / note..." style="width:100%; margin-top:4px; padding:4px; font-size:0.65rem; border:1px dashed #ccc;">
-          </div>
-        `;
-      });
-      openModal('virtuesModal');
-    }
-
-    function submitSleepVirtues() {
-      const btn = document.getElementById('submitSleepVirtuesBtn');
-      const sleepTime = document.getElementById('sleepTimeInput')?.value || '22:30';
-      const virtuesResult = {};
-      let totalScore = 0;
-
-      defaultVirtues.forEach((v, idx) => {
-        const scoreVal = parseInt(document.getElementById(`virtue_score_${idx}`)?.value || '5', 10);
-        const noteVal = document.getElementById(`virtue_note_${idx}`)?.value.trim() || '-';
-        totalScore += scoreVal;
-        virtuesResult[v] = { score: scoreVal, note: noteVal };
-      });
-
-      const avgScore = (totalScore / defaultVirtues.length).toFixed(1);
-      setButtonState(btn, 'saving', 'SAVING EVALUATION...');
-
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-
-      const payload = { 
-        action: 'addSleepVirtuesLog', 
-        date: formattedDate, 
-        sleepTime: sleepTime, 
-        avgScore: avgScore,
-        virtues: virtuesResult 
-      };
-
-      postToScript(payload)
-      .then(() => {
-        setButtonState(btn, 'success', 'EVALUATION SAVED! ✓');
-        setTimeout(() => {
-          closeModal('virtuesModal');
-          setButtonState(btn, 'reset');
-        }, 800);
-      })
-      .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
-    }
-
-    function openEditVirtuesModal() {
-      renderEditVirtuesList();
-      openModal('editVirtuesModal');
-    }
-
-    function renderEditVirtuesList() {
-      const container = document.getElementById('editVirtuesListContainer');
-      if (!container) return;
-      container.innerHTML = '';
-      defaultVirtues.forEach((v, idx) => {
-        container.innerHTML += `
-          <div style="display:flex; justify-content:space-between; align-items:center; border:1px solid #000; padding:6px; margin-bottom:4px; font-size:0.72rem;">
-            <span>${v}</span>
-            <span style="color:#900; font-weight:bold; cursor:pointer;" onclick="deleteVirtue(${idx})">[Delete]</span>
-          </div>
-        `;
-      });
-    }
-
-    function addNewVirtue() {
-      const input = document.getElementById('newVirtueInput');
-      const val = input ? input.value.trim() : '';
-      if (val) {
-        defaultVirtues.push(val);
-        localStorage.setItem('saved_virtues_list', JSON.stringify(defaultVirtues));
-        if (input) input.value = '';
-        renderEditVirtuesList();
-      }
-    }
-
-    function deleteVirtue(idx) {
-      defaultVirtues.splice(idx, 1);
-      localStorage.setItem('saved_virtues_list', JSON.stringify(defaultVirtues));
-      renderEditVirtuesList();
-    }
-
-    function resetSmokeQuitDate() {
-      const newDate = prompt("Enter new smoke quit date (YYYY-MM-DD):", "2026-08-01");
-      if (newDate) {
-        smokeQuitDate = newDate;
-        localStorage.setItem('smoke_quit_date', smokeQuitDate);
-        if (document.getElementById('smokeStreakDisplay')) {
-          document.getElementById('smokeStreakDisplay').innerText = getSmokeStreakDays();
-        }
-      }
-    }
-
-    function logWifeCycle() {
-      const btn = document.getElementById('wifeCycleBtn');
-      const exp = document.getElementById('wifeExperienceInput')?.value.trim() || 'Normal';
-      setButtonState(btn, 'saving', 'SAVING LOG...');
-
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-
-      const payload = {
-        action: "addWifeCycleLog",
-        date: formattedDate,
-        cycleDay: "Day 21",
-        hormonePhase: "Luteal Phase",
-        experience: exp,
-        comfortGuide: document.getElementById('wifeCareGuide')?.innerText || "-",
-        notes: exp,
-        timestamp: `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
-      };
-
-      postToScript(payload)
-      .then(() => {
-        setButtonState(btn, 'success', 'LOG SAVED! ✓');
-        if (document.getElementById('wifeExperienceInput')) document.getElementById('wifeExperienceInput').value = '';
-      })
-      .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
-    }
-
-    function saveCheckedHabits() {
-      const btn = document.getElementById('saveHabitsBtn');
-      const habitsToSave = [];
-
-      permanentHabits.forEach((h, idx) => {
-        const chk = document.getElementById(`chk_habit_${idx}`);
-        const noteInput = document.getElementById(`note_habit_${idx}`);
-        
-        if (chk && chk.checked) {
-          habitsToSave.push({
-            label: h.label,
-            emoji: h.emoji,
-            note: noteInput ? noteInput.value.trim() : ""
-          });
-        }
-      });
-
-      if (habitsToSave.length === 0) {
-        setButtonState(btn, 'error', 'NO HABITS CHECKED!');
-        return;
-      }
-
-      setButtonState(btn, 'saving', 'SAVING HABITS...');
-
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      const formattedDateTime = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      const payload = {
-        action: "addHabitLog",
-        dateTime: formattedDateTime,
-        dateLogged: formattedDate,
-        habits: habitsToSave
-      };
-
-      postToScript(payload)
-      .then(() => {
-        setButtonState(btn, 'success', `SAVED ${habitsToSave.length} HABITS! ✓`);
-        permanentHabits.forEach((_, idx) => {
-          const chk = document.getElementById(`chk_habit_${idx}`);
-          const noteInput = document.getElementById(`note_habit_${idx}`);
-          if (chk) chk.checked = false;
-          if (noteInput) { noteInput.value = ''; noteInput.classList.remove('active'); }
-        });
-        fetchDashboardData();
-      })
-      .catch(() => { setButtonState(btn, 'error', 'ERROR SAVING'); });
-    }
-
-    function changeMonth(delta) {
-      currentCalDate.setMonth(currentCalDate.getMonth() + delta);
-      renderHabitCalendar();
     }
 
     function renderPage2Wheel(activeDay = 21) {
@@ -1193,277 +393,94 @@
         const y4 = cy + rMid * Math.sin(startAngle);
 
         const isCurrent = (day === activeDay);
-        let fillC = '#fff';
-        if (day <= 5) fillC = '#111';
-        else if (day <= 10) fillC = '#e0e0e0';
-        else if (day <= 16) fillC = '#fdf2f2';
-
+        let fillC = (day <= 5) ? '#111' : (day <= 10) ? '#e0e0e0' : (day <= 16) ? '#fdf2f2' : '#fff';
         const strokeW = isCurrent ? '2.5' : '1';
         const strokeC = isCurrent ? '#000' : '#888';
+
         const outerPath = `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${rMid} ${rMid} 0 0 0 ${x4} ${y4} Z`;
-
-        svgHtml += `<path d="${outerPath}" fill="${fillC}" stroke="${strokeC}" stroke-width="${strokeW}" style="cursor:pointer;" onclick="renderPage2Wheel(${day})" />`;
-
-        const midAngle = (startAngle + endAngle) / 2;
-        const tx1 = cx + ((rOuter + rMid) / 2) * Math.cos(midAngle);
-        const ty1 = cy + ((rOuter + rMid) / 2) * Math.sin(midAngle) + 3;
-        const txtC = (day <= 5) ? '#fff' : '#000';
-
-        svgHtml += `<text x="${tx1}" y="${ty1}" font-size="7.5" font-family="Courier New" font-weight="bold" fill="${txtC}" text-anchor="middle" pointer-events="none">${day}</text>`;
+        svgHtml += `<path d="${outerPath}" fill="${fillC}" stroke="${strokeC}" stroke-width="${strokeW}" />`;
       }
-
-      let phaseTitle = "LUTEAL PHASE";
-      if (activeDay <= 5) phaseTitle = "MENSTRUAL";
-      else if (activeDay <= 10) phaseTitle = "FOLLICULAR";
-      else if (activeDay <= 16) phaseTitle = "OVULATORY WINDOW";
 
       svgHtml += `
         <circle cx="${cx}" cy="${cy}" r="${rInner - 3}" fill="#fff" stroke="#000" stroke-width="2" />
-        <text x="${cx}" y="${cy - 10}" font-size="16" font-family="Courier New" font-weight="bold" text-anchor="middle">DAY ${activeDay}</text>
-        <text x="${cx}" y="${cy + 6}" font-size="7.5" font-family="Courier New" font-weight="bold" fill="#555" text-anchor="middle">${phaseTitle}</text>
+        <text x="${cx}" y="${cy - 6}" font-size="16" font-family="Courier New" font-weight="bold" text-anchor="middle">DAY ${activeDay}</text>
+        <text x="${cx}" y="${cy + 10}" font-size="7.5" font-family="Courier New" font-weight="bold" fill="#555" text-anchor="middle">LUTEAL PHASE</text>
       `;
 
       svg.innerHTML = svgHtml;
     }
 
-    function renderHabitCalendar() {
-      const grid = document.getElementById('calGridCells');
-      if (!grid) return;
-      grid.innerHTML = '';
+    function resetWifeCycleDay1() {
+      const confirmReset = confirm("Set today as Day 1 of her cycle?");
+      if (!confirmReset) return;
 
-      const year = currentCalDate.getFullYear();
-      const month = currentCalDate.getMonth();
-      const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-      
-      const titleEl = document.getElementById('calMonthTitle');
-      if (titleEl) titleEl.innerText = `${monthNames[month]} ${year}`;
+      const btn = document.getElementById('resetCycleDay1Btn');
+      setButtonState(btn, 'saving', 'RESETTING...');
 
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const anchorDate = new Date(2026, 8, 24);
-
-      for (let i = 0; i < firstDay; i++) {
-        const emptyCell = document.createElement('div');
-        emptyCell.className = 'cal-day-cell';
-        grid.appendChild(emptyCell);
-      }
-
-      for (let day = 1; day <= daysInMonth; day++) {
-        const cellDate = new Date(year, month, day);
-        const cellDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-        let lunarStr = `${day}/9`;
-        if (month === 9) {
-          lunarStr = (day < 11) ? `Âm ${day + 20}/8` : `Âm ${day - 10}/9`;
-        } else if (month === 10) {
-          lunarStr = (day < 9) ? `Âm ${day + 20}/9` : `Âm ${day - 8}/10`;
-        }
-
-        const diffDays = Math.floor((cellDate - anchorDate) / (1000 * 60 * 60 * 24));
-        const cycleDay = ((diffDays % 28) + 28) % 28 + 1;
-        const isPredictedCycle = cellDate > new Date(2026, 9, 21);
-
-        let cycleEmoji = '';
-        if (cycleDay <= 5) cycleEmoji = isPredictedCycle ? '🔮🩸' : '🩸';
-        else if (cycleDay <= 10) cycleEmoji = isPredictedCycle ? '🔮🌿' : '🌿';
-        else if (cycleDay <= 16) cycleEmoji = isPredictedCycle ? '🔮✨' : '✨';
-        else cycleEmoji = isPredictedCycle ? '🔮🌙' : '🌙';
-
-        const cell = document.createElement('div');
-        cell.className = 'cal-day-cell';
-
-        const dayLogs = habitHistoryLogs.filter(l => l.date === cellDateStr);
-        const habitEmojis = Array.from(new Set(dayLogs.map(l => l.emoji || '⚡'))).join('');
-
-        cell.innerHTML = `
-          <div style="font-size:0.65rem; font-weight:bold;">${day}</div>
-          <div style="font-size:0.48rem; color:#666;">${lunarStr}</div>
-          <div style="font-size:0.65rem; margin-top:2px;">${cycleEmoji} ${habitEmojis}</div>
-        `;
-
-        if (dayLogs.length > 0) {
-          cell.classList.add('completed');
-          cell.onclick = () => showDayDetails(cellDateStr, dayLogs);
-        }
-
-        grid.appendChild(cell);
-      }
-
-      renderTagCloud();
-    }
-
-    function renderTagCloud() {
-      const container = document.getElementById('tagCloudContainer');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (!thoughtLogsHistory || thoughtLogsHistory.length === 0) {
-        container.innerHTML = '<span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>';
-        return;
-      }
-
-      const tagCounts = {};
-      thoughtLogsHistory.forEach(t => {
-        let tag = String(t.tag || 'general').trim().toLowerCase().replace(/^#/, '');
-        if (!tag) tag = 'general';
-        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-      });
-
-      const countsArr = Object.values(tagCounts);
-      if (countsArr.length === 0) {
-        container.innerHTML = '<span style="font-size:0.65rem; color:#888;">No thoughts logged yet.</span>';
-        return;
-      }
-
-      const maxCount = Math.max(...countsArr);
-
-      Object.keys(tagCounts).forEach(tag => {
-        const count = tagCounts[tag];
-        const bubble = document.createElement('div');
-        bubble.className = 'tag-bubble';
-        
-        const fontSize = 0.65 + (count / maxCount) * 0.45; 
-        bubble.style.fontSize = `${fontSize}rem`;
-        bubble.innerHTML = `#${tag} <span style="font-size:0.55rem; opacity:0.7; margin-left:4px;">(${count})</span>`;
-        
-        container.appendChild(bubble);
-      });
-    }
-
-    function showDayDetails(dateStr, logs) {
-      const title = document.getElementById('dayDetailTitle');
-      if (title) title.innerText = `LOGS FOR ${dateStr}`;
-      
-      const container = document.getElementById('dayDetailContent');
-      if (!container) return;
-      container.innerHTML = '';
-
-      logs.forEach(l => {
-        const item = document.createElement('div');
-        item.style.marginBottom = '8px';
-        item.style.borderBottom = '1px solid #ccc';
-        item.style.paddingBottom = '4px';
-        item.innerHTML = `
-          <strong>${l.emoji} ${l.habitName}</strong> (${l.dateTime ? (l.dateTime.split(' ')[1] || '') : ''})<br>
-          <em>Note: ${l.note && l.note !== '-' ? l.note : 'No notes entered'}</em>
-        `;
-        container.appendChild(item);
-      });
-
-      openModal('dayDetailModal');
-    }
-
-    function logWakeUp() {
-      const wakeBtn = document.getElementById('wakeBtn');
       const now = new Date();
-      const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      setButtonState(wakeBtn, 'saving', 'SAVING WAKE UP...');
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const formattedTimestamp = `${formattedDate} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
       const payload = {
-        date: currentDate,
-        wakeTime: currentTime,
-        smokeStreak: getSmokeStreakDays(),
-        cleanStreak: parseInt(document.getElementById('cleanMindVal')?.innerText || '0', 10)
+        action: "resetWifeCycleDay1",
+        date: formattedDate,
+        timestamp: formattedTimestamp
       };
 
       postToScript(payload)
-      .then(() => {
-        setButtonState(wakeBtn, 'success', `LOGGED AT ${currentTime} ✓`);
-        fetchDashboardData();
-      })
-      .catch(() => { setButtonState(wakeBtn, 'error', 'ERROR SAVING'); });
+        .then(() => {
+          setButtonState(btn, 'success', 'DAY 1 SET! ✓');
+          renderPage2Wheel(1);
+          fetchDashboardData();
+        })
+        .catch(() => {
+          setButtonState(btn, 'error', 'ERROR');
+        });
+    }
+
+    function applyDataToUI(data) {
+      if (!data || data.status !== 'success') return;
+
+      if (document.getElementById('streakDisplay')) document.getElementById('streakDisplay').innerText = data.streak !== undefined ? data.streak : '--';
+      if (document.getElementById('cleanMindVal')) document.getElementById('cleanMindVal').innerText = data.cleanStreak !== undefined ? data.cleanStreak : 0;
+      if (document.getElementById('quoteText')) document.getElementById('quoteText').innerText = `"${data.quote || ''}"`;
+      if (document.getElementById('quoteAuthor')) document.getElementById('quoteAuthor').innerText = `- ${data.author || 'Anonymous'}`;
+
+      if (data.wifeQuote && document.getElementById('wifeQuoteText')) {
+        document.getElementById('wifeQuoteText').innerText = `"${data.wifeQuote.quote || ''}"`;
+        document.getElementById('wifeQuoteAuthor').innerText = `- ${data.wifeQuote.author || 'Anonymous'}`;
+      }
+
+      if (data.wifeCycle) {
+        const dayNum = parseInt(data.wifeCycle.dayNum || 21, 10);
+        if (document.getElementById('wifeCareGuide')) document.getElementById('wifeCareGuide').innerText = data.wifeCycle.guide || "Manage symptoms.";
+        renderPage2Wheel(dayNum);
+      }
+
+      if (data.purityTeaching) {
+        if (document.getElementById('cleanMindBadge')) document.getElementById('cleanMindBadge').innerText = `DAY ${data.purityTeaching.day || 1} / 365`;
+        if (document.getElementById('teachingMetaDisplay')) document.getElementById('teachingMetaDisplay').innerText = `${(data.purityTeaching.tradition || 'Mind Purity').toUpperCase()}`;
+        if (document.getElementById('teachingContentText')) document.getElementById('teachingContentText').innerText = `"${data.purityTeaching.teaching || ''}"`;
+        if (document.getElementById('teachingReflectionText')) document.getElementById('teachingReflectionText').innerText = data.purityTeaching.reflection || '';
+      }
+
+      if (data.masterHabits && Array.isArray(data.masterHabits) && data.masterHabits.length > 0) {
+        permanentHabits = data.masterHabits;
+        renderHabitsList();
+      }
     }
 
     function fetchDashboardData() {
-      const cacheBusterUrl = SCRIPT_URL + '?t=' + new Date().getTime();
-
-      fetch(cacheBusterUrl)
+      fetch(SCRIPT_URL)
         .then(res => res.json())
-        .then(data => {
-          if (data && data.status === 'success') {
-            const streakDisplay = document.getElementById('streakDisplay');
-            const cleanMindVal = document.getElementById('cleanMindVal');
-            if (streakDisplay) streakDisplay.innerText = data.streak !== undefined ? data.streak : '--';
-            if (cleanMindVal) cleanMindVal.innerText = data.cleanStreak !== undefined ? data.cleanStreak : 0;
-            
-            const qText = data.quote || "Every action you take is a vote for the type of person you wish to become.";
-            const qAuthor = sanitizeAuthorString(data.author);
-
-            const quoteTextEl = document.getElementById('quoteText');
-            const quoteAuthorEl = document.getElementById('quoteAuthor');
-            if (quoteTextEl) quoteTextEl.innerText = `"${qText}"`;
-            if (quoteAuthorEl) quoteAuthorEl.innerText = `- ${qAuthor}`;
-            
-            if (data.srsQuote) activeSrsQuote = data.srsQuote;
-
-            if (data.wifeQuote) {
-              const topicEl = document.getElementById('wifeQuoteTopic');
-              const textEl = document.getElementById('wifeQuoteText');
-              const authorEl = document.getElementById('wifeQuoteAuthor');
-              if (topicEl) topicEl.innerText = (data.wifeQuote.topic || "GENTLEMAN'S THOUGHT FOR HER").toUpperCase();
-              if (textEl) textEl.innerText = `"${data.wifeQuote.quote || ''}"`;
-              if (authorEl) authorEl.innerText = `- ${data.wifeQuote.author || 'Anonymous'}`;
-            }
-
-            if (data.wifeCycle) {
-              const dayNum = parseInt(data.wifeCycle.dayNum || (data.wifeCycle.cycleDay ? data.wifeCycle.cycleDay.replace(/\D/g, '') : 21), 10) || 21;
-              const careGuideEl = document.getElementById('wifeCareGuide');
-              if (careGuideEl) careGuideEl.innerText = data.wifeCycle.guide || "Manage symptoms according to comfort.";
-              
-              renderPage2Wheel(dayNum);
-              
-              const mechEl = document.getElementById('wifeMechanismVal');
-              const bodyEl = document.getElementById('wifeBodyChangesVal');
-              const pregEl = document.getElementById('wifePregnancyVal');
-
-              if (mechEl) mechEl.innerText = data.wifeCycle.mechanism || "Hormonal shifts regulating uterine lining.";
-              if (bodyEl) bodyEl.innerText = data.wifeCycle.bodyChanges || "Normal physiological changes.";
-              if (pregEl) pregEl.innerText = data.wifeCycle.pregnancyPossibility || "Outside the modeled window.";
-            }
-
-            if (data.purityTeaching) {
-              activeTeachingData = data.purityTeaching;
-              const badgeEl = document.getElementById('cleanMindBadge');
-              const metaEl = document.getElementById('teachingMetaDisplay');
-              const contentEl = document.getElementById('teachingContentText');
-              const reflectionEl = document.getElementById('teachingReflectionText');
-
-              if (badgeEl) badgeEl.innerText = `DAY ${activeTeachingData.day || 1} / 365`;
-              if (metaEl) metaEl.innerText = `${(activeTeachingData.tradition || 'Mind Purity').toUpperCase()} | ${(activeTeachingData.source || 'Master Teachings').toUpperCase()}`;
-              if (contentEl) contentEl.innerText = `"${activeTeachingData.teaching || ''}"`;
-              if (reflectionEl) reflectionEl.innerText = activeTeachingData.reflection || '';
-            }
-
-            if (data.masterHabits && Array.isArray(data.masterHabits) && data.masterHabits.length > 0) {
-              permanentHabits = data.masterHabits;
-              renderHabitsList();
-            }
-
-            if (data.habitHistory && Array.isArray(data.habitHistory)) habitHistoryLogs = data.habitHistory;
-            if (data.thoughtLogs && Array.isArray(data.thoughtLogs)) thoughtLogsHistory = data.thoughtLogs;
-
-            renderHabitCalendar();
-          }
-        })
-        .catch(err => console.error("Dashboard fetch error:", err));
+        .then(data => applyDataToUI(data))
+        .catch(err => {
+          console.warn("Fetch constrained, trying again...", err);
+        });
     }
 
-    function getSmokeStreakDays() {
-      const quit = new Date(smokeQuitDate);
-      const today = new Date();
-      return Math.max(0, Math.floor((today - quit) / (1000 * 60 * 60 * 24)));
-    }
-
-    // Initial local rendering before network fetch
-    renderChakraSection();
     renderHabitsList();
     renderPage2Wheel(21);
-    const smokeDisplay = document.getElementById('smokeStreakDisplay');
-    if (smokeDisplay) smokeDisplay.innerText = getSmokeStreakDays();
-
-    // Fetch live backend metrics
     fetchDashboardData();
   </script>
 </body>
